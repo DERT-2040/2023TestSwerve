@@ -1,0 +1,34 @@
+[
+  {
+    "name": "/Preferences/FrontLeft",
+    "type": "double",
+    "value": 3.14,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/RearLeft",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/FrontRight",
+    "type": "double",
+    "value": 2.4,
+    "properties": {
+      "persistent": true
+    }
+  },
+  {
+    "name": "/Preferences/RearRight",
+    "type": "double",
+    "value": 0.0,
+    "properties": {
+      "persistent": true
+    }
+  }
+]
