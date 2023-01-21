@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.SwerveModule;
@@ -18,10 +19,10 @@ public class DriveCalibrateCommand extends CommandBase {
     }
     @Override
     public void initialize() {
-        Preferences.setDouble(m_subsystem.m_frontLeft.GetTurnOffsetKey(), m_subsystem.m_frontLeft.GetTurningEncoderValue());
-        Preferences.setDouble(m_subsystem.m_frontRight.GetTurnOffsetKey(), m_subsystem.m_frontRight.GetTurningEncoderValue());
-        Preferences.setDouble(m_subsystem.m_rearLeft.GetTurnOffsetKey(), m_subsystem.m_rearLeft.GetTurningEncoderValue());
-        Preferences.setDouble(m_subsystem.m_rearRight.GetTurnOffsetKey(), m_subsystem.m_rearRight.GetTurningEncoderValue());
+        Preferences.setDouble(m_subsystem.m_frontLeft.GetTurnOffsetKey(), m_subsystem.m_frontLeft.GetTurningCalibrationValue());
+        Preferences.setDouble(m_subsystem.m_frontRight.GetTurnOffsetKey(), m_subsystem.m_frontRight.GetTurningCalibrationValue());
+        Preferences.setDouble(m_subsystem.m_rearLeft.GetTurnOffsetKey(), m_subsystem.m_rearLeft.GetTurningCalibrationValue());
+        Preferences.setDouble(m_subsystem.m_rearRight.GetTurnOffsetKey(), m_subsystem.m_rearRight.GetTurningCalibrationValue());
     }
 
     @Override

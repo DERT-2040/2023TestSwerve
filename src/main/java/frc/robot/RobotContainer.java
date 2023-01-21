@@ -48,7 +48,7 @@ public class RobotContainer {
   private static Joystick joystick2 = new Joystick(1);
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
     public void drive() {
-        m_robotDrive.drive(joystick1.getX(), -joystick1.getY(), joystick2.getX(), false);
+        m_robotDrive.drive(joystick1.getX(), -joystick1.getY(), joystick2.getX(), true);
     }
 
     public void getVision() {

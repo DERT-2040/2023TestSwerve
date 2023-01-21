@@ -75,7 +75,7 @@ public class SwerveModule {  // Class Definition  ******************************
     if(!Preferences.containsKey(this.turnOffsetKey)){                     // check to see if the wheel offset has been saved
       Preferences.setDouble(this.turnOffsetKey, 0);                // if it has not save a 0 offset
     }
-    turnOffset = Preferences.getDouble(this.turnOffsetKey, 0);  // read the wheel angle offset stored in permanent memory  
+    turnOffset = Preferences.getDouble(this.turnOffsetKey, 0);  // read the wheel angle offset stored in memory  
 
     
 
@@ -125,7 +125,7 @@ public class SwerveModule {  // Class Definition  ******************************
 
 
    // Set the end stops for the encoder (min duty cycle and max duty cylce at the point the PWM "wraps" around)
-    m_turningEncoder.setDutyCycleRange(1/4096, 4095/4096); 
+   // m_turningEncoder.setDutyCycleRange(1/4096, 4095/4096); 
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
@@ -140,7 +140,7 @@ public class SwerveModule {  // Class Definition  ******************************
    */
   public SwerveModuleState getState() {
     return new SwerveModuleState(
-        m_driveEncoder.getVelocity(), new Rotation2d(m_turningEncoder.getAbsolutePosition()));   // was getDistance
+        m_driveEncoder.getVelocity(), new Rotation2d(GetTurningEncoderValue()));   // was getDistance
   }
   
   /**
@@ -150,7 +150,7 @@ public class SwerveModule {  // Class Definition  ******************************
    */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        m_driveEncoder.getVelocity(), new Rotation2d(m_turningEncoder.getAbsolutePosition()));   // was getDistance
+        m_driveEncoder.getVelocity(), new Rotation2d(GetTurningEncoderValue()));   // was getDistance
   }
 
   /**
@@ -161,20 +161,23 @@ public class SwerveModule {  // Class Definition  ******************************
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
-        SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getAbsolutePosition()));   // was getDistance
+        SwerveModuleState.optimize(desiredState, new Rotation2d(GetTurningEncoderValue()));   // was getDistance
 
     // Calculate the drive output from the drive PID controller.
     // velocity meter/sec * (60 sec/min * 8.14 gear ratio) / (0.1016 meters * pi) = V * 1530 rev/min
     m_drivePIDController.setReference(1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    SmartDashboard.putNumber("Position", m_turningEncoder.getAbsolutePosition());   // was getDistance
+    SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
     SmartDashboard.putNumber("Target", state.angle.getRadians());
     //SmartDashboard.putNumber("Velocity", m_turningEncoder.get);
     SmartDashboard.putNumber("Output Current",m_driveMotor.getOutputCurrent());
     
-
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
-        m_turningPIDController.calculate(m_turningEncoder.getAbsolutePosition(), state.angle.getRadians());// - turnOffset);  was getDistance
+        m_turningPIDController.calculate(GetTurningEncoderValue(), state.angle.getRadians());//  was getDistance
+        SmartDashboard.putNumber("Radians", state.angle.getRadians());
+        SmartDashboard.putNumber("output", turnOutput);
+
+        SmartDashboard.putNumber(turnOffsetKey + "1", (GetTurningEncoderValue()));
 
      //Calculate the turning motor output from the turning PID controller.
     m_turningMotor.set(-turnOutput);
@@ -188,8 +191,14 @@ public class SwerveModule {  // Class Definition  ******************************
   }
 
 
+  public double GetTurningCalibrationValue() {
+    return (m_turningEncoder.getAbsolutePosition() * 2 * Math.PI) % (2 * Math.PI);
+
+  }
+
+
   public double GetTurningEncoderValue() {
-    return m_turningEncoder.getAbsolutePosition();  //was getDistance
+    return ((GetTurningCalibrationValue()) - turnOffset + 16 * Math.PI) % (2 * Math.PI);  //was getDistance
   }
 
 
