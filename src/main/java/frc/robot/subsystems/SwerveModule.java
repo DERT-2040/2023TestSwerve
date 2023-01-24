@@ -107,6 +107,7 @@ public class SwerveModule {  // Class Definition  ******************************
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
+    m_driveEncoder.setPositionConversionFactor(.0398);
     //m_driveEncoder.setDistancePerRotation(1);
     //m_driveEncoder.setDistancePerPulse(ModuleConstants.kDriveEncoderDistancePerPulse);
 
@@ -150,7 +151,7 @@ public class SwerveModule {  // Class Definition  ******************************
    */
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
-        m_driveEncoder.getVelocity(), new Rotation2d(GetTurningEncoderValue()));   // was getDistance
+        m_driveEncoder.getPosition(), new Rotation2d(GetTurningEncoderValue()));   // was getDistance
   }
 
   /**

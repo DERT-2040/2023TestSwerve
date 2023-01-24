@@ -85,7 +85,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    m_odometry.update(
+    var odom = m_odometry.update(
       new Rotation2d(getGyro()),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -93,6 +93,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+    SmartDashboard.putString("Odometry Pose", odom.toString());
 
     m_field.setRobotPose(m_odometry.getPoseMeters());  // update dashboard
     SmartDashboard.putData("Field", m_field);
