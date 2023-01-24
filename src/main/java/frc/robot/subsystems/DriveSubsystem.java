@@ -68,7 +68,7 @@ public class DriveSubsystem extends SubsystemBase {
   SwerveDriveOdometry m_odometry =
       new SwerveDriveOdometry(
           DriveConstants.kDriveKinematics,
-          new Rotation2d(Math.toRadians(gyro.getAngle())),
+          new Rotation2d(getGyro()),
           new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -86,7 +86,7 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
     m_odometry.update(
-      new Rotation2d(Math.toRadians(gyro.getAngle())),
+      new Rotation2d(getGyro()),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -114,7 +114,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
-        new Rotation2d(Math.toRadians(gyro.getAngle())),
+        new Rotation2d(getGyro()),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -136,7 +136,7 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates =
         DriveConstants.kDriveKinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, new Rotation2d(Math.toRadians(gyro.getAngle())))
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, 4 * rot, new Rotation2d(getGyro()))
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -145,6 +145,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
     SmartDashboard.putNumber("speed", swerveModuleStates[2].speedMetersPerSecond);
+    SmartDashboard.putNumber("GyroAngle", gyro.getAngle());
+    SmartDashboard.putNumber("GyroPitch", gyro.getPitch());
+    SmartDashboard.putNumber("GyroYaw", gyro.getYaw());
+  
   }
 
 
@@ -175,13 +179,17 @@ public class DriveSubsystem extends SubsystemBase {
     gyro.reset();
   }
 
+
+  public double getGyro() {
+    return Math.toRadians(-gyro.getAngle());
+  }
   /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return new Rotation2d(Math.toRadians(gyro.getAngle())).getDegrees();
+    return new Rotation2d(getGyro()).getDegrees();
   }
 
   /**

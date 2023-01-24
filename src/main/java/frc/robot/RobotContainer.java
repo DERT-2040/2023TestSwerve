@@ -19,7 +19,9 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
+import frc.robot.commands.GripperCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -28,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -40,15 +43,34 @@ import com.kauailabs.navx.frc.AHRS;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final VisionSubsystem m_vision = new VisionSubsystem();
+
 
   // The driver's controller
   private static Joystick joystick1 = new Joystick(0);
   private static Joystick joystick2 = new Joystick(1);
+  private static GenericHID gamePad1 = new GenericHID(2);
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+    public void resetGyro() {
+      m_robotDrive.zeroHeading();
+    }
+
     public void drive() {
-        m_robotDrive.drive(joystick1.getX(), -joystick1.getY(), joystick2.getX(), true);
+      //Joystick values
+      double x = -joystick1.getY();
+      double y = -joystick1.getX();
+      double rot = -joystick2.getX();
+      double deadband = 0.2;
+      if(x > -deadband && x < deadband) {
+        x = 0;
+      }
+      if(y > -deadband && y < deadband) {
+        y = 0;
+      }
+      if(rot > -deadband && rot < deadband) {
+        rot = 0;
+      }
+
+      m_robotDrive.drive(x, y, rot, true);
     }
 
     public void getVision() {
@@ -81,8 +103,38 @@ public class RobotContainer {
   public void Calibrate() {
     SmartDashboard.putData("Calibrate", new DriveCalibrateCommand(m_robotDrive));
   }
+  
+  
+  
+  
+  
+  
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final VisionSubsystem m_vision = new VisionSubsystem();
+  private final GripperSubsystem m_gripperSubsystem = new GripperSubsystem();
+
+  public static double getGamepad1Axis0() {
+    
+    double axis = gamePad1.getRawAxis(0);
+    //if(axis > -0.1 && axis < 0.1) {
+      //axis = 0;
+    //}
+    return axis;
+  }
+  private final GripperCommand m_gripperCommand = new GripperCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
+
+  public Command getGripperCommand() {
+    return m_gripperCommand;
+  }
+
+
+
+
+
+
 
   /**
+   * 
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link edu.wpi.first.wpilibj.GenericHID} or one of its subclasses ({@link
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a

@@ -31,6 +31,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.Calibrate();
+    m_robotContainer.resetGyro();
 
 
   }
@@ -90,6 +91,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.resetDriveEncoders();
+    m_robotContainer.resetGyro();
+    m_robotContainer.getGripperCommand().schedule();
   
   }
 
@@ -97,6 +100,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_robotContainer.drive();
+    
     
   }
 

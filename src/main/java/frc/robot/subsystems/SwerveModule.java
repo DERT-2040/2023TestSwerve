@@ -44,7 +44,7 @@ public class SwerveModule {  // Class Definition  ******************************
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
-          0.2,
+          0.7,
           0.005,
           0.000001,
           new TrapezoidProfile.Constraints(
@@ -89,11 +89,11 @@ public class SwerveModule {  // Class Definition  ******************************
     m_turningEncoder = new DutyCycleEncoder(turningEncoderChannel);
 
     m_drivePIDController = m_driveMotor.getPIDController();
-        kP = 0.00025;
-        kI = 7e-8;
+        kP = 0.00005;
+        kI = 0;
         kD = 0.000001;
         kIz = 0;
-        kFF = 0.000125;
+        kFF = 0.00025;
         kMaxOutput = 1;
         kMinOutput = 0;
 
@@ -178,6 +178,7 @@ public class SwerveModule {  // Class Definition  ******************************
         SmartDashboard.putNumber("output", turnOutput);
 
         SmartDashboard.putNumber(turnOffsetKey + "1", (GetTurningEncoderValue()));
+        SmartDashboard.putNumber(turnOffsetKey + "Drive", m_driveEncoder.getVelocity());
 
      //Calculate the turning motor output from the turning PID controller.
     m_turningMotor.set(-turnOutput);
