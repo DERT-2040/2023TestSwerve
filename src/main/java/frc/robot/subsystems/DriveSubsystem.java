@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
@@ -64,6 +65,7 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final AHRS gyro = RobotContainer.getAHRS();
 
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry =
       new SwerveDriveOdometry(
@@ -78,6 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     // objects to send pose info to the dashboard
     private Field2d m_field = new Field2d();
+    Pose2d targetPose = new Pose2d(5,5,new Rotation2d(Units.degreesToRadians(180)));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {}
@@ -96,6 +99,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putString("Odometry Pose", odom.toString());
 
     m_field.setRobotPose(m_odometry.getPoseMeters());  // update dashboard
+    m_field.getObject("Target").setPose(targetPose);
     SmartDashboard.putData("Field", m_field);
   }
 

@@ -20,6 +20,7 @@ import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperCommand;
+import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -70,11 +71,16 @@ public class RobotContainer {
         rot = 0;
       }
 
+      x = Math.pow(x, 3);
+      y = Math.pow(y, 3);
+      rot = Math.pow(rot, 3);
+
       m_robotDrive.drive(x, y, rot, true);
     }
 
     public void getVision() {
-      SmartDashboard.putString("Pose", m_vision.getPose().toString());
+      SmartDashboard.putString("TargetPose", m_visionSubsystem.getPose().toString());
+      //return m_visionCommand;
     }
 
     public void resetDriveEncoders() {
@@ -110,8 +116,15 @@ public class RobotContainer {
   
   
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final VisionSubsystem m_vision = new VisionSubsystem();
+  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+
+
+  private final VisionCommand m_visionCommand = new VisionCommand(m_visionSubsystem);
+
+
   private final GripperSubsystem m_gripperSubsystem = new GripperSubsystem();
+
+
 
   public static double getGamepad1Axis0() {
     

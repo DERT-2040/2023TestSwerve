@@ -53,10 +53,9 @@ public class SwerveModule {  // Class Definition  ******************************
 
   /**
    * Constructs a SwerveModule.
-   *
+   * @param turnOffsetKey Text Key to save and retrieve the turing encoder offset
    * @param driveMotorChannel The channel of the drive motor.
    * @param turningMotorChannel The channel of the turning motor.
-   * @param driveEncoderChannels The channels of the drive encoder.
    * @param turningEncoderChannels The channels of the turning encoder.
    * @param driveEncoderReversed Whether the drive encoder is reversed.
    * @param turningEncoderReversed Whether the turning encoder is reversed.
@@ -139,16 +138,20 @@ public class SwerveModule {  // Class Definition  ******************************
    *
    * @return The current state of the module.
    */
+
+   /*  removed unused in rest of code EWO 1/26/23
   public SwerveModuleState getState() {
     return new SwerveModuleState(
         m_driveEncoder.getVelocity(), new Rotation2d(GetTurningEncoderValue()));   // was getDistance
   }
-  
+  */
   /**
    * Returns the current position of the module.
    *
    * @return The current position of the module.
    */
+
+  
   public SwerveModulePosition getPosition() {
     return new SwerveModulePosition(
         m_driveEncoder.getPosition(), new Rotation2d(GetTurningEncoderValue()));   // was getDistance
@@ -161,11 +164,11 @@ public class SwerveModule {  // Class Definition  ******************************
    */
   public void setDesiredState(SwerveModuleState desiredState) {
     // Optimize the reference state to avoid spinning further than 90 degrees
-    SwerveModuleState state =
-        SwerveModuleState.optimize(desiredState, new Rotation2d(GetTurningEncoderValue()));   // was getDistance
+    SwerveModuleState state = SwerveModuleState.optimize(desiredState, new Rotation2d(GetTurningEncoderValue()));   // was getDistance
 
     // Calculate the drive output from the drive PID controller.
     // velocity meter/sec * (60 sec/min * 8.14 gear ratio) / (0.1016 meters * pi) = V * 1530 rev/min
+    // speed request meters.sec * (60 sec/min * 8.14 motor rev / wheel rev) / (0.1016*pi meters/ wheel rev)
     m_drivePIDController.setReference(1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
     SmartDashboard.putNumber("Target", state.angle.getRadians());

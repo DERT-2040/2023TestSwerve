@@ -93,6 +93,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.resetDriveEncoders();
     m_robotContainer.resetGyro();
     m_robotContainer.getGripperCommand().schedule();
+    
   
   }
 
@@ -100,12 +101,14 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_robotContainer.drive();
+    m_robotContainer.getVision();
   }
 
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    //m_robotContainer.getVision().schedule();
   }
 
   /** This function is called periodically during test mode. */
