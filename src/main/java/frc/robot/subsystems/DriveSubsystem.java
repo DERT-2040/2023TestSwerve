@@ -8,6 +8,8 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -64,10 +66,23 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   private final AHRS gyro = RobotContainer.getAHRS();
+  
 
 
   // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry =
+  SwerveDriveOdometry m_odometry;
+          
+
+    // objects to send pose info to the dashboard
+    private Field2d m_field = new Field2d();
+    Pose2d targetPose = new Pose2d(15.513558, 2.748026,new Rotation2d(Units.degreesToRadians(180)));
+    Pose2d robotStartPose = new Pose2d(11, 2.7, new Rotation2d(Units.degreesToRadians(270)));
+
+  /** Creates a new DriveSubsystem. */
+  public DriveSubsystem() {
+    gyro.setAngleAdjustment(90);
+
+    m_odometry =
       new SwerveDriveOdometry(
           DriveConstants.kDriveKinematics,
           new Rotation2d(getGyro()),
@@ -75,15 +90,11 @@ public class DriveSubsystem extends SubsystemBase {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
             m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-          });
+            m_rearRight.getPosition()},
+            robotStartPose
+          );
 
-    // objects to send pose info to the dashboard
-    private Field2d m_field = new Field2d();
-    Pose2d targetPose = new Pose2d(5,5,new Rotation2d(Units.degreesToRadians(180)));
-
-  /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {}
+  }
 
   @Override
   public void periodic() {
@@ -96,9 +107,12 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
         });
+
     SmartDashboard.putString("Odometry Pose", odom.toString());
 
-    m_field.setRobotPose(m_odometry.getPoseMeters());  // update dashboard
+
+
+    m_field.setRobotPose(m_odometry.getPoseMeters().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Units.degreesToRadians(90)))));  // update dashboard
     m_field.getObject("Target").setPose(targetPose);
     SmartDashboard.putData("Field", m_field);
   }
@@ -182,6 +196,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     gyro.reset();
+    gyro.setAngleAdjustment(90);
   }
 
 

@@ -51,12 +51,15 @@ public class RobotContainer {
   private static Joystick joystick2 = new Joystick(1);
   private static GenericHID gamePad1 = new GenericHID(2);
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 8);
+
     public void resetGyro() {
       m_robotDrive.zeroHeading();
     }
 
     public void drive() {
       //Joystick values
+      
       double x = -joystick1.getY();
       double y = -joystick1.getX();
       double rot = -joystick2.getX();
@@ -74,12 +77,30 @@ public class RobotContainer {
       x = Math.pow(x, 3);
       y = Math.pow(y, 3);
       rot = Math.pow(rot, 3);
+      if(joystick2Button9.getAsBoolean()) {
+        Pose2d pose = getVision();
+        x = pose.getX() * 0.1;
+        if(x > 0.1) {
+          x = 0.1; 
+        } else if (x < -0.1) {
+          x = -0.1;
+        }
+
+        y = pose.getY() * 0.1;
+        if(y > 0.1) {
+          y = 0.1;
+        } else if (y < -0.1) {
+          y = -0.1;
+        }
+        rot = 0;
+      }
 
       m_robotDrive.drive(x, y, rot, true);
     }
 
-    public void getVision() {
+    public Pose2d getVision() {
       SmartDashboard.putString("TargetPose", m_visionSubsystem.getPose().toString());
+      return m_visionSubsystem.getPose();
       //return m_visionCommand;
     }
 
