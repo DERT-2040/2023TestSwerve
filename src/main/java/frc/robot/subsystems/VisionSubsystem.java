@@ -123,6 +123,7 @@ public class VisionSubsystem extends SubsystemBase {
         //Camera to target
         photonPoseEstimator.setReferencePose(previousPose);
         Pose3d camToTarget3d = photonPoseEstimator.update().get().estimatedPose;
+        Pose2d camToTarget = new Pose2d(camToTarget3d.getX(), camToTarget3d.getY(), new Rotation2d(camToTarget3d.getRotation().getZ()));
         //Pose2d camToTarget = new Pose2d(camToTarget3d.getX(), camToTarget3d.getY(), new Rotation2d(camToTarget3d.getRotation().getZ()));
         Transform3d trans = new Transform3d(new Pose3d(new Pose2d(0, 0, new Rotation2d(0))), camToTarget3d);
         //Transform3d trans = result.getBestTarget().getBestCameraToTarget();
@@ -156,6 +157,6 @@ public class VisionSubsystem extends SubsystemBase {
       //  return robotPose;             FIX
       return pose; // temp to remove errors*/
       SmartDashboard.putString("Field Position", finalPose.toString());
-      return finalPose; //new Pose2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
+      return camToTarget;//finalPose; //new Pose2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
     }
 }

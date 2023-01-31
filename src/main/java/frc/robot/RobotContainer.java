@@ -93,7 +93,7 @@ public class RobotContainer {
         double m_auto_Maximum = 0.3;
 
         rot = 0;
-        Pose2d pose = getVision();
+        Pose2d pose = getTargetPose();
         x = pose.getX() * m_autoScaling;
         y = pose.getY() * m_autoScaling;
         
@@ -121,7 +121,7 @@ public class RobotContainer {
         */
 
 
-        rot = pose.getRotation().getDegrees() / (-180 * 3);
+        rot = pose.getRotation().getDegrees() / (180 * 3);
 
       }
 
@@ -129,10 +129,21 @@ public class RobotContainer {
     }
 
     //gets target position
-    public Pose2d getVision() {
-      SmartDashboard.putString("TargetPose", m_visionSubsystem.getPose().toString());
-      Pose2d fieldPose = m_visionSubsystem.getPose();
+    public Pose2d getTargetPose() {
+      Pose2d visionPose = m_visionSubsystem.getPose();
+      SmartDashboard.putString("Vision Position", visionPose.toString());
+      Pose2d odometryPose = m_robotDrive.getPose();
+
+
+      Pose2d fieldPose = new Pose2d((visionPose.getX() + odometryPose.getX()) / 2, (visionPose.getY() + odometryPose.getY()) / 2, new Rotation2d((visionPose.getRotation().getRadians() + odometryPose.getRotation().getRadians() + (Math.PI / 2)) / 2));
+
+
+
+      
+      SmartDashboard.putString("Field Pose", fieldPose.toString());
+
       Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
+      
       Transform2d robotToTarget = targetPose.minus(fieldPose);
 
 
@@ -147,6 +158,7 @@ public class RobotContainer {
       if(y > deadband || y < -deadband) {
         returnPose = new Pose2d(returnPose.getX(), robotToTarget.getY(), robotToTarget.getRotation());
       }
+      SmartDashboard.putString("TargetPose", returnPose.toString());
       return returnPose;
       //return m_visionCommand;
     }
