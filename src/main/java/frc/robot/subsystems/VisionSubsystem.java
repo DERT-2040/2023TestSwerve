@@ -35,6 +35,7 @@ public class VisionSubsystem extends SubsystemBase {
     ArrayList<AprilTag> atList;
     AprilTagFieldLayout atfl;
     PhotonPoseEstimator photonPoseEstimator;
+    Pose2d previousPose;
 
     public VisionSubsystem() {
         final AprilTag tag1 = new AprilTag(1, new Pose3d(15.513558, 1.071626, 0.462788, new Rotation3d(new Quaternion(0, 0, 0, 1))));
@@ -73,6 +74,7 @@ public class VisionSubsystem extends SubsystemBase {
         camera = new PhotonCamera("OV5647");
         photonPoseEstimator = new PhotonPoseEstimator(atfl, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, new Transform3d(new Pose3d(new Pose2d(0, 0, new Rotation2d(0))), new Pose3d(new Pose2d(0, 0, new Rotation2d(0)))));
 
+        previousPose = new Pose2d(14, 2.75, new Rotation2d(0));//new Pose2d(atList.get(1).pose.getX(), atList.get(1).pose.getY(), new Rotation2d(atList.get(1).pose.getRotation().getZ()));
         
 
     }
@@ -111,6 +113,7 @@ public class VisionSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Target ID", id);
 
 
+        
 
         //April tag locationo
         //Pose2d targetPose = new Pose2d(3.67, 0.55, new Rotation2d(Units.degreesToRadians(180)));
@@ -118,7 +121,11 @@ public class VisionSubsystem extends SubsystemBase {
         Pose2d targetPose = new Pose2d(new Translation2d(targetPose3d.getX(), targetPose3d.getY()), new Rotation2d(targetPose3d.getRotation().getZ()));
 
         //Camera to target
-        Transform3d trans = result.getBestTarget().getBestCameraToTarget();
+        photonPoseEstimator.setReferencePose(previousPose);
+        Pose3d camToTarget3d = photonPoseEstimator.update().get().estimatedPose;
+        //Pose2d camToTarget = new Pose2d(camToTarget3d.getX(), camToTarget3d.getY(), new Rotation2d(camToTarget3d.getRotation().getZ()));
+        Transform3d trans = new Transform3d(new Pose3d(new Pose2d(0, 0, new Rotation2d(0))), camToTarget3d);
+        //Transform3d trans = result.getBestTarget().getBestCameraToTarget();
         SmartDashboard.putString("ResultTransform", trans.toString());
         //SmartDashboard.putNumber("x", trans.getRotation().getX());
         //SmartDashboard.putNumber("y", trans.getRotation().getY());
