@@ -127,6 +127,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         Transform2d camToTarget2d = new Transform2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
         SmartDashboard.putString("2d Transform", camToTarget2d.toString());
+        
 
 
         Pose2d finalPose = targetPose.plus(camToTarget2d);//PhotonUtils.estimateFieldToCamera(camToTarget2d, targetPose);
@@ -148,6 +149,6 @@ public class VisionSubsystem extends SubsystemBase {
       //  return robotPose;             FIX
       return pose; // temp to remove errors*/
       SmartDashboard.putString("Field Position", finalPose.toString());
-      return new Pose2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
+      return finalPose; //new Pose2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
     }
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -77,30 +78,76 @@ public class RobotContainer {
       x = Math.pow(x, 3);
       y = Math.pow(y, 3);
       rot = Math.pow(rot, 3);
+
+      /*  Next step should be to convert getVision / getPose from returning translation from camera to the April Tag to
+       *  the actual field position
+       *  then here we can define a desired filed location
+       *  and calculate the translation from current position to the desired and auto travel that path
+       * 
+       *  Future step will be to use the photon vision library to merge the april tag location with the swerve obometry position
+       */
+
       if(joystick2Button9.getAsBoolean()) {
+
+        double m_autoScaling = 2;
+        double m_auto_Maximum = 0.3;
+
+        rot = 0;
         Pose2d pose = getVision();
-        x = pose.getX() * 0.1;
+        x = pose.getX() * m_autoScaling;
+        y = pose.getY() * m_autoScaling;
+        
+
+        double test = Math.max(Math.abs(x),Math.abs(y));
+        if(test > m_auto_Maximum){
+          x = x * m_auto_Maximum / test;
+          y = y * m_auto_Maximum / test;
+        }
+
+        /* old code here
         if(x > 0.1) {
           x = 0.1; 
         } else if (x < -0.1) {
           x = -0.1;
         }
 
-        y = pose.getY() * 0.1;
+ 
         if(y > 0.1) {
           y = 0.1;
         } else if (y < -0.1) {
           y = -0.1;
         }
-        rot = 0;
+
+        */
+
+
+        rot = pose.getRotation().getDegrees() / (-180 * 3);
+
       }
 
       m_robotDrive.drive(x, y, rot, true);
     }
 
+    //gets target position
     public Pose2d getVision() {
       SmartDashboard.putString("TargetPose", m_visionSubsystem.getPose().toString());
-      return m_visionSubsystem.getPose();
+      Pose2d fieldPose = m_visionSubsystem.getPose();
+      Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
+      Transform2d robotToTarget = targetPose.minus(fieldPose);
+
+
+      double x = fieldPose.getX();
+      double y = fieldPose.getY();
+      double deadband = 0.2;
+      Pose2d returnPose = new Pose2d(0, 0, robotToTarget.getRotation());
+      
+      if(x > deadband || x < -deadband) {
+        returnPose = new Pose2d(robotToTarget.getX(), 0, robotToTarget.getRotation());
+      } 
+      if(y > deadband || y < -deadband) {
+        returnPose = new Pose2d(returnPose.getX(), robotToTarget.getY(), robotToTarget.getRotation());
+      }
+      return returnPose;
       //return m_visionCommand;
     }
 
