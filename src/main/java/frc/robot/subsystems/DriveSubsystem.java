@@ -112,7 +112,8 @@ public class DriveSubsystem extends SubsystemBase {
 
 
 
-    m_field.setRobotPose(m_odometry.getPoseMeters().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Units.degreesToRadians(90)))));  // update dashboard
+   // m_field.setRobotPose(m_odometry.getPoseMeters().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Units.degreesToRadians(90)))));  // update dashboard
+    m_field.setRobotPose(rotatePose2d(m_odometry.getPoseMeters(),90));
     m_field.getObject("Target").setPose(targetPose);
     SmartDashboard.putData("Field", m_field);
   }
@@ -221,4 +222,24 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+  /**
+   * Method to rotate a Pose2d by an angle in degrees
+   * 
+   * @param pose  The pose to be rotated  x & y are uneffected
+   * @param angle The angle in degrees to rotate the pose
+   * 
+   */
+
+   public Pose2d rotatePose2d(Pose2d pose, double angle){
+
+    double m_poseX = pose.getX();
+    double m_poseY = pose.getY();
+    Rotation2d m_poseAngle = pose.getRotation();
+    Rotation2d m_correctionAngle = new Rotation2d(Units.degreesToRadians(angle));
+
+    return new Pose2d(m_poseX, m_poseY, m_poseAngle.plus(m_correctionAngle));
+   }
+
+
 }
