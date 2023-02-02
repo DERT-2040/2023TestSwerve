@@ -115,6 +115,14 @@ public class DriveSubsystem extends SubsystemBase {
     m_field.setRobotPose(m_odometry.getPoseMeters().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Units.degreesToRadians(90)))));  // update dashboard
     m_field.getObject("Target").setPose(targetPose);
     SmartDashboard.putData("Field", m_field);
+    
+    double myPoseX = m_odometry.getPoseMeters().getX();
+    double myPoseY = m_odometry.getPoseMeters().getY();
+    double myPoseAngle = m_odometry.getPoseMeters().getRotation().getDegrees();
+    SmartDashboard.putNumber("Odometry Robot Pose X", myPoseX);
+    SmartDashboard.putNumber("Odometry Robot Pose Y", myPoseY);
+    SmartDashboard.putNumber("Odometry Robot Pose Angle", myPoseAngle);
+
   }
 
   /**

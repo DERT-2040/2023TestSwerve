@@ -21,12 +21,12 @@ import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperCommand;
-import frc.robot.commands.VisionCommand;
+//import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+//import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
@@ -130,23 +130,28 @@ public class RobotContainer {
 
     //gets target position
     public Pose2d getVision() {
-      SmartDashboard.putString("TargetPose", m_visionSubsystem.getPose().toString());
+    //  SmartDashboard.putString("TargetPose", m_visionSubsystem.getPose().toString());
       Pose2d fieldPose = m_visionSubsystem.getPose();
       Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
       Transform2d robotToTarget = targetPose.minus(fieldPose);
 
-
+      // EWO removed deadband and just return robot to Target
+      /* 
       double x = fieldPose.getX();
       double y = fieldPose.getY();
       double deadband = 0.2;
+
+      */
       Pose2d returnPose = new Pose2d(0, 0, robotToTarget.getRotation());
-      
+      /*
       if(x > deadband || x < -deadband) {
         returnPose = new Pose2d(robotToTarget.getX(), 0, robotToTarget.getRotation());
       } 
       if(y > deadband || y < -deadband) {
         returnPose = new Pose2d(returnPose.getX(), robotToTarget.getY(), robotToTarget.getRotation());
       }
+      */
+      returnPose = new Pose2d(returnPose.getX(), robotToTarget.getY(), robotToTarget.getRotation());
       return returnPose;
       //return m_visionCommand;
     }
@@ -187,7 +192,7 @@ public class RobotContainer {
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
 
 
-  private final VisionCommand m_visionCommand = new VisionCommand(m_visionSubsystem);
+  //private final VisionCommand m_visionCommand = new VisionCommand(m_visionSubsystem);
 
 
   private final GripperSubsystem m_gripperSubsystem = new GripperSubsystem();
