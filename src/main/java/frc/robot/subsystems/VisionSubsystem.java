@@ -149,6 +149,7 @@ public class VisionSubsystem extends SubsystemBase {
       //  return robotPose;             FIX
       return pose; // temp to remove errors*/
       SmartDashboard.putString("Field Position", finalPose.toString());
+      SmartDashboard.putNumber("Vision X", finalPose.getX());
       return finalPose; //new Pose2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
     }
 }

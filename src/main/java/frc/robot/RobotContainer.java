@@ -138,7 +138,7 @@ public class RobotContainer {
 
       double x = fieldPose.getX();
       double y = fieldPose.getY();
-      double deadband = 0.2;
+      double deadband = 0.01;
       Pose2d returnPose = new Pose2d(0, 0, robotToTarget.getRotation());
       
       if(x > deadband || x < -deadband) {
