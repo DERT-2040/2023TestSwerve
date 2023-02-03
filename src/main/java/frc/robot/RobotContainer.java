@@ -128,12 +128,16 @@ public class RobotContainer {
       m_robotDrive.drive(x, y, rot, true);
     }
 
+
     //gets target position
     public Pose2d getVision() {
-      SmartDashboard.putString("TargetPose", m_visionSubsystem.getPose().toString());
-      Pose2d fieldPose = m_visionSubsystem.getPose();
+      SmartDashboard.putString("Vision Pose", m_visionSubsystem.getPose().toString());
+      Pose2d odometryPose = m_robotDrive.getPose();
+      Pose2d visionPose = m_visionSubsystem.getPose();
+      Pose2d fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation().plus(visionPose.getRotation()).div(2));
       Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
       Transform2d robotToTarget = targetPose.minus(fieldPose);
+      SmartDashboard.putString("Field Pose", fieldPose.toString());
 
 
       double x = fieldPose.getX();

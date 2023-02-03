@@ -76,7 +76,7 @@ public class DriveSubsystem extends SubsystemBase {
     // objects to send pose info to the dashboard
     private Field2d m_field = new Field2d();
     Pose2d targetPose = new Pose2d(15.513558, 2.748026,new Rotation2d(Units.degreesToRadians(180)));
-    Pose2d robotStartPose = new Pose2d(11, 2.7, new Rotation2d(Units.degreesToRadians(270)));
+    Pose2d robotStartPose = new Pose2d(14, 2.75, new Rotation2d(Units.degreesToRadians(270)));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
