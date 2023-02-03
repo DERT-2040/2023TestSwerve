@@ -13,11 +13,12 @@ public class GripperSubsystem extends SubsystemBase {
     public GripperSubsystem() {
         counter = new Counter(4);
         gripperTalon = new Spark(0);
+        counter.reset();
  // Set up the input channel for the counter
   //counter.setUpSource(4);
 
  // Set the encoder to count pulse duration from rising edge to falling edge
- counter.setSemiPeriodMode(true);
+
  
     }
 
