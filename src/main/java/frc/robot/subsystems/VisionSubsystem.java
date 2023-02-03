@@ -90,7 +90,7 @@ public class VisionSubsystem extends SubsystemBase {
         var result = camera.getLatestResult();
         List<PhotonTrackedTarget> target = result.getTargets();
         if(target == null || target.size() == 0) {
-            return new Pose2d(0, 0, new Rotation2d(0));
+            return new Pose2d(-999, 0, new Rotation2d(0));
         }
         SmartDashboard.putNumber("Target", target.get(0).getPitch());
 

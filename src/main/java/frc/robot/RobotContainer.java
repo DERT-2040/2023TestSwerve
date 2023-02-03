@@ -129,13 +129,20 @@ public class RobotContainer {
     }
 
 
-    //gets target position
+    //gets target position  preforms auto drive to the targeted postion
+
     public Pose2d getVision() {
       SmartDashboard.putString("Vision Pose", m_visionSubsystem.getPose().toString());
       Pose2d odometryPose = m_robotDrive.getPose();
       Pose2d visionPose = m_visionSubsystem.getPose();
-      Pose2d fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation().plus(visionPose.getRotation()).div(2));
+      Pose2d fieldPose = odometryPose;
+      if(visionPose.getX() != -999){
+        fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation().plus(visionPose.getRotation()).div(2));
+      }
+
+      // Target Pose is the desired location on the field to drive to
       Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
+      
       Transform2d robotToTarget = targetPose.minus(fieldPose);
       SmartDashboard.putString("Field Pose", fieldPose.toString());
 
