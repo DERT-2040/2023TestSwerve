@@ -112,29 +112,38 @@ public class RobotContainer {
     }
 
 
-    //gets target position  preforms auto drive to the targeted postion
+    //gets target position  preform drive to the targeted postion on the field when a button is pushed
 
     public Pose2d getVision() {
       SmartDashboard.putString("Vision Pose", m_visionSubsystem.getPose().toString());
-      Pose2d odometryPose = m_robotDrive.getPose();
+      Pose2d odometryPose = new Pose2d(-m_robotDrive.getPose().getY(), m_robotDrive.getPose().getX(), m_robotDrive.getPose().getRotation().times(1));
+      SmartDashboard.putString("Odometry Pose", m_visionSubsystem.getPose().toString());
+      
       Pose2d visionPose = m_visionSubsystem.getPose();
       Pose2d fieldPose = odometryPose;
-      Pose2d returnPose = new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0)));
-      PIDController m_autoXControl = new PIDController(1,0,0);
+      
+      PIDController m_xControl = new PIDController(1,0,0);
+
 
       if(visionPose.getX() != -999){
         fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation().plus(visionPose.getRotation()).div(2));
       }
+      fieldPose = visionPose;
 
       // Target Pose is the desired location on the field to drive to
       Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
 
       Transform2d robotToTarget = targetPose.minus(fieldPose);
-      SmartDashboard.putString("Field Pose", fieldPose.toString());
 
+      SmartDashboard.putNumber("odomPose X",odometryPose.getX());
+      SmartDashboard.putNumber("Vision Pose X",visionPose.getX());
+      SmartDashboard.putNumber("fieldPose X",fieldPose.getX());
+      
 
-      double x = fieldPose.getX();
-      double y = fieldPose.getY();
+      double x = fieldPose.getY();
+      double y = fieldPose.getX();
+
+      Pose2d returnPose = new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0)));
 
 
       if(true){ // original code
@@ -150,12 +159,15 @@ public class RobotContainer {
 
       } else{
 
-        x = m_autoXControl.calculate(fieldPose.getX(), targetPose.getX());
+        x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
 
-        returnPose = new Pose2d(x, robotToTarget.getY(), -robotToTarget.getRotation());
+        returnPose = new Pose2d(x, robotToTarget.getY(), robotToTarget.getRotation());
 
 
       }
+
+      SmartDashboard.putNumber("returned X Pose", returnPose.getX());
+
       return returnPose;
       //return m_visionCommand;
     }
