@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -81,6 +83,11 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {}
 
+
+
+  AddressableLED m_led;
+  AddressableLEDBuffer m_ledBuffer;
+
   @Override
   public void teleopInit() {
     // This makes sure that the autonomous stops running when
@@ -97,11 +104,19 @@ public class Robot extends TimedRobot {
   
   }
 
+
+  
+
+
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    m_robotContainer.periodic();
     m_robotContainer.drive();
     m_robotContainer.getVision();
+
+
+
   }
 
   @Override

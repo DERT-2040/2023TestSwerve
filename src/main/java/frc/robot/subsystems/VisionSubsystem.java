@@ -68,11 +68,12 @@ public class VisionSubsystem extends SubsystemBase {
 
         atfl = new AprilTagFieldLayout(atList, 16.54175, 8.0137);
         
-        SmartDashboard.putString("field layout", atfl.toString());
 
         camera = new PhotonCamera("OV5647");
-        photonPoseEstimator = new PhotonPoseEstimator(atfl, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, new Transform3d(new Pose3d(new Pose2d(0, 0, new Rotation2d(0))), new Pose3d(new Pose2d(0, 0, new Rotation2d(0)))));
+        
+        //photonPoseEstimator = new PhotonPoseEstimator(atfl, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, camera, new Transform3d(new Pose3d(new Pose2d(0, 0, new Rotation2d(0))), new Pose3d(new Pose2d(0, 0, new Rotation2d(0)))));
 
+        
         
 
     }
@@ -92,7 +93,7 @@ public class VisionSubsystem extends SubsystemBase {
         if(target == null || target.size() == 0) {
             return new Pose2d(-999, 0, new Rotation2d(0));
         }
-        SmartDashboard.putNumber("Target", target.get(0).getPitch());
+    
 
     
         
@@ -108,7 +109,6 @@ public class VisionSubsystem extends SubsystemBase {
 
 
         int id = target.get(0).getFiducialId();
-        SmartDashboard.putNumber("Target ID", id);
 
 
 
@@ -120,13 +120,14 @@ public class VisionSubsystem extends SubsystemBase {
         //Camera to target
         Transform3d trans = result.getBestTarget().getBestCameraToTarget();
         SmartDashboard.putString("ResultTransform", trans.toString());
+        SmartDashboard.putNumber("VisionAngle", (Units.radiansToDegrees(trans.getRotation().getZ())));
         //SmartDashboard.putNumber("x", trans.getRotation().getX());
         //SmartDashboard.putNumber("y", trans.getRotation().getY());
         //SmartDashboard.putNumber("z", trans.getRotation().getZ());
         
 
         Transform2d camToTarget2d = new Transform2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
-        SmartDashboard.putString("2d Transform", camToTarget2d.toString());
+        
         
 
 
@@ -148,8 +149,6 @@ public class VisionSubsystem extends SubsystemBase {
      //   Pose2d robotPose = ??????;   FIX
       //  return robotPose;             FIX
       return pose; // temp to remove errors*/
-      SmartDashboard.putString("Field Position", finalPose.toString());
-      SmartDashboard.putNumber("Vision X", finalPose.getX());
       return finalPose; //new Pose2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
     }
 }

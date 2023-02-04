@@ -25,6 +25,7 @@ import frc.robot.commands.GripperCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -54,10 +55,27 @@ public class RobotContainer {
   private static GenericHID gamePad1 = new GenericHID(2);
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 8);
+  
 
     public void resetGyro() {
       m_robotDrive.zeroHeading();
     }
+
+    public void periodic() {
+      checkButtonInputs();
+    }
+
+    public void checkButtonInputs() {
+      //sets LEDs to Purple
+      if(gamePad1.getRawButtonPressed(3)) {
+        m_LedSubsystem.setColor(false);
+      }
+      //sets LEDs to Yellow
+      if(gamePad1.getRawButtonPressed(4)) {
+        m_LedSubsystem.setColor(true);
+      }
+    }
+    
 
     public void drive() {
       //Joystick values
@@ -115,23 +133,31 @@ public class RobotContainer {
     //gets target position  preform drive to the targeted postion on the field when a button is pushed
 
     public Pose2d getVision() {
-      SmartDashboard.putString("Vision Pose", m_visionSubsystem.getPose().toString());
-      Pose2d odometryPose = new Pose2d(-m_robotDrive.getPose().getY(), m_robotDrive.getPose().getX(), m_robotDrive.getPose().getRotation().times(1));
-      SmartDashboard.putString("Odometry Pose", m_visionSubsystem.getPose().toString());
-      
-      Pose2d visionPose = m_visionSubsystem.getPose();
-      Pose2d fieldPose = odometryPose;
+      // Target Pose is the desired location on the field to drive to
+      Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
       
       PIDController m_xControl = new PIDController(1,0,0);
 
+      
+      Pose2d odometryPose = new Pose2d(m_robotDrive.getPose().getY(), -m_robotDrive.getPose().getX() + targetPose.getY() * 2, m_robotDrive.getPose().getRotation().times(-1));
+      SmartDashboard.putString("Odometry Pose", odometryPose.toString());
+      
+      Pose2d visionPose = m_visionSubsystem.getPose();
+      SmartDashboard.putString("Vision Pose", visionPose.toString());
+
+
+      Pose2d fieldPose = odometryPose;
+      
+      
+
 
       if(visionPose.getX() != -999){
-        fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation().plus(visionPose.getRotation()).div(2));
+        fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation().plus(visionPose.getRotation()).div(-2));
       }
-      fieldPose = visionPose;
+      
+      //fieldPose = visionPose;
+      SmartDashboard.putString("Field Pose", fieldPose.toString());
 
-      // Target Pose is the desired location on the field to drive to
-      Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
 
       Transform2d robotToTarget = targetPose.minus(fieldPose);
 
@@ -140,8 +166,8 @@ public class RobotContainer {
       SmartDashboard.putNumber("fieldPose X",fieldPose.getX());
       
 
-      double x = fieldPose.getY();
-      double y = fieldPose.getX();
+      double x = fieldPose.getX();
+      double y = fieldPose.getY();
 
       Pose2d returnPose = new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0)));
 
@@ -157,7 +183,7 @@ public class RobotContainer {
           returnPose = new Pose2d(returnPose.getX(), robotToTarget.getY(), robotToTarget.getRotation());
         }
 
-      } else{
+      } else {
 
         x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
 
@@ -206,6 +232,7 @@ public class RobotContainer {
   
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
+  private final LEDSubsystem m_LedSubsystem = new LEDSubsystem();
 
 
   private final VisionCommand m_visionCommand = new VisionCommand(m_visionSubsystem);

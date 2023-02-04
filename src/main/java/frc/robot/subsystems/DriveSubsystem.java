@@ -109,15 +109,15 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
-    SmartDashboard.putString("Odometry Pose", odom.toString());
 
 
 
-   // m_field.setRobotPose(m_odometry.getPoseMeters().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Units.degreesToRadians(90)))));  // update dashboard
+    //m_field.setRobotPose(m_odometry.getPoseMeters().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Units.degreesToRadians(90)))));  // update dashboard
     m_field.setRobotPose(rotatePose2d(m_odometry.getPoseMeters(),90));
     m_field.getObject("Target").setPose(targetPose);
     SmartDashboard.putData("Field", m_field);
   }
+
 
   /**
    * Returns the currently-estimated pose of the robot.
@@ -165,11 +165,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+    /*
     SmartDashboard.putNumber("speed", swerveModuleStates[2].speedMetersPerSecond);
     SmartDashboard.putNumber("GyroAngle", gyro.getAngle());
     SmartDashboard.putNumber("GyroPitch", gyro.getPitch());
     SmartDashboard.putNumber("GyroYaw", gyro.getYaw());
-    SmartDashboard.putNumber("Odometry X", getPose().getX());
+    SmartDashboard.putNumber("Odometry X", getPose().getX());*/
   
   }
 
