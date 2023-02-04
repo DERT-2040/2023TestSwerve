@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
@@ -103,26 +104,8 @@ public class RobotContainer {
           x = x * m_auto_Maximum / test;
           y = y * m_auto_Maximum / test;
         }
-
-        /* old code here
-        if(x > 0.1) {
-          x = 0.1; 
-        } else if (x < -0.1) {
-          x = -0.1;
-        }
-
- 
-        if(y > 0.1) {
-          y = 0.1;
-        } else if (y < -0.1) {
-          y = -0.1;
-        }
-
-        */
-
-
-        rot = pose.getRotation().getDegrees() / (-180 * 3);
-
+        
+        rot = pose.getRotation().getDegrees() / (180 * 3);
       }
 
       m_robotDrive.drive(x, y, rot, true);
@@ -136,27 +119,42 @@ public class RobotContainer {
       Pose2d odometryPose = m_robotDrive.getPose();
       Pose2d visionPose = m_visionSubsystem.getPose();
       Pose2d fieldPose = odometryPose;
+      Pose2d returnPose = new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0)));
+      PIDController m_autoXControl = new PIDController(1,0,0);
+
       if(visionPose.getX() != -999){
         fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation().plus(visionPose.getRotation()).div(2));
       }
 
       // Target Pose is the desired location on the field to drive to
       Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
-      
+
       Transform2d robotToTarget = targetPose.minus(fieldPose);
       SmartDashboard.putString("Field Pose", fieldPose.toString());
 
 
       double x = fieldPose.getX();
       double y = fieldPose.getY();
-      double deadband = 0.01;
-      Pose2d returnPose = new Pose2d(0, 0, robotToTarget.getRotation());
-      
-      if(x > deadband || x < -deadband) {
-        returnPose = new Pose2d(robotToTarget.getX(), 0, robotToTarget.getRotation());
-      } 
-      if(y > deadband || y < -deadband) {
-        returnPose = new Pose2d(returnPose.getX(), robotToTarget.getY(), robotToTarget.getRotation());
+
+
+      if(true){ // original code
+        double deadband = 0.01;
+        returnPose = new Pose2d(0, 0, robotToTarget.getRotation());
+        
+        if(x > deadband || x < -deadband) {
+          returnPose = new Pose2d(robotToTarget.getX(), 0, robotToTarget.getRotation());
+        } 
+        if(y > deadband || y < -deadband) {
+          returnPose = new Pose2d(returnPose.getX(), robotToTarget.getY(), robotToTarget.getRotation());
+        }
+
+      } else{
+
+        x = m_autoXControl.calculate(fieldPose.getX(), targetPose.getX());
+
+        returnPose = new Pose2d(x, robotToTarget.getY(), -robotToTarget.getRotation());
+
+
       }
       return returnPose;
       //return m_visionCommand;
