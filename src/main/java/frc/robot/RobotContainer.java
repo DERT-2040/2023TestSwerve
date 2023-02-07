@@ -67,11 +67,11 @@ public class RobotContainer {
 
     public void checkButtonInputs() {
       //sets LEDs to Purple
-      if(gamePad1.getRawButtonPressed(3)) {
+      if(gamePad1.getRawButton(3)) {
         m_LedSubsystem.setColor(false);
       }
       //sets LEDs to Yellow
-      if(gamePad1.getRawButtonPressed(4)) {
+      if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
       }
     }
@@ -111,7 +111,6 @@ public class RobotContainer {
         double m_autoScaling = 2;
         double m_auto_Maximum = 0.3;
 
-        rot = 0;
         Pose2d pose = getVision();
         x = pose.getX() * m_autoScaling;
         y = pose.getY() * m_autoScaling;
@@ -122,6 +121,7 @@ public class RobotContainer {
           x = x * m_auto_Maximum / test;
           y = y * m_auto_Maximum / test;
         }
+        
         
         rot = pose.getRotation().getDegrees() / (180 * 3);
       }
@@ -159,15 +159,18 @@ public class RobotContainer {
       SmartDashboard.putString("Field Pose", fieldPose.toString());
 
 
-      Transform2d robotToTarget = targetPose.minus(fieldPose);
+      //Transform2d robotToTarget = targetPose.minus(fieldPose);
+      Pose2d robotToTarget = new Pose2d(targetPose.getX() - fieldPose.getX(), targetPose.getY() - fieldPose.getY(), new Rotation2d(-targetPose.getRotation().getRadians() + fieldPose.getRotation().getRadians()));
+
+      SmartDashboard.putString("robotToTarget", robotToTarget.toString());
 
       SmartDashboard.putNumber("odomPose X",odometryPose.getX());
       SmartDashboard.putNumber("Vision Pose X",visionPose.getX());
       SmartDashboard.putNumber("fieldPose X",fieldPose.getX());
       
 
-      double x = fieldPose.getX();
-      double y = fieldPose.getY();
+      double x = robotToTarget.getX();
+      double y = robotToTarget.getY();
 
       Pose2d returnPose = new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0)));
 
@@ -192,7 +195,7 @@ public class RobotContainer {
 
       }
 
-      SmartDashboard.putNumber("returned X Pose", returnPose.getX());
+      SmartDashboard.putString("Return Pose", returnPose.toString());
 
       return returnPose;
       //return m_visionCommand;

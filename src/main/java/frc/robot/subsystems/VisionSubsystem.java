@@ -7,7 +7,7 @@ import java.util.Optional;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Quaternion;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -84,13 +84,37 @@ public class VisionSubsystem extends SubsystemBase {
 
     //}
 
-
+    double previousTimestamp = 0;
    
 
     public Pose2d getPose() {
         var result = camera.getLatestResult();
-        List<PhotonTrackedTarget> target = result.getTargets();
-        if(target == null || target.size() == 0) {
+        var resultTimestamp = result.getTimestampSeconds();
+        if(/*resultTimestamp != previousTimestamp &&*/ result.hasTargets()) {
+            previousTimestamp = resultTimestamp;
+            var target = result.getBestTarget();
+            var fiducialID = target.getFiducialId();
+            if (/*target.getPoseAmbiguity() <= .2 && fiducialID > 0 && */fiducialID <= atList.size()) {
+                var targetPose = atList.get(fiducialID-1).pose;
+                Transform3d camToTarget = target.getBestCameraToTarget();
+                Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
+
+
+                //add later
+                //var visionMeasurement = camPose.transformBy(CAM_TO_ROBOT);
+
+                Pose2d returnPose = new Pose2d(camPose.getX(), camPose.getY(), new Rotation2d(-camPose.getRotation().getZ()));
+                return returnPose;
+            }
+        }
+        return new Pose2d(-999, 0, new Rotation2d(0));
+
+
+
+        /*
+
+        List<PhotonTrackedTarget> targets = result.getTargets();
+        if(targets == null || targets.size() == 0) {
             return new Pose2d(-999, 0, new Rotation2d(0));
         }
     
@@ -105,10 +129,10 @@ public class VisionSubsystem extends SubsystemBase {
             var camPose = Constants.kFarTargetPose.transformBy(camToTargetTrans.inverse());
             photonPoseEstimator.addVisionMeasurement(
                     camPose.transformBy(Constants.kCameraToRobot).toPose2d(), imageCaptureTime);
-        }  */
+        }  
 
 
-        int id = target.get(0).getFiducialId();
+        int id = targets.get(0).getFiducialId();
 
 
 
@@ -149,6 +173,6 @@ public class VisionSubsystem extends SubsystemBase {
      //   Pose2d robotPose = ??????;   FIX
       //  return robotPose;             FIX
       return pose; // temp to remove errors*/
-      return finalPose; //new Pose2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
+      //return finalPose; //new Pose2d(new Translation2d(trans.getX(), trans.getY()), new Rotation2d(trans.getRotation().getZ()));
     }
 }
