@@ -16,6 +16,7 @@ public class LEDSubsystem extends SubsystemBase {
 
         setColor(true);
         m_led.start();
+        counter = 0;
 
     }
 
@@ -33,6 +34,30 @@ public class LEDSubsystem extends SubsystemBase {
         }
         m_led.setData(m_ledBuffer);
         SmartDashboard.putBoolean("LED Color", yellow);
+    }
+
+    int counter;
+
+    public void idlePattern() {
+        counter++;
+            for(int i=0; i<m_ledBuffer.getLength(); i+=2) {
+                //sets the LEDs to yellow
+                m_ledBuffer.setRGB(i, 0, 25, 25);
+            }
+    
+            for(int i=1; i<m_ledBuffer.getLength(); i+=2) {
+                m_ledBuffer.setRGB(i, 0, 50, 0);
+            }
+        
+            for(int i=1; i<m_ledBuffer.getLength(); i+=2) {
+                //sets the LEDs to yellow
+                m_ledBuffer.setRGB(i, 0, 25, 25);
+            }
+
+            for(int i=0; i<m_ledBuffer.getLength(); i+=2) {
+                m_ledBuffer.setRGB(i, 0, 50, 0);
+            }
+        
     }
 }
     

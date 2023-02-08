@@ -170,19 +170,20 @@ public class SwerveModule {  // Class Definition  ******************************
     // velocity meter/sec * (60 sec/min * 8.14 gear ratio) / (0.1016 meters * pi) = V * 1530 rev/min
     // speed request meters.sec * (60 sec/min * 8.14 motor rev / wheel rev) / (0.1016*pi meters/ wheel rev)
     m_drivePIDController.setReference(1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
-    SmartDashboard.putNumber("Target", state.angle.getRadians());
+    //SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
+    //SmartDashboard.putNumber("Target", state.angle.getRadians());
     //SmartDashboard.putNumber("Velocity", m_turningEncoder.get);
     SmartDashboard.putNumber("Output Current",m_driveMotor.getOutputCurrent());
     
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
         m_turningPIDController.calculate(GetTurningEncoderValue(), state.angle.getRadians());//  was getDistance
+        /* 
         SmartDashboard.putNumber("Radians", state.angle.getRadians());
         SmartDashboard.putNumber("output", turnOutput);
 
         SmartDashboard.putNumber(turnOffsetKey + "1", (GetTurningEncoderValue()));
-        SmartDashboard.putNumber(turnOffsetKey + "Drive", m_driveEncoder.getVelocity());
+        SmartDashboard.putNumber(turnOffsetKey + "Drive", m_driveEncoder.getVelocity());*/
 
      //Calculate the turning motor output from the turning PID controller.
     m_turningMotor.set(-turnOutput);

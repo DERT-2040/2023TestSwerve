@@ -76,6 +76,9 @@ public class RobotContainer {
       }
     }
     
+    double filteredX = 0;
+    double filteredY = 0;
+    
 
     public void drive() {
       //Joystick values
@@ -108,22 +111,35 @@ public class RobotContainer {
 
       if(joystick2Button9.getAsBoolean()) {
 
-        double m_autoScaling = 2;
-        double m_auto_Maximum = 0.3;
+      
+        double m_maximum = 1;
 
         Pose2d pose = getVision();
-        x = pose.getX() * m_autoScaling;
-        y = pose.getY() * m_autoScaling;
+        x = pose.getX();
+        y = pose.getY();
         
 
         double test = Math.max(Math.abs(x),Math.abs(y));
-        if(test > m_auto_Maximum){
-          x = x * m_auto_Maximum / test;
-          y = y * m_auto_Maximum / test;
+        if(test > m_maximum){
+          x = x * m_maximum / test;
+          y = y * m_maximum / test;
         }
+
+        double filter = 0.25;
+        filteredX = (x - filteredX) * filter + filteredX;
+        x = filteredX;
+        filteredY = (y - filteredY) * filter + filteredY;
+        y = filteredY;
         
         
-        rot = pose.getRotation().getDegrees() / (180 * 3);
+        
+        rot = pose.getRotation().getDegrees() / (180);
+        
+        if(rot > .5) {
+          rot = .5;
+        } else if(rot < -.5) {
+          rot = -.5;
+        }
       }
 
       m_robotDrive.drive(x, y, rot, true);
@@ -136,12 +152,13 @@ public class RobotContainer {
       // Target Pose is the desired location on the field to drive to
       Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
       
-      PIDController m_xControl = new PIDController(1,0,0);
+      PIDController m_xControl = new PIDController(2,0.2,0);
+      PIDController m_yControl = new PIDController(1,0.2,0);
 
       
       Pose2d odometryPose = new Pose2d(m_robotDrive.getPose().getY(), -m_robotDrive.getPose().getX() + targetPose.getY() * 2, m_robotDrive.getPose().getRotation().times(-1));
       SmartDashboard.putString("Odometry Pose", odometryPose.toString());
-      
+      //SmartDashboard.putString("Raw Odom Pose", m_robotDrive.getPose().toString());
       Pose2d visionPose = m_visionSubsystem.getPose();
       SmartDashboard.putString("Vision Pose", visionPose.toString());
 
@@ -152,17 +169,24 @@ public class RobotContainer {
 
 
       if(visionPose.getX() != -999){
-        fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation().plus(visionPose.getRotation()).div(-2));
+        fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation());
+        m_robotDrive.resetOdometry(new Pose2d(-(fieldPose.getY() - targetPose.getY() * 2), fieldPose.getX(),new Rotation2d(0)));
+
       }
       
       //fieldPose = visionPose;
       SmartDashboard.putString("Field Pose", fieldPose.toString());
 
+      //SmartDashboard.putString("Reset Pose", new Pose2d(-(visionPose.getY() - targetPose.getY() * 2), visionPose.getX(), fieldPose.getRotation().times(-1)).toString());
+
+      
+      //m_robotDrive.resetOdometry(new Pose2d(-(visionPose.getY() - targetPose.getY() * 2), visionPose.getX(), fieldPose.getRotation().times(-1)));
+
+
 
       //Transform2d robotToTarget = targetPose.minus(fieldPose);
       Pose2d robotToTarget = new Pose2d(targetPose.getX() - fieldPose.getX(), targetPose.getY() - fieldPose.getY(), new Rotation2d(-targetPose.getRotation().getRadians() + fieldPose.getRotation().getRadians()));
 
-      SmartDashboard.putString("robotToTarget", robotToTarget.toString());
 
       SmartDashboard.putNumber("odomPose X",odometryPose.getX());
       SmartDashboard.putNumber("Vision Pose X",visionPose.getX());
@@ -171,11 +195,12 @@ public class RobotContainer {
 
       double x = robotToTarget.getX();
       double y = robotToTarget.getY();
+      Rotation2d rot = robotToTarget.getRotation();
 
       Pose2d returnPose = new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0)));
 
 
-      if(true){ // original code
+      if(false){ // original code
         double deadband = 0.01;
         returnPose = new Pose2d(0, 0, robotToTarget.getRotation());
         
@@ -189,8 +214,11 @@ public class RobotContainer {
       } else {
 
         x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
+        y = m_yControl.calculate(fieldPose.getY(), targetPose.getY());
+        rot = robotToTarget.getRotation();
+        
 
-        returnPose = new Pose2d(x, robotToTarget.getY(), robotToTarget.getRotation());
+        returnPose = new Pose2d(x, y, rot);// robotToTarget.getY(), robotToTarget.getRotation());
 
 
       }
