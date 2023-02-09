@@ -27,22 +27,16 @@ public class GripperSubsystem extends SubsystemBase {
     }
 
     public void grip(double power) {
+        counterPower = power;
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", counter.get());
-        counterPower = power;
-
     }
-    public void moveGrip(int counts, char direction, double power) {
+    public void moveGrip(int counts, double power) {
+        counterPower = power;
         int tempCounts = counter.get();
         int countTime = Math.abs(counter.get() - tempCounts);
         while(countTime>counts){
-            if(direction == 'r') {
                 gripperTalon.set(power);
-            } else if(direction == 'l') {
-                gripperTalon.set(-1 * power);
-            } else {
-                System.out.println("Invalid Gripper Command!");
-            }
         }
     }
 }
