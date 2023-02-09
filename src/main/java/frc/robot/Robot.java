@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.Calibrate();
-    m_robotContainer.resetGyro();
+   // m_robotContainer.resetGyro();
     robotOn = false;
 
 
@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.resetDriveEncoders();
-    m_robotContainer.resetGyro();
+   // m_robotContainer.resetGyro();
     m_robotContainer.getGripperCommand().schedule();
     
   

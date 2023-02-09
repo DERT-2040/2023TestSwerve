@@ -171,7 +171,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("GyroPitch", gyro.getPitch());
     SmartDashboard.putNumber("GyroYaw", gyro.getYaw());
     SmartDashboard.putNumber("Odometry X", getPose().getX());*/
-  
+    SmartDashboard.putNumber("getGyro output ", getGyro()*180/Math.PI);
   }
 
 
