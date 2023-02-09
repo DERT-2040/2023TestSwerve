@@ -109,6 +109,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
+    SmartDashboard.putNumber("Odometery Angle ", odom.getRotation().getDegrees());  
+
 
 
 
