@@ -81,7 +81,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    gyro.setAngleAdjustment(90);
+    gyro.setAngleAdjustment(0);
 
     m_odometry =
       new SwerveDriveOdometry(
@@ -202,7 +202,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     gyro.reset();
-    gyro.setAngleAdjustment(90);
+    gyro.setAngleAdjustment(0);
   }
 
 
