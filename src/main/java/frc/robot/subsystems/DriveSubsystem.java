@@ -81,7 +81,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    gyro.setAngleAdjustment(90);
+    gyro.setAngleAdjustment(0); // test
 
     m_odometry =
       new SwerveDriveOdometry(
@@ -110,7 +110,7 @@ public class DriveSubsystem extends SubsystemBase {
         });
 
     SmartDashboard.putNumber("Odometery Angle ", odom.getRotation().getDegrees());  
-
+    SmartDashboard.putString("Low level odom",odom.getPose.toString);
 
 
 
@@ -202,7 +202,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     gyro.reset();
-    gyro.setAngleAdjustment(90);
+    gyro.setAngleAdjustment(0); // test
   }
 
 
