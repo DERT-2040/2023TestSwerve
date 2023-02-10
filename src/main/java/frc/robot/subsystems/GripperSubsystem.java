@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -36,13 +37,18 @@ public class GripperSubsystem extends SubsystemBase {
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", m_count);
         SmartDashboard.putNumber("Gripper Power",power);
+        SmartDashboard.putData("Gripper Turn 180", moveGrip(180, 1));
     }
 
-    public void moveGrip(int counts, double power) {
-        int tempCounts = counter.get();
-        int countTime = Math.abs(counter.get() - tempCounts);
-        while(countTime>counts){
-                gripperTalon.set(power);
+    public Sendable moveGrip(int counts, double power) {
+        double abs_count = Math.abs(m_count);
+        while (abs_count > (m_count - counts) || abs_count < (m_count + counts)) {
+            grip(power);
         }
+        return counter;
+    }
+    
+    public void gripObject() {
+        
     }
 }
