@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.lang.Math;;
+import java.lang.Math;
 
 public class GripperSubsystem extends SubsystemBase {
     double m_count = 0;
@@ -37,7 +37,10 @@ public class GripperSubsystem extends SubsystemBase {
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", m_count);
         SmartDashboard.putNumber("Gripper Power",power);
-        SmartDashboard.putData("Gripper Turn 180", moveGrip(180, 1));
+        SmartDashboard.putData("Gripper Turn 180", moveGrip(175, 1));
+        SmartDashboard.putData("Gripper Turn -180", moveGrip(175, -1));
+        SmartDashboard.putData("Pickup Cube (1/2 Turn)", gripObject("Cube"));
+        SmartDashboard.putData("Pickup Cone (1 turn)", gripObject("Cone"));
     }
 
     public Sendable moveGrip(int counts, double power) {
@@ -47,8 +50,15 @@ public class GripperSubsystem extends SubsystemBase {
         }
         return counter;
     }
-    
-    public void gripObject() {
-        
+
+    public Sendable gripObject(String objectType) {
+        if (objectType.equals("Cube")) {
+            moveGrip(175, 1);
+            moveGrip(175, -1);
+        } else if (objectType.equals("Cone")) {
+            moveGrip(350, 1);
+            moveGrip(350, -1);
+        }
+        return counter;
     }
 }
