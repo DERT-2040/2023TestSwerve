@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.lang.Math;
 
+import javax.xml.validation.ValidatorHandler;
+
 public class GripperSubsystem extends SubsystemBase {
     double m_count = 0;
     double m_prevCount = 0;
@@ -40,21 +42,19 @@ public class GripperSubsystem extends SubsystemBase {
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", m_count);
         SmartDashboard.putNumber("Gripper Power",power);
-        SmartDashboard.putData("Gripper Turn 180", moveGrip(175, 1));
-        SmartDashboard.putData("Gripper Turn -180", moveGrip(175, -1));
-        SmartDashboard.putData("Pickup Cube (1/2 Turn)", gripObject("Cube"));
-        SmartDashboard.putData("Pickup Cone (1 turn)", gripObject("Cone"));
+        //SmartDashboard.putData("Gripper Turn 180", moveGrip(175, 1));
+        //SmartDashboard.putData("Gripper Turn -180", moveGrip(175, -1));
+        //SmartDashboard.putData("Pickup Cube (1/2 Turn)", gripObject("Cube"));
+        //SmartDashboard.putData("Pickup Cone (1 turn)", gripObject("Cone"));
     }
 
-    public Sendable moveGrip(int counts, double power) {
-        double abs_count = Math.abs(m_count);
-        while (abs_count > (m_count - counts) || abs_count < (m_count + counts)) {
+    public void moveGrip(int counts, double power) {
+        while (m_count > (m_count - counts) || m_count < (m_count + counts)) {
             grip(power);
         }
-        return counter;
     }
 
-    public Sendable gripObject(String objectType) {
+    public void gripObject(int objectType) {
         if (objectType.equals("Cube")) {
             moveGrip(175, 1);
             moveGrip(175, -1);
@@ -62,6 +62,5 @@ public class GripperSubsystem extends SubsystemBase {
             moveGrip(350, 1);
             moveGrip(350, -1);
         }
-        return counter;
     }
 }
