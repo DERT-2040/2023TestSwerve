@@ -10,7 +10,7 @@ import java.lang.Math;
 import javax.xml.validation.ValidatorHandler;
 
 public class GripperSubsystem extends SubsystemBase {
-    double m_count = 0;
+    static double m_count = 0;
     double m_prevCount = 0;
     Counter counter;
     Spark gripperTalon;
@@ -22,13 +22,10 @@ public class GripperSubsystem extends SubsystemBase {
   //counter.setUpSource(4);
 
  // Set the encoder to count pulse duration from rising edge to falling edge
- 
-
-
-
     }
 
-    public void grip(double power) {
+
+    public void grip_speed(double power) {
 
         double m_currentCount = counter.get();
     ;
@@ -37,7 +34,7 @@ public class GripperSubsystem extends SubsystemBase {
          } else {
             m_count = m_count - (m_currentCount - m_prevCount);
          }
-         m_prevCount = m_currentCount; // added comment
+         m_prevCount = m_currentCount;
 
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", m_count);
@@ -48,19 +45,14 @@ public class GripperSubsystem extends SubsystemBase {
         //SmartDashboard.putData("Pickup Cone (1 turn)", gripObject("Cone"));
     }
 
+    public void grip_goto(int location) {
+
+    }
+
     public void moveGrip(int counts, double power) {
         while (m_count > (m_count - counts) || m_count < (m_count + counts)) {
             grip(power);
         }
     }
 
-    public void gripObject(int objectType) {
-        if (objectType.equals("Cube")) {
-            moveGrip(175, 1);
-            moveGrip(175, -1);
-        } else if (objectType.equals("Cone")) {
-            moveGrip(350, 1);
-            moveGrip(350, -1);
-        }
-    }
 }
