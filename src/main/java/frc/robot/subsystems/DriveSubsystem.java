@@ -77,7 +77,7 @@ public class DriveSubsystem extends SubsystemBase {
     private Field2d m_field = new Field2d();
     Pose2d targetPose = new Pose2d(15.513558, 2.748026,new Rotation2d(Units.degreesToRadians(180)));
     //x and y on odometry are switched relative to vison
-    Pose2d robotStartPose = new Pose2d(2.75, 14, new Rotation2d(Units.degreesToRadians(0)));
+    Pose2d robotStartPose = new Pose2d(14, 2.75, new Rotation2d(Units.degreesToRadians(0)));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
@@ -109,8 +109,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
-    SmartDashboard.putNumber("Odometery Angle ", odom.getRotation().getDegrees());  
-
+    //SmartDashboard.putNumber("Odometery Angle ", odom.getRotation().getDegrees());  
+    //  odom angle agrees with robotDrivePose
 
 
 
@@ -204,8 +204,9 @@ public class DriveSubsystem extends SubsystemBase {
     gyro.reset();
     gyro.setAngleAdjustment(0);
   }
-
-
+/*
+* @return the robot's gyro angle in radians
+*/
   public double getGyro() {
     return Math.toRadians(-gyro.getAngle());
   }

@@ -155,7 +155,7 @@ public class RobotContainer {
       PIDController m_xControl = new PIDController(2,0.2,0);
       PIDController m_yControl = new PIDController(1,0.2,0);
 
-      
+      SmartDashboard.putString("robotDrivePose ", m_robotDrive.getPose().toString());
       Pose2d odometryPose = new Pose2d(m_robotDrive.getPose().getY(), -m_robotDrive.getPose().getX() + targetPose.getY() * 2, m_robotDrive.getPose().getRotation().times(-1));
       SmartDashboard.putString("Odometry Pose", odometryPose.toString());
       //SmartDashboard.putString("Raw Odom Pose", m_robotDrive.getPose().toString());
