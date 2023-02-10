@@ -21,6 +21,9 @@ public class GripperSubsystem extends SubsystemBase {
 
  // Set the encoder to count pulse duration from rising edge to falling edge
  
+
+
+
     }
 
     public void grip(double power) {
@@ -32,7 +35,7 @@ public class GripperSubsystem extends SubsystemBase {
          } else {
             m_count = m_count - (m_currentCount - m_prevCount);
          }
-         m_prevCount = m_currentCount;
+         m_prevCount = m_currentCount; // added comment
 
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", m_count);
