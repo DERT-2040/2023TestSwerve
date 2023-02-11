@@ -77,11 +77,11 @@ public class DriveSubsystem extends SubsystemBase {
     private Field2d m_field = new Field2d();
     Pose2d targetPose = new Pose2d(15.513558, 2.748026,new Rotation2d(Units.degreesToRadians(180)));
     //x and y on odometry are switched relative to vison
-    Pose2d robotStartPose = new Pose2d(14, 2.75, new Rotation2d(Units.degreesToRadians(0)));
+    Pose2d robotStartPose = new Pose2d(2.75, 14, new Rotation2d(Units.degreesToRadians(0)));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
-    gyro.setAngleAdjustment(0);
+    gyro.setAngleAdjustment(90);
 
     m_odometry =
       new SwerveDriveOdometry(
@@ -202,7 +202,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     gyro.reset();
-    gyro.setAngleAdjustment(0);
+    gyro.setAngleAdjustment(90);
   }
 /*
 * @return the robot's gyro angle in radians
