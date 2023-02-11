@@ -175,8 +175,8 @@ public class SwerveModule {  // Class Definition  ******************************
     //SmartDashboard.putNumber("Velocity", m_turningEncoder.get);
     SmartDashboard.putNumber(turnOffsetKey + " Drive Output Current", m_driveMotor.getOutputCurrent());
     SmartDashboard.putNumber(turnOffsetKey + " Turn Output Current", m_turningMotor.getOutputCurrent());
-    SmartDashboard.putNumber(turnOffsetKey = " Drive Temp F", m_driveMotor.getMotorTemperature() * (9/5) + 32);
-    SmartDashboard.putNumber(turnOffsetKey = " Turn Temp F", m_turningMotor.getMotorTemperature() * (9/5) + 32);
+    SmartDashboard.putNumber(turnOffsetKey + " Drive Temp F", m_driveMotor.getMotorTemperature() * (9/5) + 32);
+    SmartDashboard.putNumber(turnOffsetKey + " Turn Temp F", m_turningMotor.getMotorTemperature() * (9/5) + 32);
     
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
