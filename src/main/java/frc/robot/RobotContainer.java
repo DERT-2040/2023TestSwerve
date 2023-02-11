@@ -19,13 +19,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.ArmCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperCommand;
 import frc.robot.commands.VisionCommand;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -55,6 +58,8 @@ public class RobotContainer {
   private static GenericHID gamePad1 = new GenericHID(2);
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 8);
+  private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 2);
+
   
 
     public void resetGyro() {
@@ -63,6 +68,7 @@ public class RobotContainer {
 
     public void periodic() {
       checkButtonInputs();
+      m_PDHMonitor.periodic();
     }
 
     public void checkButtonInputs() {
@@ -74,7 +80,10 @@ public class RobotContainer {
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
       }
+      joystick2Button3.whileTrue(m_armCommand);
     }
+
+
     
     double filteredX = 0;
     double filteredY = 0;
@@ -142,7 +151,9 @@ public class RobotContainer {
         }
       }
 
-      m_robotDrive.drive(x, y, rot, true);
+      double speed = (-joystick1.getZ() + 1) / 2;
+
+      m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
     }
 
 
@@ -170,7 +181,7 @@ public class RobotContainer {
 
       if(visionPose.getX() != -999){
         fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation());
-      //  m_robotDrive.resetOdometry(new Pose2d(-(fieldPose.getY() - targetPose.getY() * 2), fieldPose.getX(),new Rotation2d(0)));
+        m_robotDrive.resetOdometry(new Pose2d(-(fieldPose.getY() - targetPose.getY() * 2), fieldPose.getX(),new Rotation2d(0)));
 
       }
       
@@ -271,6 +282,17 @@ public class RobotContainer {
 
   private final GripperSubsystem m_gripperSubsystem = new GripperSubsystem();
 
+  private final PDHMonitor m_PDHMonitor = new PDHMonitor();
+
+  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
+  private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem);
+
+
+
+  public void LEDIdle() {
+    m_LedSubsystem.idlePattern();
+  }
+
 
 
   public static double getGamepad1Axis0() {
@@ -300,7 +322,8 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then calling passing it to a
    * {@link JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

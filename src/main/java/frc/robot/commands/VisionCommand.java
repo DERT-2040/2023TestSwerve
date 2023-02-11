@@ -24,7 +24,7 @@ public class VisionCommand extends CommandBase {
      @Override
      public void execute() {
         //var temp = m_subsystem.getEstimatedGlobalPose());
-        SmartDashboard.putString("visionPose", m_subsystem.getPose().toString());
+        //SmartDashboard.putString("visionPose", m_subsystem.getPose().toString());
          
          
      }

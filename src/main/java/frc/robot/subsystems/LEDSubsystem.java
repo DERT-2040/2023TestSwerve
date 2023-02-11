@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LEDSubsystem extends SubsystemBase {
     AddressableLED m_led;
     AddressableLEDBuffer m_ledBuffer;
+    int counter;
 
     public LEDSubsystem() {
         m_led = new AddressableLED(1);
@@ -36,11 +37,21 @@ public class LEDSubsystem extends SubsystemBase {
         SmartDashboard.putBoolean("LED Color", yellow);
     }
 
-    int counter;
 
     public void idlePattern() {
         counter++;
-            for(int i=0; i<m_ledBuffer.getLength(); i+=2) {
+        for(int i=0; i<m_ledBuffer.getLength(); i++) {
+            //sets the LEDs to yellow
+            
+            m_ledBuffer.setRGB(i, 0, (int)((Math.sin(.01 * counter) + 1) * 255 / 2), (int)((-Math.sin(.01 * counter) + 1) * 255 / 2));
+            SmartDashboard.putNumber("Green", (int)((Math.sin(.01 * counter) + 1) * 255 / 2));
+            SmartDashboard.putNumber("Blue", (int)((-Math.sin(.01 * counter) + 1) * 255 / 2));
+            //m_ledBuffer.setRGB(i, 255, 255, 255);
+        }
+        m_led.setData(m_ledBuffer);
+
+
+            /*for(int i=0; i<m_ledBuffer.getLength(); i+=2) {
                 //sets the LEDs to yellow
                 m_ledBuffer.setRGB(i, 0, 25, 25);
             }
@@ -56,7 +67,7 @@ public class LEDSubsystem extends SubsystemBase {
 
             for(int i=0; i<m_ledBuffer.getLength(); i+=2) {
                 m_ledBuffer.setRGB(i, 0, 50, 0);
-            }
+            }*/
         
     }
 }
