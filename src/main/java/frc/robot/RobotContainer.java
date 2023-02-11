@@ -71,6 +71,10 @@ public class RobotContainer {
       m_PDHMonitor.periodic();
     }
 
+    public void init() {
+      m_LedSubsystem.setColor(true);
+    }
+
     public void checkButtonInputs() {
       //sets LEDs to Purple
       if(gamePad1.getRawButton(3)) {
@@ -82,6 +86,8 @@ public class RobotContainer {
       }
       joystick2Button3.whileTrue(m_armCommand);
     }
+
+
 
 
     
