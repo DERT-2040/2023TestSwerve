@@ -11,6 +11,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.DriveCalibrateCommand;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,7 +27,8 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
   boolean robotOn;
-
+  DoubleLogEntry myDoubleLog;
+  double test_count = 1;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -36,7 +41,11 @@ public class Robot extends TimedRobot {
     m_robotContainer.Calibrate();
     m_robotContainer.resetGyro();
     robotOn = false;
-
+ 
+    DataLogManager.start();
+    DataLog log = DataLogManager.getLog();
+    DriverStation.startDataLog(DataLogManager.getLog()); // log joystick and fms data
+    myDoubleLog = new DoubleLogEntry(log, "/my/double");
 
   }
 
@@ -120,6 +129,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.periodic();
     m_robotContainer.drive();
     m_robotContainer.getVision();
+    myDoubleLog.append(test_count++);
 
 
 
