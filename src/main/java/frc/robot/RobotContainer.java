@@ -98,8 +98,8 @@ public class RobotContainer {
     public void drive() {
       //Joystick values
       
-      double x = -joystick1.getY();
-      double y = -joystick1.getX();
+      double x = joystick1.getX();
+      double y = -joystick1.getY();
       double rot = -joystick2.getX();
       double deadband = 0.2;
       if(x > -deadband && x < deadband) {
