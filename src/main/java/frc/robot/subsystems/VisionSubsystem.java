@@ -103,7 +103,7 @@ public class VisionSubsystem extends SubsystemBase {
                 //add later
                 //var visionMeasurement = camPose.transformBy(CAM_TO_ROBOT);
 
-                Pose2d returnPose = new Pose2d(camPose.getX(), camPose.getY(), new Rotation2d(-camPose.getRotation().getZ()));
+                Pose2d returnPose = new Pose2d(camPose.getX(), camPose.getY(), new Rotation2d(camPose.getRotation().getZ()));
                 return returnPose;
             }
         }

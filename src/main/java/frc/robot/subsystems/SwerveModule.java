@@ -74,7 +74,7 @@ public class SwerveModule {  // Class Definition  ******************************
     if(!Preferences.containsKey(this.turnOffsetKey)){                     // check to see if the wheel offset has been saved
       Preferences.setDouble(this.turnOffsetKey, 0);                // if it has not save a 0 offset
     }
-    turnOffset = Preferences.getDouble(this.turnOffsetKey, 0) - Math.PI / 2;  // read the wheel angle offset stored in memory  
+    turnOffset = Preferences.getDouble(this.turnOffsetKey, 0) + Math.PI / 2;  // read the wheel angle offset stored in memory  
 
     
 
@@ -106,7 +106,8 @@ public class SwerveModule {  // Class Definition  ******************************
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
     // resolution.
-    m_driveEncoder.setPositionConversionFactor(.0398);
+    m_driveEncoder.setPositionConversionFactor(.0373);
+    
     //m_driveEncoder.setDistancePerRotation(1);
     //m_driveEncoder.setDistancePerPulse(ModuleConstants.kDriveEncoderDistancePerPulse);
 

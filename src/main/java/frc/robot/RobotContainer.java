@@ -98,9 +98,9 @@ public class RobotContainer {
     public void drive() {
       //Joystick values
       
-      double x = joystick1.getX();
-      double y = -joystick1.getY();
-      double rot = -joystick2.getX();
+      double x = -joystick1.getX();
+      double y = joystick1.getY();
+      double rot = joystick2.getX();
       double deadband = 0.2;
       if(x > -deadband && x < deadband) {
         x = 0;
@@ -173,7 +173,7 @@ public class RobotContainer {
       PIDController m_yControl = new PIDController(1,0.2,0);
 
       SmartDashboard.putString("robotDrivePose ", m_robotDrive.getPose().toString());
-      Pose2d odometryPose = new Pose2d(m_robotDrive.getPose().getY(), -m_robotDrive.getPose().getX() + targetPose.getY() * 2, m_robotDrive.getPose().getRotation().times(-1));
+      Pose2d odometryPose = new Pose2d(m_robotDrive.getPose().getX(), m_robotDrive.getPose().getY() /*+ targetPose.getY() * 2*/, m_robotDrive.getPose().getRotation());
       SmartDashboard.putString("Odometry Pose", odometryPose.toString());
       //SmartDashboard.putString("Raw Odom Pose", m_robotDrive.getPose().toString());
       Pose2d visionPose = m_visionSubsystem.getPose();
@@ -187,7 +187,7 @@ public class RobotContainer {
 
       if(visionPose.getX() != -999){
         fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation());
-        m_robotDrive.resetOdometry(new Pose2d(-(fieldPose.getY() - targetPose.getY() * 2), fieldPose.getX(),new Rotation2d(0)));
+        //m_robotDrive.resetOdometry(new Pose2d(-(fieldPose.getY() - targetPose.getY() * 2), fieldPose.getX(),new Rotation2d(0)));
 
       }
       
