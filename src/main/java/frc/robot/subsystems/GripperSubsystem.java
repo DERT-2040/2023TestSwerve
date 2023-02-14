@@ -1,11 +1,8 @@
 package frc.robot.subsystems;
-
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.lang.Math;
 
 public class GripperSubsystem extends SubsystemBase {
     static double m_count = 0;
@@ -37,20 +34,26 @@ public class GripperSubsystem extends SubsystemBase {
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", m_count);
         SmartDashboard.putNumber("Gripper Power",power);
-        //SmartDashboard.putData("Gripper Turn 180", moveGrip(175, 1));
-        //SmartDashboard.putData("Gripper Turn -180", moveGrip(175, -1));
-        //SmartDashboard.putData("Pickup Cube (1/2 Turn)", gripObject("Cube"));
-        //SmartDashboard.putData("Pickup Cone (1 turn)", gripObject("Cone"));
     }
 
     public void grip_goto(int location) {
-
-    }
-
-    public void moveGrip(int counts, double power) {
-        while (m_count > (m_count - counts) || m_count < (m_count + counts)) {
-            grip_speed(power);
+        if (location > m_count) {
+            gripperTalon.set(1);
+        } else if (location < m_count) {
+            gripperTalon.set(-1);
         }
     }
 
+    public void gripCone() {
+        grip_goto(600);
+    }
+
+    public void gripCube() {
+        grip_goto(520);
+    }
+
+    public void gripRelease() {
+        grip_goto(2000);
+    }
+    
 }
