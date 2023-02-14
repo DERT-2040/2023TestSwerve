@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.lang.Math;;
+import java.lang.Math;
 
 public class GripperSubsystem extends SubsystemBase {
     double m_count = 0;
