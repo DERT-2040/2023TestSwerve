@@ -21,11 +21,11 @@ public class ArmCommand extends CommandBase{
  
      @Override
      public void execute() {
-        m_subsystem.arm(-0.5);
+     //   m_subsystem.arm(-0.5);
      }
  
      @Override
      public void end(boolean interrupted) {
-        m_subsystem.arm(0);
+     //   m_subsystem.arm(0);
      }
 }

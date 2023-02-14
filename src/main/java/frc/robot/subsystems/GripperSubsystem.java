@@ -6,11 +6,6 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.lang.Math;
-<<<<<<< HEAD
-
-import javax.xml.validation.ValidatorHandler;
-=======
->>>>>>> Feb-10
 
 public class GripperSubsystem extends SubsystemBase {
     static double m_count = 0;
