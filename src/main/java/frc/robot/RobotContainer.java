@@ -161,7 +161,7 @@ public class RobotContainer {
         }
       }
 
-      double speed = (-joystick1.getZ() + 1) / 2;
+      double speed = 1;//(-joystick1.getZ() + 1) / 2;
 
       m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
       SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);
@@ -182,10 +182,10 @@ public class RobotContainer {
 
       //SmartDashboard.putString("robotDrivePose ", m_robotDrive.getPose().toString());
       Pose2d odometryPose = new Pose2d(m_robotDrive.getPose().getX(), m_robotDrive.getPose().getY() /*+ targetPose.getY() * 2*/, m_robotDrive.getPose().getRotation());
-      //SmartDashboard.putString("Odometry Pose", odometryPose.toString());
+      SmartDashboard.putString("Odometry Pose", odometryPose.toString());
       //SmartDashboard.putString("Raw Odom Pose", m_robotDrive.getPose().toString());
       Pose2d visionPose = m_visionSubsystem.getPose();
-      //SmartDashboard.putString("Vision Pose", visionPose.toString());
+      SmartDashboard.putString("Vision Pose", visionPose.toString());
 
 
       Pose2d fieldPose = odometryPose;
@@ -200,7 +200,7 @@ public class RobotContainer {
       }
       
       //fieldPose = visionPose;
-      //SmartDashboard.putString("Field Pose", fieldPose.toString());
+      SmartDashboard.putString("Field Pose", fieldPose.toString());
 
       //SmartDashboard.putString("Reset Pose", new Pose2d(-(visionPose.getY() - targetPose.getY() * 2), visionPose.getX(), fieldPose.getRotation().times(-1)).toString());
 
@@ -243,12 +243,12 @@ public class RobotContainer {
         rot = robotToTarget.getRotation();
         
 
-        returnPose = new Pose2d(x, y, rot);// robotToTarget.getY(), robotToTarget.getRotation());
+        returnPose = new Pose2d(y, -x, rot);// robotToTarget.getY(), robotToTarget.getRotation());
 
 
       }
 
-      //SmartDashboard.putString("Return Pose", returnPose.toString());
+      SmartDashboard.putString("Return Pose", returnPose.toString());
 
       return returnPose;
       //return m_visionCommand;
