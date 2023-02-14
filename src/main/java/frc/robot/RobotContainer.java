@@ -22,7 +22,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.ArmCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
-import frc.robot.commands.GripperCommand;
+import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -39,6 +39,7 @@ import java.util.List;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.Timer;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -96,8 +97,11 @@ public class RobotContainer {
     
 
     public void drive() {
-      //Joystick values
       
+      double executionTime = Timer.getFPGATimestamp();
+      
+
+    //Joystick values
       double x = -joystick1.getX();
       double y = joystick1.getY();
       double rot = joystick2.getX();
@@ -160,24 +164,28 @@ public class RobotContainer {
       double speed = (-joystick1.getZ() + 1) / 2;
 
       m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
+      SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);
     }
 
 
-    //gets target position  preform drive to the targeted postion on the field when a button is pushed
-
-    public Pose2d getVision() {
-      // Target Pose is the desired location on the field to drive to
+    // Target Pose is the desired location on the field to drive to
       Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
       
       PIDController m_xControl = new PIDController(2,0.2,0);
       PIDController m_yControl = new PIDController(1,0.2,0);
 
-      SmartDashboard.putString("robotDrivePose ", m_robotDrive.getPose().toString());
+
+
+    //gets target position  preform drive to the targeted postion on the field when a button is pushed
+
+    public Pose2d getVision() {
+
+      //SmartDashboard.putString("robotDrivePose ", m_robotDrive.getPose().toString());
       Pose2d odometryPose = new Pose2d(m_robotDrive.getPose().getX(), m_robotDrive.getPose().getY() /*+ targetPose.getY() * 2*/, m_robotDrive.getPose().getRotation());
-      SmartDashboard.putString("Odometry Pose", odometryPose.toString());
+      //SmartDashboard.putString("Odometry Pose", odometryPose.toString());
       //SmartDashboard.putString("Raw Odom Pose", m_robotDrive.getPose().toString());
       Pose2d visionPose = m_visionSubsystem.getPose();
-      SmartDashboard.putString("Vision Pose", visionPose.toString());
+      //SmartDashboard.putString("Vision Pose", visionPose.toString());
 
 
       Pose2d fieldPose = odometryPose;
@@ -192,7 +200,7 @@ public class RobotContainer {
       }
       
       //fieldPose = visionPose;
-      SmartDashboard.putString("Field Pose", fieldPose.toString());
+      //SmartDashboard.putString("Field Pose", fieldPose.toString());
 
       //SmartDashboard.putString("Reset Pose", new Pose2d(-(visionPose.getY() - targetPose.getY() * 2), visionPose.getX(), fieldPose.getRotation().times(-1)).toString());
 
@@ -205,9 +213,9 @@ public class RobotContainer {
       Pose2d robotToTarget = new Pose2d(targetPose.getX() - fieldPose.getX(), targetPose.getY() - fieldPose.getY(), new Rotation2d(-targetPose.getRotation().getRadians() + fieldPose.getRotation().getRadians()));
 
 
-      SmartDashboard.putNumber("odomPose X",odometryPose.getX());
-      SmartDashboard.putNumber("Vision Pose X",visionPose.getX());
-      SmartDashboard.putNumber("fieldPose X",fieldPose.getX());
+      //SmartDashboard.putNumber("odomPose X",odometryPose.getX());
+      //SmartDashboard.putNumber("Vision Pose X",visionPose.getX());
+      //SmartDashboard.putNumber("fieldPose X",fieldPose.getX());
       
 
       double x = robotToTarget.getX();
@@ -240,7 +248,7 @@ public class RobotContainer {
 
       }
 
-      SmartDashboard.putString("Return Pose", returnPose.toString());
+      //SmartDashboard.putString("Return Pose", returnPose.toString());
 
       return returnPose;
       //return m_visionCommand;
@@ -309,10 +317,10 @@ public class RobotContainer {
     //}
     return axis;
   }
-  private final GripperCommand m_gripperCommand = new GripperCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
+  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
 
   public Command getGripperCommand() {
-    return m_gripperCommand;
+    return m_gripperReleaseCommand;
   }
 
 
