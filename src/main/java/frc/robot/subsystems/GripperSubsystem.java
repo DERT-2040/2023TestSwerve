@@ -51,7 +51,7 @@ public class GripperSubsystem extends SubsystemBase {
 
     public void moveGrip(int counts, double power) {
         while (m_count > (m_count - counts) || m_count < (m_count + counts)) {
-            grip(power);
+            grip_speed(power);
         }
     }
 

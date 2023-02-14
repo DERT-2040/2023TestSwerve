@@ -20,12 +20,12 @@ public class GripperReleaseCommand extends CommandBase {
      
      @Override
      public void initialize() {
-        m_subsystem.grip(m_powerInput.getAsDouble());
+        m_subsystem.grip_speed(m_powerInput.getAsDouble());
      }
  
      @Override
      public void execute() {
-        m_subsystem.grip(m_powerInput.getAsDouble());
+        m_subsystem.grip_speed(m_powerInput.getAsDouble());
          
          
      }
