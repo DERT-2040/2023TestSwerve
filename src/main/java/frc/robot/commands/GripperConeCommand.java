@@ -21,7 +21,7 @@ public class GripperConeCommand extends CommandBase {
  
      @Override
      public void execute() {
-         
+        m_subsystem.gripCone();
          
      }
  

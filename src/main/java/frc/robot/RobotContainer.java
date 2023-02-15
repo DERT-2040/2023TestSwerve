@@ -35,6 +35,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import frc.robot.commands.GripperCubeCommand;
+import frc.robot.commands.GripperConeCommand;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -319,10 +321,19 @@ public class RobotContainer {
   }
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
 
-  public Command getGripperCommand() {
+  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_gripperSubsystem);
+
+  public final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_gripperSubsystem);
+
+  public Command getGripperReleaseCommand() {
     return m_gripperReleaseCommand;
   }
-
+  public Command getGripperCubeCommand() {
+    return m_gripperCubeCommand;
+  }
+  public Command getGripperConeCommand() {
+    return m_gripperConeCommand;
+  }
 
 
 

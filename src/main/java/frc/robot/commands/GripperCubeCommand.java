@@ -20,7 +20,7 @@ public class GripperCubeCommand extends CommandBase {
  
      @Override
      public void execute() {
-         
+         m_subsystem.gripCube();
          
      }
  
