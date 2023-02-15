@@ -46,18 +46,22 @@ public class GripperSubsystem extends SubsystemBase {
         }
     }
 
-    public void gripCone(Boolean ButtonInput) {
+    public void gripCone(boolean ButtonInput) {
         if (ButtonInput) {
         grip_goto(600);
         }
     }
 
-    public void gripCube() {
+    public void gripCube(boolean ButtonInput) {
+        if (ButtonInput) {
         grip_goto(520);
+        }
     }
 
-    public void gripRelease() {
+    public void gripRelease(boolean ButtonInput) {
+        if (ButtonInput) {
         grip_goto(2000);
+        }
     }
     
 }

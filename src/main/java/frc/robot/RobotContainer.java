@@ -311,22 +311,22 @@ public class RobotContainer {
 
 
 
-  public static Boolean getGamepadY() {
+  public static boolean getGamepadY() {
     return gamePad1.getRawButton(6);
   }
-  public static Boolean getGamepadA() {
+  public static boolean getGamepadA() {
     return gamePad1.getRawButton(1);
   }
-  public static Boolean getGamepadB() {
+  public static boolean getGamepadB() {
     return gamePad1.getRawButton(3);
   }
 
   //Uses buttons, 1 B, 3 X, 6 Y
-  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepadY);
+  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer.getGamepadY());
 
-  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_gripperSubsystem, RobotContainer::getGamepadB);
+  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_gripperSubsystem, RobotContainer.getGamepadB());
 
-  public final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_gripperSubsystem, RobotContainer::getGamepadA);
+  public final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_gripperSubsystem, RobotContainer.getGamepadA());
 
   public Command getGripperReleaseCommand() {
     return m_gripperReleaseCommand;

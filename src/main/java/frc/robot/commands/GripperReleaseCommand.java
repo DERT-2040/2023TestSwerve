@@ -6,25 +6,24 @@ import frc.robot.subsystems.GripperSubsystem;
 public class GripperReleaseCommand extends CommandBase {
 
     GripperSubsystem m_subsystem;
-    Boolean m_ButtonInput;
+    boolean m_ButtonInput;
      
-     public GripperReleaseCommand(GripperSubsystem subsystem, Object ButtonInput) {
+     public GripperReleaseCommand(GripperSubsystem subsystem, boolean ButtonInput) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
-         m_ButtonInput = (Boolean)ButtonInput;
+         m_ButtonInput = ButtonInput;
      }
 
 
 
 @Override
      public void initialize() {
-        m_subsystem.gripRelease();
      }
  
      @Override
      public void execute() {
-        m_subsystem.gripRelease();
+        m_subsystem.gripRelease(m_ButtonInput);
          
      }
  

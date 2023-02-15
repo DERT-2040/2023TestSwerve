@@ -8,13 +8,13 @@ import frc.robot.subsystems.GripperSubsystem;
 public class GripperConeCommand extends CommandBase {
 
     GripperSubsystem m_subsystem;
-    Boolean m_ButtonInput;
+    boolean m_ButtonInput;
      
-     public GripperConeCommand(GripperSubsystem subsystem, Object ButtonInput) {
+     public GripperConeCommand(GripperSubsystem subsystem, boolean ButtonInput) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
-         m_ButtonInput = (Boolean)ButtonInput;
+         m_ButtonInput = ButtonInput;
      }
 
 
