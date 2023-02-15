@@ -1,5 +1,4 @@
 package frc.robot.subsystems;
-import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
