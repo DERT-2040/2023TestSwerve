@@ -1,4 +1,6 @@
 package frc.robot.subsystems;
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -9,12 +11,12 @@ public class GripperSubsystem extends SubsystemBase {
     double m_prevCount = 0;
     Counter counter;
     Spark gripperTalon;
-    public GripperSubsystem() {
+    public void GripperSubsystem() {
         counter = new Counter(4);
         gripperTalon = new Spark(0);
         counter.reset();
  // Set up the input channel for the counter
-  //counter.setUpSource(4);
+  //counter.setUpSource(4);bbb
 
  // Set the encoder to count pulse duration from rising edge to falling edge
     }
@@ -38,14 +40,16 @@ public class GripperSubsystem extends SubsystemBase {
 
     public void grip_goto(int location) {
         if (location > m_count) {
-            gripperTalon.set(1);
+            grip_speed(1);
         } else if (location < m_count) {
-            gripperTalon.set(-1);
+            grip_speed(-1);
         }
     }
 
-    public void gripCone() {
+    public void gripCone(Boolean ButtonInput) {
+        if (ButtonInput) {
         grip_goto(600);
+        }
     }
 
     public void gripCube() {

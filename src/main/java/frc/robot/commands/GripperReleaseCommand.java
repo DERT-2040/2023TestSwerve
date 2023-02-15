@@ -1,22 +1,23 @@
 package frc.robot.commands;
-import java.util.function.DoubleSupplier;
+import java.util.function.BooleanSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.GripperSubsystem;
 
 public class GripperReleaseCommand extends CommandBase {
 
     GripperSubsystem m_subsystem;
-    DoubleSupplier m_powerInput;
+    Boolean m_ButtonInput;
      
-     public GripperReleaseCommand(GripperSubsystem subsystem, DoubleSupplier powerInput) {
+     public GripperReleaseCommand(GripperSubsystem subsystem, Object ButtonInput) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
-         m_powerInput = powerInput;
+         m_ButtonInput = (Boolean)ButtonInput;
      }
 
-     
-     @Override
+
+
+@Override
      public void initialize() {
         m_subsystem.gripRelease();
      }
