@@ -21,8 +21,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.Timer;
 
 public class DriveSubsystem extends SubsystemBase {
+
+  double m_startTime1 = Timer.getFPGATimestamp();
+  boolean m_1secReset = false;
+
   // Robot swerve modules
   public final SwerveModule m_frontLeft =
       new SwerveModule(
@@ -99,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Update the odometry in the periodic block
+    // Update the odometry in the periodic block.
     var odom = m_odometry.update(
       new Rotation2d(getGyro()),
         new SwerveModulePosition[] {
@@ -109,6 +114,10 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
+        if( (Timer.getFPGATimestamp() - m_startTime1 > 1.0) &&   !m_1secReset){
+          resetOdometry(robotStartPose);
+          boolean m_1secReset = true;
+        }
     //SmartDashboard.putNumber("Odometery Angle ", odom.getRotation().getDegrees());  
     //  odom angle agrees with robotDrivePose
 

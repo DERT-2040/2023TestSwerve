@@ -244,17 +244,17 @@ public class RobotContainer {
         SmartDashboard.putNumber("x error",m_xError);
         SmartDashboard.putNumber("y error",m_yError);
 
-      //  if(m_xError > 0.1016){  // only update drive if error is more than 4 inches
+        if(m_xError > 0.1016/4){  // only update drive if error is more than 2 inches
           x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
-      //  } else{
-      //    x = 0;
-      //  }
+        } else{
+          x = 0;
+        }
 
-      //  if(m_yError > 0.1016){ // only update drive if error is more than 4 in
+        if(m_yError > 0.1016/4){ // only update drive if error is more than 2 in
           y = m_yControl.calculate(fieldPose.getY(), targetPose.getY());
-      //  } else{
-      //    y = 0;
-      //  }
+        } else{
+          y = 0;
+        }
           rot = robotToTarget.getRotation();
         
 
