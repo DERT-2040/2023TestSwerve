@@ -189,8 +189,8 @@ public class RobotContainer {
 
 
       Pose2d fieldPose = odometryPose;
-      
-      
+            m_xControl.setIntegratorRange(-0.1,0.1);
+            m_yControl.setIntegratorRange(-0.1,0.1);
 
 
       if(visionPose.getX() != -999){
@@ -238,9 +238,21 @@ public class RobotContainer {
 
       } else {
 
-        x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
-        y = m_yControl.calculate(fieldPose.getY(), targetPose.getY());
-        rot = robotToTarget.getRotation();
+        double m_xError = ABS(target.getX() - fieldPose.getX());
+        double m_yError = ABS(target.getY() - fieldPose.getY());
+
+        if(m_xError > 0.1016){  // only update drive if error is more than 4 inches
+          x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
+        } else{
+          x = 0;
+        }
+
+        if(m_yError > 0.1016){ // only update drive if error is more than 4 in
+          y = m_yControl.calculate(fieldPose.getY(), targetPose.getY());
+        } else{
+          y = 0;
+        }
+          rot = robotToTarget.getRotation();
         
 
         returnPose = new Pose2d(y, -x, rot);// robotToTarget.getY(), robotToTarget.getRotation());
