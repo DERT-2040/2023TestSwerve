@@ -17,6 +17,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.ArmCommand;
@@ -162,6 +163,10 @@ public class RobotContainer {
       }
 
       double speed = 1;//(-joystick1.getZ() + 1) / 2;
+      double voltage = RobotController.getBatteryVoltage();
+      if(voltage < 12) {
+        speed = 0;
+      }
 
       m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
       SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);
@@ -244,15 +249,15 @@ public class RobotContainer {
         SmartDashboard.putNumber("x error",m_xError);
         SmartDashboard.putNumber("y error",m_yError);
 
-        if(m_xError > 0.1016/4){  // only update drive if error is more than 2 inches
+        if(m_xError > 0.1016/2){  // only update drive if error is more than 2 inches
           x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
         } else{
           x = 0;
         }
 
-        if(m_yError > 0.1016/4){ // only update drive if error is more than 2 in
+        if(m_yError > 0.1016/2){ // only update drive if error is more than 2 in
           y = m_yControl.calculate(fieldPose.getY(), targetPose.getY());
-        } else{
+        } else {
           y = 0;
         }
           rot = robotToTarget.getRotation();

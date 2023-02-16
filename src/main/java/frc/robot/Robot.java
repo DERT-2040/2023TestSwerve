@@ -24,8 +24,7 @@ public class Robot extends TimedRobot {
   RobotContainer m_robotContainer = new RobotContainer();
   //private RobotContainer m_robotContainer;
   boolean robotOn;
-  boolean m_1secReset = false;
-  double m_startTime;
+  
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -39,7 +38,6 @@ public class Robot extends TimedRobot {
     m_robotContainer.Calibrate();
     m_robotContainer.resetGyro();
     robotOn = false;
-    m_startTime = Timer.getFPGATimestamp();
 
 
   }
@@ -59,12 +57,6 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    if((Timer.getFPGATimestamp() - m_startTime > 1.0) && !m_1secReset){  // one second
-      m_robotContainer.resetDriveEncoders();
-      m_robotContainer.resetGyro();
-      m_1secReset = true;
-
-    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

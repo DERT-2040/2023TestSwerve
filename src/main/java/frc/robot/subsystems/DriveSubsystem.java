@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.Timer;
 public class DriveSubsystem extends SubsystemBase {
 
   double m_startTime1 = Timer.getFPGATimestamp();
-  boolean m_1secReset = false;
+  boolean m_1secReset;
 
   // Robot swerve modules
   public final SwerveModule m_frontLeft =
@@ -100,6 +100,8 @@ public class DriveSubsystem extends SubsystemBase {
             robotStartPose
           );
 
+    m_1secReset = false;
+
   }
 
   @Override
@@ -114,9 +116,9 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
         });
 
-        if( (Timer.getFPGATimestamp() - m_startTime1 > 1.0) &&   !m_1secReset){
+        if( (Timer.getFPGATimestamp() - m_startTime1 > 0.5) &&   !m_1secReset){
           resetOdometry(robotStartPose);
-          boolean m_1secReset = true;
+          m_1secReset = true;
         }
     //SmartDashboard.putNumber("Odometery Angle ", odom.getRotation().getDegrees());  
     //  odom angle agrees with robotDrivePose
