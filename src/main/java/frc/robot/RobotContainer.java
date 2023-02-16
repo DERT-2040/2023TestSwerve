@@ -163,8 +163,8 @@ public class RobotContainer {
       }
 
       double speed = 1;//(-joystick1.getZ() + 1) / 2;
-      double voltage = RobotController.getBatteryVoltage();
-      if(voltage < 12) {
+      
+      if(RobotController.getBatteryVoltage() < 10) {
         speed = 0;
       }
 
@@ -325,6 +325,10 @@ public class RobotContainer {
 
   public void LEDIdle() {
     m_LedSubsystem.idlePattern();
+  }
+
+  public void LEDVoltage() {
+    m_LedSubsystem.lowVoltage();
   }
 
 
