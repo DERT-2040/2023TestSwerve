@@ -18,13 +18,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.VisionCommand;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.VisionSubsystem;
@@ -35,7 +33,7 @@ import java.util.List;
 import frc.robot.commands.GripperCubeCommand;
 import frc.robot.commands.GripperConeCommand;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation; 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.Timer;
@@ -84,7 +82,6 @@ public class RobotContainer {
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
       }
-      joystick2Button3.whileTrue(m_armCommand);
     }
 
 
@@ -293,13 +290,9 @@ public class RobotContainer {
   private final VisionCommand m_visionCommand = new VisionCommand(m_visionSubsystem);
 
 
-  private final GripperSubsystem m_gripperSubsystem = new GripperSubsystem();
+  private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
 
   private final PDHMonitor m_PDHMonitor = new PDHMonitor();
-
-  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
-  private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem);
-
 
 
   public void LEDIdle() {
@@ -319,11 +312,11 @@ public class RobotContainer {
   }
 
   //Uses buttons, 1 B, 3 X, 6 Y
-  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer.getGamepadY());
+  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_ArmSubsystem, RobotContainer.getGamepadY());
 
-  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_gripperSubsystem, RobotContainer.getGamepadB());
+  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_ArmSubsystem, RobotContainer.getGamepadB());
 
-  public final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_gripperSubsystem, RobotContainer.getGamepadA());
+  public final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_ArmSubsystem, RobotContainer.getGamepadA());
 
   public Command getGripperReleaseCommand() {
     return m_gripperReleaseCommand;
