@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.NavigableMap;
 
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+
 public class ArmSubsystem extends SubsystemBase {
     static double m_count = 0;
     double m_prevCount = 0;
@@ -68,8 +70,20 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
-    public void runArmPath() {
-        
+    public void setExtension (int location) {
+        if (location > armExtendNeo.get()) {
+            armExtendNeo.set(1);
+        } else if (location < armExtendNeo.get()) {
+            armExtendNeo.set(-1);
+        }
+    }
+
+    public void setRotation (int location) {
+        if (location > armRotateNeo.get()) {
+            armRotateNeo.set(1);
+        } else if (location < armRotateNeo.get()) {
+            armRotateNeo.set(-1);
+        }
     }
     
 }
