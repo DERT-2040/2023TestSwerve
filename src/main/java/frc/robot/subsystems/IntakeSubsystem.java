@@ -11,14 +11,14 @@ public class IntakeSubsystem extends SubsystemBase {
     Spark inhaleMotor;
     int inhaleID = 2;
 
-    CANSparkMax extendMotor;
-    int extendID = 21;
+    Spark extendMotor;
+    int extendID = 3;//21;
     private RelativeEncoder extendEncoder;
 
     public IntakeSubsystem() {
         inhaleMotor =new Spark(inhaleID);
-        extendMotor = new CANSparkMax(extendID, MotorType.kBrushless);
-        extendEncoder = extendMotor.getEncoder();
+        extendMotor = new Spark(extendID);//CANSparkMax(extendID, MotorType.kBrushless);
+        //extendEncoder = extendMotor.getEncoder();
     }
 
     //Kirby
@@ -30,10 +30,10 @@ public class IntakeSubsystem extends SubsystemBase {
         extendMotor.set(speed);
     }
 
-    public double getExtendPosition() {
+    /*public double getExtendPosition() {
         return extendEncoder.getPosition();
         
-    }
+    }*/
 
 }
 
