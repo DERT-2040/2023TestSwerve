@@ -107,6 +107,10 @@ public class Robot extends TimedRobot {
     m_robotContainer.resetGyro();
 
     m_robotContainer.init();
+
+    m_robotContainer.getGripperConeCommand();
+    m_robotContainer.getGripperCubeCommand();
+    m_robotContainer.getGripperReleaseCommand();
   
   }
 
