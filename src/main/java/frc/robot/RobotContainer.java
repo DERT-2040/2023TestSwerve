@@ -24,10 +24,13 @@ import frc.robot.commands.ArmCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
+import frc.robot.commands.IntakeExtendCommand;
+import frc.robot.commands.IntakeInhaleCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.VisionSubsystem;
@@ -59,8 +62,10 @@ public class RobotContainer {
   private static Joystick joystick2 = new Joystick(1);
   private static GenericHID gamePad1 = new GenericHID(2);
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 8);
-  private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 2);
+  private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
+  private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
+  private static JoystickButton joystick2Button0 = new JoystickButton(joystick2, 0);
+  private static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
 
   
 
@@ -86,7 +91,10 @@ public class RobotContainer {
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
       }
-      joystick2Button3.whileTrue(m_armCommand);
+      joystick2Button2.whileTrue(m_armCommand);
+      joystick2Button4.whileTrue(m_intakeInhaleCommand);
+      joystick2Button0.whileTrue(m_intakeExtendCommand);
+      
     }
 
 
@@ -129,7 +137,7 @@ public class RobotContainer {
        *  Future step will be to use the photon vision library to merge the april tag location with the swerve obometry position
        */
 
-      if(joystick2Button9.getAsBoolean()) {
+      if(joystick2Button8.getAsBoolean()) {
 
       
         double m_maximum = 1;
@@ -320,6 +328,10 @@ public class RobotContainer {
 
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem);
+
+  private final IntakeSubsystem m_intakeSubsystem = new IntakeSubsystem();
+  private final IntakeExtendCommand m_intakeExtendCommand = new IntakeExtendCommand(m_intakeSubsystem);
+  private final IntakeInhaleCommand m_intakeInhaleCommand = new IntakeInhaleCommand(m_intakeSubsystem);
 
 
 
