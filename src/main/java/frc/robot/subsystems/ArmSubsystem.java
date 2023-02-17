@@ -4,15 +4,20 @@ import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import java.util.NavigableMap;
 
 public class ArmSubsystem extends SubsystemBase {
     static double m_count = 0;
     double m_prevCount = 0;
     Counter counter;
     Spark gripperTalon;
-    public void GripperSubsystem() {
+    Spark armExtendNeo;
+    Spark armRotateNeo;
+    public void ArmSubsystem() {
         counter = new Counter(4);
         gripperTalon = new Spark(0);
+        armExtendNeo = new Spark(0);
+        armRotateNeo = new Spark(0);
         counter.reset();
  // Set up the input channel for the counter
   //counter.setUpSource(4);bbb
@@ -61,6 +66,10 @@ public class ArmSubsystem extends SubsystemBase {
         if (ButtonInput) {
         grip_goto(2000);
         }
+    }
+
+    public void runArmPath() {
+        
     }
     
 }
