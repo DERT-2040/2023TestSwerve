@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.ArmCommand;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.VisionCommand;
@@ -55,8 +56,12 @@ public class RobotContainer {
   private static Joystick joystick2 = new Joystick(1);
   private static GenericHID gamePad1 = new GenericHID(2);
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
+
   private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 8);
   private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 2);
+  
 
   
 
@@ -82,6 +87,7 @@ public class RobotContainer {
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
       }
+      joystick1Button3.whileTrue(m_armCommand);
     }
 
 
@@ -306,6 +312,7 @@ public class RobotContainer {
 
 
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
+  private final ArmCommand m_armCommand = new ArmCommand(m_ArmSubsystem);
 
   private final PDHMonitor m_PDHMonitor = new PDHMonitor();
 
@@ -327,13 +334,13 @@ public class RobotContainer {
   }
 
   //Uses buttons, 1 B, 3 X, 6 Y
-  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_ArmSubsystem, RobotContainer.getGamepadY());
+  /*private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_ArmSubsystem, RobotContainer.getGamepadY());
 
   private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_ArmSubsystem, RobotContainer.getGamepadB());
 
   public final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_ArmSubsystem, RobotContainer.getGamepadA());
-
-  public Command getGripperReleaseCommand() {
+*/
+  /*public Command getGripperReleaseCommand() {
     return m_gripperReleaseCommand;
   }
   public Command getGripperCubeCommand() {
@@ -341,7 +348,7 @@ public class RobotContainer {
   }
   public Command getGripperConeCommand() {
     return m_gripperConeCommand;
-  }
+  }*/
 
 
 

@@ -113,15 +113,16 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.resetDriveEncoders();
    // m_robotContainer.resetGyro();
-    m_robotContainer.getGripperReleaseCommand().schedule();
+    //m_robotContainer.getGripperReleaseCommand().schedule();
     
     m_robotContainer.resetGyro();
 
     m_robotContainer.init();
 
-    m_robotContainer.getGripperConeCommand();
+    //??? doesn't do anything
+    /*m_robotContainer.getGripperConeCommand();
     m_robotContainer.getGripperCubeCommand();
-    m_robotContainer.getGripperReleaseCommand();
+    m_robotContainer.getGripperReleaseCommand();*/
   
   }
 

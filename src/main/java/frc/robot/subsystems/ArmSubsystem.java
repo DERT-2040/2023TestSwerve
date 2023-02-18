@@ -20,33 +20,47 @@ public class ArmSubsystem extends SubsystemBase {
     RelativeEncoder extendEncoder;
     SparkMaxPIDController extendControl;
     CANSparkMax armRotateNeo;
-    RelativeEncoder rotateEncoder;
+    public RelativeEncoder rotateEncoder;
     SparkMaxPIDController rotateControl;
 
 
 
 
-    double[] rotateAngles = {};
-    double[] extendDistances = {};
+    double[] rotateAngles = {-90, 0};
+    double[] extendDistances = {0, 0};
 
 
 
-    public void ArmSubsystem() {
+    public ArmSubsystem() {
+        //65 rotations is full extention for extending arm
+        //55 rotations = 90 degrees arm rotation
+
         counter = new Counter(4);
         gripperTalon = new Spark(0);
+
+        
         armExtendNeo = new CANSparkMax(30, MotorType.kBrushless);
+        armExtendNeo.setSmartCurrentLimit(10);
         extendEncoder = armExtendNeo.getEncoder();
+        extendEncoder.setPositionConversionFactor(1/65);
+        extendEncoder.setPosition(0);
         extendControl = armExtendNeo.getPIDController();
-        extendControl.setP(1);
-        extendControl.setI(0);
+        extendControl.setP(.0001);
+        extendControl.setI(0.00001);
         extendControl.setD(0);
         extendControl.setIZone(0);
         extendControl.setFF(0);
+        extendControl.setOutputRange(-.1, .1);
+        
+
         armRotateNeo = new CANSparkMax(31, MotorType.kBrushless);
+        armRotateNeo.setSmartCurrentLimit(20);
         rotateEncoder = armRotateNeo.getEncoder();
+        rotateEncoder.setPositionConversionFactor(90/55);
+        rotateEncoder.setPosition(0);
         rotateControl = armRotateNeo.getPIDController();
-        rotateControl.setP(1);
-        rotateControl.setI(0);
+        rotateControl.setP(.0001);
+        rotateControl.setI(0.00001);
         rotateControl.setD(0);
         rotateControl.setIZone(0);
         rotateControl.setFF(0);
@@ -130,8 +144,8 @@ public class ArmSubsystem extends SubsystemBase {
             i++;
         }
 
-        double extend = extendDistances[i-1] + ((angle - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendDistances[i] - extendDistances[i-1]);
-        extendControl.setReference(extend, ControlType.kPosition);
+        //double extend = extendDistances[i-1] + ((angle - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendDistances[i] - extendDistances[i-1]);
+        //extendControl.setReference(extend, ControlType.kPosition);
     }
 
     
