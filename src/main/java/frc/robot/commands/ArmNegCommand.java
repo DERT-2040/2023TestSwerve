@@ -3,11 +3,11 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmCommand extends CommandBase{
+public class ArmNegCommand extends CommandBase{
     ArmSubsystem m_subsystem;
     
      
-     public ArmCommand(ArmSubsystem subsystem) {
+     public ArmNegCommand(ArmSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
@@ -22,7 +22,7 @@ public class ArmCommand extends CommandBase{
  
      @Override
      public void execute() {
-        m_subsystem.rotate(-0.4);
+        m_subsystem.rotate(0.4);
      }
  
      @Override

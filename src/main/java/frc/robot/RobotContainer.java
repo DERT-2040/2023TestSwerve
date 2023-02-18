@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
@@ -66,6 +67,7 @@ public class RobotContainer {
   private static GenericHID gamePad1 = new GenericHID(2);
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
   private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
+  private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
 
 
 
@@ -101,6 +103,7 @@ public class RobotContainer {
         m_LedSubsystem.setColor(true);
       }
       joystick1Button2.whileTrue(m_armCommand);
+      joystick1Button3.whileTrue(m_armNegCommand);
 
       
       joystick2Button4.whileTrue(m_intakeExhaleCommand);
@@ -341,6 +344,7 @@ public class RobotContainer {
 
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
   private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem);
+  private final ArmNegCommand m_armNegCommand = new ArmNegCommand(m_armSubsystem);
 
   private final IntakeExtendSubsystem m_intakeExtendSubsystem = new IntakeExtendSubsystem();
   private final IntakeInhaleSubsystem m_intakeInhaleSubsystem = new IntakeInhaleSubsystem();
