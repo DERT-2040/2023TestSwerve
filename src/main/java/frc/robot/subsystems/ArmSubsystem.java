@@ -1,13 +1,9 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import java.util.NavigableMap;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -127,27 +123,6 @@ public class ArmSubsystem extends SubsystemBase {
         return true;
     }
 
-    public void runPresetTable (int[] extendList, int[] rotateList) {
-        for (int i = 0;i < extendList.length; i++) {
-            boolean rotateDone = false;
-            boolean extendDone = false;
-            if (rotateDone && extendDone != true) {
-            if (rotateList[i] != armRotateNeo.get()) {
-                setRotation(rotateList[i]);
-            } else {
-                rotateDone = true;
-            }
-            if (extendList[i] != armExtendNeo.get()) {
-                setExtend(extendList[i]);
-            } else {
-                rotateDone = true;
-            }
-        }
-        }
-
-        boolean frameSatisfied = false;
-        //if (frameSatisfied != true)
-    }
     public void setArmAngle(double angle) {
         rotateControl.setReference(angle, ControlType.kPosition);
         int i = 0;
