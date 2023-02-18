@@ -7,11 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.DriveCalibrateCommand;
-import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -115,11 +112,15 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.resetDriveEncoders();
    // m_robotContainer.resetGyro();
-    m_robotContainer.getGripperCommand().schedule();
+    m_robotContainer.getGripperReleaseCommand().schedule();
     
     m_robotContainer.resetGyro();
 
     m_robotContainer.init();
+
+    m_robotContainer.getGripperConeCommand();
+    m_robotContainer.getGripperCubeCommand();
+    m_robotContainer.getGripperReleaseCommand();
   
   }
 

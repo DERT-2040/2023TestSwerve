@@ -1,26 +1,26 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.GripperSubsystem;
-
+import frc.robot.subsystems.ArmSubsystem;
 public class GripperCubeCommand extends CommandBase {
 
-    GripperSubsystem m_subsystem;
+    ArmSubsystem m_subsystem;
+    boolean m_ButtonInput;
      
-     public GripperCubeCommand(GripperSubsystem subsystem) {
+     public GripperCubeCommand(ArmSubsystem subsystem, boolean ButtonInput) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
+         m_ButtonInput = ButtonInput;
      }
 
-     
-     @Override
+    @Override
      public void initialize() {
      }
  
      @Override
      public void execute() {
-         
+         m_subsystem.gripCube(m_ButtonInput);
          
      }
  
