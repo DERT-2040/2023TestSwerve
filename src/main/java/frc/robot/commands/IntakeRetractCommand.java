@@ -1,13 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.IntakeExtendSubsystem;
 
-public class ArmCommand extends CommandBase{
-    ArmSubsystem m_subsystem;
-    
+public class IntakeRetractCommand extends CommandBase {
+    IntakeExtendSubsystem m_subsystem;
      
-     public ArmCommand(ArmSubsystem subsystem) {
+     public IntakeRetractCommand(IntakeExtendSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
@@ -22,11 +21,11 @@ public class ArmCommand extends CommandBase{
  
      @Override
      public void execute() {
-        m_subsystem.rotate(-0.5);
+        m_subsystem.extend(-.3);
      }
  
      @Override
      public void end(boolean interrupted) {
-        m_subsystem.rotate(0);
+        m_subsystem.extend(0);
      }
 }
