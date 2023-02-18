@@ -19,6 +19,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.ArmExtendCommand;
+import frc.robot.commands.ArmRetractCommand;
+import frc.robot.commands.ArmReverseCommand;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.VisionCommand;
@@ -58,6 +61,9 @@ public class RobotContainer {
   //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
   private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
+  private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
+  private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
+  private static JoystickButton joystick1Button11 = new JoystickButton(joystick1, 11);
 
   private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 8);
   private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 2);
@@ -72,6 +78,8 @@ public class RobotContainer {
     public void periodic() {
       checkButtonInputs();
       m_PDHMonitor.periodic();
+      SmartDashboard.putNumber("Arm Current", m_ArmSubsystem.armRotateNeo.getOutputCurrent());
+      SmartDashboard.putNumber("Extend Position", m_ArmSubsystem.extendEncoder.getPosition() / 58);
     }
 
     public void init() {
@@ -88,6 +96,9 @@ public class RobotContainer {
         m_LedSubsystem.setColor(true);
       }
       joystick1Button3.whileTrue(m_armCommand);
+      joystick1Button2.whileTrue(m_armReverseCommand);
+      joystick1Button11.whileTrue(m_armExtendCommand);
+      joystick1Button10.whileTrue(m_armRetractCommand);
     }
 
 
@@ -313,6 +324,9 @@ public class RobotContainer {
 
   private final ArmSubsystem m_ArmSubsystem = new ArmSubsystem();
   private final ArmCommand m_armCommand = new ArmCommand(m_ArmSubsystem);
+  private final ArmReverseCommand m_armReverseCommand = new ArmReverseCommand(m_ArmSubsystem);
+  private final ArmExtendCommand m_armExtendCommand = new ArmExtendCommand(m_ArmSubsystem);
+  private final ArmRetractCommand m_armRetractCommand = new ArmRetractCommand(m_ArmSubsystem);
 
   private final PDHMonitor m_PDHMonitor = new PDHMonitor();
 

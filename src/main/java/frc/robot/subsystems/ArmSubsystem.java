@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -8,6 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
@@ -17,11 +19,11 @@ public class ArmSubsystem extends SubsystemBase {
     Counter counter;
     Spark gripperTalon;
     CANSparkMax armExtendNeo;
-    RelativeEncoder extendEncoder;
-    SparkMaxPIDController extendControl;
-    CANSparkMax armRotateNeo;
+    public RelativeEncoder extendEncoder;
+    PIDController extendControl;
+    public CANSparkMax armRotateNeo;
     public RelativeEncoder rotateEncoder;
-    SparkMaxPIDController rotateControl;
+    PIDController rotateControl;
 
 
 
@@ -40,30 +42,51 @@ public class ArmSubsystem extends SubsystemBase {
 
         
         armExtendNeo = new CANSparkMax(30, MotorType.kBrushless);
-        armExtendNeo.setSmartCurrentLimit(10);
+        armExtendNeo.setSmartCurrentLimit(5);
+        armExtendNeo.setIdleMode(IdleMode.kBrake);
         extendEncoder = armExtendNeo.getEncoder();
-        extendEncoder.setPositionConversionFactor(1/65);
+        //extendEncoder.setPositionConversionFactor(1/(13000*58));
+        
         extendEncoder.setPosition(0);
-        extendControl = armExtendNeo.getPIDController();
+        extendControl = new PIDController(1, 0, 0);
+
+        /*extendControl = armExtendNeo.getPIDController();
         extendControl.setP(.0001);
         extendControl.setI(0.00001);
         extendControl.setD(0);
         extendControl.setIZone(0);
         extendControl.setFF(0);
-        extendControl.setOutputRange(-.1, .1);
+        extendControl.setOutputRange(-.1, .1);*/
+        //extendControl.set
         
 
-        armRotateNeo = new CANSparkMax(31, MotorType.kBrushless);
-        armRotateNeo.setSmartCurrentLimit(20);
+
+
+
+        armRotateNeo = new CANSparkMax(40, MotorType.kBrushless);
+        armRotateNeo.setSmartCurrentLimit(40);
+        armRotateNeo.setIdleMode(IdleMode.kBrake);
+        
         rotateEncoder = armRotateNeo.getEncoder();
         rotateEncoder.setPositionConversionFactor(90/55);
         rotateEncoder.setPosition(0);
+
+        rotateControl = new PIDController(.003, .001, 0);
+
+
+
+        /*
         rotateControl = armRotateNeo.getPIDController();
-        rotateControl.setP(.0001);
-        rotateControl.setI(0.00001);
+        rotateControl.setFeedbackDevice(rotateEncoder);
+
+        rotateControl.setP(.000001);
+        rotateControl.setI(0.00000);
         rotateControl.setD(0);
-        rotateControl.setIZone(0);
+        //rotateControl.setIZone(0);
         rotateControl.setFF(0);
+        rotateControl.setOutputRange(.3, .3);*/
+
+
         counter.reset();
     
  // Set up the input channel for the counter
@@ -138,15 +161,29 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmAngle(double angle) {
-        rotateControl.setReference(angle, ControlType.kPosition);
-        int i = 0;
+        armRotateNeo.set(rotateControl.calculate(rotateEncoder.getPosition(), angle));
+        //rotateControl.setReference(angle, ControlType.kPosition);
+        /*int i = 0;
         while(angle > rotateAngles[i]) {
             i++;
-        }
+        }*/
 
         //double extend = extendDistances[i-1] + ((angle - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendDistances[i] - extendDistances[i-1]);
         //extendControl.setReference(extend, ControlType.kPosition);
     }
 
+    public void setArmSpeed(double speed) {
+        armRotateNeo.set(speed);
+    }
+
+    //position from 0 (retracted) to 1 (extended)
+    public void setExtendPosition(double position) {
+        armExtendNeo.set(extendControl.calculate(extendEncoder.getPosition() / 58, position));
+    }
+
+
+    public void setExtendSpeed(double speed) {
+        armExtendNeo.set(speed);
+    }
     
 }

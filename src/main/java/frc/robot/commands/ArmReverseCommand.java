@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmCommand extends CommandBase {
+public class ArmReverseCommand extends CommandBase {
     ArmSubsystem m_subsystem;
 
-    public ArmCommand(ArmSubsystem subsystem) {
+    public ArmReverseCommand(ArmSubsystem subsystem) {
         m_subsystem = subsystem;
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(subsystem);
@@ -16,12 +16,12 @@ public class ArmCommand extends CommandBase {
 
    @Override
     public void initialize() {
-        m_subsystem.setArmAngle(-90);
+        m_subsystem.setArmAngle(90);
     }
 
     @Override
     public void execute() {
-        m_subsystem.setArmAngle(-90);
+        m_subsystem.setArmAngle(90);
         
     }
 
