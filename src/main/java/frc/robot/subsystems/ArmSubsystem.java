@@ -28,8 +28,8 @@ public class ArmSubsystem extends SubsystemBase {
 
 
 
-    double[] rotateAngles = {-90, 0};
-    double[] extendDistances = {0, 0};
+    double[] rotateAngles =    {-90, -70,  0,    50};
+    double[] extendDistances = {-.9, -.3, -0.1, -0.1};
 
 
 
@@ -47,8 +47,8 @@ public class ArmSubsystem extends SubsystemBase {
         extendEncoder = armExtendNeo.getEncoder();
         //extendEncoder.setPositionConversionFactor(1/(13000*58));
         
-        extendEncoder.setPosition(0);
-        extendControl = new PIDController(1, 0, 0);
+        extendEncoder.setPosition(-.4 * 58);
+        extendControl = new PIDController(1.5, 0, 0.1);
 
         /*extendControl = armExtendNeo.getPIDController();
         extendControl.setP(.0001);
@@ -64,11 +64,11 @@ public class ArmSubsystem extends SubsystemBase {
 
 
         armRotateNeo = new CANSparkMax(40, MotorType.kBrushless);
-        armRotateNeo.setSmartCurrentLimit(40);
+        armRotateNeo.setSmartCurrentLimit(45);
         armRotateNeo.setIdleMode(IdleMode.kBrake);
         
         rotateEncoder = armRotateNeo.getEncoder();
-        rotateEncoder.setPositionConversionFactor(90/55);
+        //rotateEncoder.setPositionConversionFactor(90/60);
         rotateEncoder.setPosition(0);
 
         rotateControl = new PIDController(.003, .001, 0);
@@ -117,7 +117,10 @@ public class ArmSubsystem extends SubsystemBase {
             grip_speed(1);
         } else if (location < m_count) {
             grip_speed(-1);
+        } else {
+            grip_speed(0);
         }
+        SmartDashboard.putNumber("Counter", m_count);
     }
 
     public void gripCone(boolean ButtonInput) {
@@ -138,7 +141,7 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }
 
-    public boolean setExtend (int location) {
+   /*  public boolean setExtend (int location) {
         if (location > armExtendNeo.get()) {
             armExtendNeo.set(1);
         } else if (location < armExtendNeo.get()) {
@@ -147,7 +150,7 @@ public class ArmSubsystem extends SubsystemBase {
             return false;
         }
         return true;
-    }
+    }*/
 
     public boolean setRotation (int location) {
         if (location > armRotateNeo.get()) {
@@ -161,14 +164,23 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmAngle(double angle) {
-        armRotateNeo.set(rotateControl.calculate(rotateEncoder.getPosition(), angle));
+        double actualArmAngle = rotateEncoder.getPosition() * (90/60) * (90.0/50.0);
+        armRotateNeo.set(rotateControl.calculate(actualArmAngle, angle));
+        SmartDashboard.putNumber("Target Arm Angle", angle);
+        if(actualArmAngle < -90) {
+            actualArmAngle = -90;
+        } else if(actualArmAngle > 50) {
+            actualArmAngle = 50;
+        }
         //rotateControl.setReference(angle, ControlType.kPosition);
-        /*int i = 0;
-        while(angle > rotateAngles[i]) {
+        int i = 0;
+        while(actualArmAngle > rotateAngles[i] && i < rotateAngles.length) {
             i++;
-        }*/
+        }
 
-        //double extend = extendDistances[i-1] + ((angle - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendDistances[i] - extendDistances[i-1]);
+        double extend = extendDistances[i-1] + ((actualArmAngle - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendDistances[i] - extendDistances[i-1]);
+        setExtendPosition(extend);
+        //armExtendNeo.set(extendControl.calculate(extendEncoder.getPosition() / 58, extend));
         //extendControl.setReference(extend, ControlType.kPosition);
     }
 
@@ -179,6 +191,7 @@ public class ArmSubsystem extends SubsystemBase {
     //position from 0 (retracted) to 1 (extended)
     public void setExtendPosition(double position) {
         armExtendNeo.set(extendControl.calculate(extendEncoder.getPosition() / 58, position));
+        SmartDashboard.putNumber("Desired Arm Extend", position);
     }
 
 

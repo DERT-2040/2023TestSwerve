@@ -23,6 +23,7 @@ import frc.robot.commands.ArmExtendCommand;
 import frc.robot.commands.ArmRetractCommand;
 import frc.robot.commands.ArmReverseCommand;
 import frc.robot.commands.DriveCalibrateCommand;
+import frc.robot.commands.GripPower;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.DriveSubsystem;
@@ -65,8 +66,15 @@ public class RobotContainer {
   private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
   private static JoystickButton joystick1Button11 = new JoystickButton(joystick1, 11);
 
-  private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 8);
-  private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 2);
+  private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
+  private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
+
+  private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
+  private static JoystickButton joystick2Button10 = new JoystickButton(joystick2, 10);
+  private static JoystickButton joystick2Button11 = new JoystickButton(joystick2, 11);
+
+  private static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
+  private static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
   
 
   
@@ -79,6 +87,7 @@ public class RobotContainer {
       checkButtonInputs();
       m_PDHMonitor.periodic();
       SmartDashboard.putNumber("Arm Current", m_ArmSubsystem.armRotateNeo.getOutputCurrent());
+      SmartDashboard.putNumber("Arm Position", m_ArmSubsystem.rotateEncoder.getPosition() * (90/60) * (90.0/50.0));
       SmartDashboard.putNumber("Extend Position", m_ArmSubsystem.extendEncoder.getPosition() / 58);
     }
 
@@ -99,6 +108,13 @@ public class RobotContainer {
       joystick1Button2.whileTrue(m_armReverseCommand);
       joystick1Button11.whileTrue(m_armExtendCommand);
       joystick1Button10.whileTrue(m_armRetractCommand);
+
+      joystick2Button9.whileTrue(m_gripperReleaseCommand);
+      joystick2Button10.whileTrue(m_gripperCubeCommand);
+      joystick2Button11.whileTrue(m_gripperConeCommand);
+
+      joystick2Button4.whileTrue(m_gripNegative);
+      joystick2Button5.whileTrue(m_gripPositive);
     }
 
 
@@ -141,7 +157,7 @@ public class RobotContainer {
        *  Future step will be to use the photon vision library to merge the april tag location with the swerve obometry position
        */
 
-      if(joystick2Button9.getAsBoolean()) {
+      if(joystick2Button8.getAsBoolean()) {
 
       
         double m_maximum = 1;
@@ -348,12 +364,16 @@ public class RobotContainer {
   }
 
   //Uses buttons, 1 B, 3 X, 6 Y
-  /*private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_ArmSubsystem, RobotContainer.getGamepadY());
+  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_ArmSubsystem);
 
-  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_ArmSubsystem, RobotContainer.getGamepadB());
+  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_ArmSubsystem);
 
-  public final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_ArmSubsystem, RobotContainer.getGamepadA());
-*/
+  public final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_ArmSubsystem);
+
+  public final GripPower m_gripPositive = new GripPower(m_ArmSubsystem, 1);
+  public final GripPower m_gripNegative = new GripPower(m_ArmSubsystem, -1);
+
+
   /*public Command getGripperReleaseCommand() {
     return m_gripperReleaseCommand;
   }

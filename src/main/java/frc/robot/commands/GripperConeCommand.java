@@ -7,13 +7,12 @@ import frc.robot.subsystems.ArmSubsystem;
 public class GripperConeCommand extends CommandBase {
 
     ArmSubsystem m_subsystem;
-    boolean m_ButtonInput;
      
-     public GripperConeCommand(ArmSubsystem subsystem, boolean ButtonInput) {
+     public GripperConeCommand(ArmSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
-         m_ButtonInput = ButtonInput;
+         
      }
 
 
@@ -24,12 +23,12 @@ public class GripperConeCommand extends CommandBase {
  
      @Override
      public void execute() {
-        m_subsystem.gripCone(m_ButtonInput);
+        m_subsystem.grip_goto(100);
          
      }
  
      @Override
      public void end(boolean interrupted) {
-         
+        m_subsystem.grip_speed(0); 
      }
 }

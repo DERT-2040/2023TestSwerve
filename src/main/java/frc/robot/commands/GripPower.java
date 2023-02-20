@@ -1,15 +1,16 @@
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class GripperReleaseCommand extends CommandBase {
-
+public class GripPower extends CommandBase {
     ArmSubsystem m_subsystem;
-     
-     public GripperReleaseCommand(ArmSubsystem subsystem) {
+    double direction;
+     public GripPower(ArmSubsystem subsystem, double direction) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
+         this.direction = direction;
      }
 
 
@@ -20,7 +21,7 @@ public class GripperReleaseCommand extends CommandBase {
  
      @Override
      public void execute() {
-        m_subsystem.grip_goto(300);;
+        m_subsystem.grip_speed(direction);
          
      }
  

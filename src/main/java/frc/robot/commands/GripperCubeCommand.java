@@ -5,27 +5,26 @@ import frc.robot.subsystems.ArmSubsystem;
 public class GripperCubeCommand extends CommandBase {
 
     ArmSubsystem m_subsystem;
-    boolean m_ButtonInput;
      
-     public GripperCubeCommand(ArmSubsystem subsystem, boolean ButtonInput) {
+     public GripperCubeCommand(ArmSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
-         m_ButtonInput = ButtonInput;
      }
 
     @Override
      public void initialize() {
+
      }
  
      @Override
      public void execute() {
-         m_subsystem.gripCube(m_ButtonInput);
+         m_subsystem.grip_goto(100);
          
      }
  
      @Override
      public void end(boolean interrupted) {
-         
+         m_subsystem.grip_speed(0);
      }
 }

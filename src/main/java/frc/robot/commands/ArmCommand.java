@@ -28,6 +28,7 @@ public class ArmCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_subsystem.setArmSpeed(0);
+        m_subsystem.setExtendSpeed(0);
         //m_subsystem.setArmAngle(m_subsystem.rotateEncoder.getPosition());
     }
 }
