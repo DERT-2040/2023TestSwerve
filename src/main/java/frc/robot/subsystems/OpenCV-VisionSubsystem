@@ -17,9 +17,8 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
         int blurradius = 5;
         int vertical_threshold = 230;
         int alignment_error_thershold = 30;
-        //Load OpenCV
-        //System.load("C:\\Users\\FIRSTMentor\\Documents\\librarys\\opencv\\build\\java\\x64\\opencv_java455.dll");
         //Setup Camera Device
+        TODO
         VideoCapture cap = new VideoCapture(0);
         cap.set(Videoio.CAP_PROP_EXPOSURE, -11);
         cap.set(Videoio.CAP_PROP_CONTRAST, 13);
