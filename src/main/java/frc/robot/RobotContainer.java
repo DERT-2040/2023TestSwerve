@@ -24,12 +24,14 @@ import frc.robot.Constants.DriveConstants;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
+import frc.robot.commands.TurntableAlignCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PDHMonitor;
+import frc.robot.subsystems.TurntableSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -316,6 +318,8 @@ public class RobotContainer {
 
   private final GripperSubsystem m_gripperSubsystem = new GripperSubsystem();
 
+  private final TurntableSubsystem m_turntablesubsystem = new TurntableSubsystem();
+
   private final PDHMonitor m_PDHMonitor = new PDHMonitor();
 
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
@@ -344,6 +348,12 @@ public class RobotContainer {
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
 
   public Command getGripperCommand() {
+    return m_gripperReleaseCommand;
+  }
+
+  private final TurntableAlignCommand m_turntableAlignCommand = new TurntableAlignCommand(m_turntablesubsystem);
+
+  public Command getTurntableCommand() {
     return m_gripperReleaseCommand;
   }
 
