@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.ArmCommand;
+//import frc.robot.commands.ArmCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
@@ -86,7 +86,7 @@ public class RobotContainer {
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
       }
-      joystick2Button3.whileTrue(m_armCommand);
+      //joystick2Button3.whileTrue(m_armCommand);
     }
 
 
@@ -319,7 +319,7 @@ public class RobotContainer {
   private final PDHMonitor m_PDHMonitor = new PDHMonitor();
 
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
-  private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem);
+  //private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem);
 
 
 

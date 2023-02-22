@@ -8,7 +8,7 @@ import java.util.List;
 import javafx.util.Pair;
 
 class OpenCV_VisionSubsystem extends SubsystemBase {
-    public static Pair<int, boolean> CalculateVision() {
+    public static Pair<int, boolean> CheckVision() {
         //Importent Outputs
         int alignmentOutput = 0;
         boolean roti_pass = false;
@@ -28,11 +28,6 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
             System.out.println("An error has orrured opening the webcam");
             return;
         }
-        //Window Display Code
-        String window_name = "Webcam";
-        HighGui.namedWindow(window_name, HighGui.WINDOW_NORMAL);
-        //The loop is importent to let the program exit
-        while (true) {
             //
             // Image Processing
             //
@@ -63,8 +58,8 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
             Mat eroded_image = new Mat();
             Imgproc.erode(combinedMask, eroded_image, kernel_Mat, new Point(-1, -1), erodecycles);
             //Clone Images (Multi-Channel Image is not needed)
-            //Mat eroded_image_multi = eroded_image.clone();
-            //Imgproc.cvtColor(eroded_image_multi, eroded_image_multi, Imgproc.COLOR_GRAY2BGR);
+            Mat eroded_image_multi = eroded_image.clone();
+            Imgproc.cvtColor(eroded_image_multi, eroded_image_multi, Imgproc.COLOR_GRAY2BGR);
             Mat eroded_image_roti = eroded_image.clone();
             Mat eroded_image_alin = eroded_image.clone();
             //Stops if no white pixels
@@ -96,10 +91,10 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
                     //Calculate the bounding rect of the contour "idx"
                     Rect largestRect = Imgproc.boundingRect(turntableContours.get(roti_idx));
                     //Find the corners (Not needed)
-                    //org.opencv.core.Point pt1 = new org.opencv.core.Point(largestRect.x, largestRect.y);
-                    //org.opencv.core.Point pt2 = new org.opencv.core.Point(largestRect.x + largestRect.width, largestRect.y + largestRect.height);
+                    org.opencv.core.Point pt1 = new org.opencv.core.Point(largestRect.x, largestRect.y);
+                    org.opencv.core.Point pt2 = new org.opencv.core.Point(largestRect.x + largestRect.width, largestRect.y + largestRect.height);
                     //Draw the Rectangle (Not Neeeded)
-                    //Imgproc.rectangle(eroded_image_multi, pt1, pt2, new Scalar(255, 0, 0));
+                    Imgproc.rectangle(eroded_image_multi, pt1, pt2, new Scalar(255, 0, 0));
                     //Pass or Fail math
                     double boxRatio = ((double)largestRect.width / largestRect.height);
                     int box_pixel_size = largestRect.height * largestRect.width;
@@ -122,7 +117,7 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
                         roti_pass = false;
                     }
                     //Put the status on screen (not needed)
-                    /*double textScale = 1;
+                    double textScale = 1;
                     if (roti_pass) {
                         Imgproc.putText(eroded_image_multi, "Pass", new Point(25, 30), 2, textScale, new Scalar(0, 230, 60), 2);
                     } else {
@@ -137,7 +132,7 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
                         Imgproc.putText(eroded_image_multi, "Pass Box Size", new Point(25, 110), 2, textScale, new Scalar(60, 130, 0), 2);
                     } else {
                         Imgproc.putText(eroded_image_multi, "Fail Box Size", new Point(25, 110), 2, textScale, new Scalar(200, 175, 0), 2);
-                    } */
+                    }
                 }
                 //
                 // Robot Alignment
@@ -177,7 +172,7 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
                             alignmentOutput = 2;
                         }
                         //Print the output on the screen (Not Needed)
-                        /*double textScale = 1;
+                        double textScale = 1;
                         if (alignmentContours.size() != 0) {
                             Imgproc.circle(eroded_image_multi, firstCords, (int) circle_radius[0], new Scalar(55, 40, 240), 2);
                         }
@@ -189,17 +184,10 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
                         }
                         if (alignmentOutput == 2) {
                             Imgproc.putText(eroded_image_multi, "Correct", new Point(425, 30), 2, textScale, new Scalar(20, 190, 20), 2);
-                        }*/
+                        }
                     }
                 }
             }
-            HighGui.imshow(window_name, eroded_image_multi);
-            //Exit Window & Close
-            if (HighGui.waitKey(1) == 'q') {
-                break;
-            }
             return new Pair<int, boolean>(alignmentOutput, roti_pass);
-        }
-        HighGui.destroyWindow(window_name);
     }
 }
