@@ -1,3 +1,4 @@
+package frc.robot.subsystems;
 import org.opencv.core.*;
 import org.opencv.highgui.HighGui;
 import org.opencv.videoio.VideoCapture;
@@ -6,27 +7,31 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.util.Pair;
-import frc.robot.subsystems;
 
 class OpenCV_VisionSubsystem extends SubsystemBase {
-
-
+    VideoCapture cap;
+    int alignmentOutput;
+    boolean roti_pass;
+    int erodecycles;
+    int blurradius;
+    int vertical_threshold;
+    int alignment_error_thershold;
     public OpenCV_VisionSubsystem() {
-        VideoCapture cap;
+        //Vision Device Setup
+        cap = new VideoCapture(0);
         //Importent Outputs
-        int alignmentOutput = 0;
-        boolean roti_pass = false;
+        alignmentOutput = 0;
+        roti_pass = false;
         //Program Settings
-        int erodecycles = 1;
-        int blurradius = 5;
-        int vertical_threshold = 230;
-        int alignment_error_thershold = 30;
+        erodecycles = 1;
+        blurradius = 5;
+        vertical_threshold = 230;
+        alignment_error_thershold = 30;
     }
 
     public static Pair<int, boolean> CheckVision() {
         //Setup Camera Device
         TODO
-        cap = new VideoCapture(0);
         cap.set(Videoio.CAP_PROP_EXPOSURE, -11);
         cap.set(Videoio.CAP_PROP_CONTRAST, 13);
         //Check if the webcam is open
