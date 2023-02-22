@@ -37,7 +37,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import frc.robot.commands.GripperCubeCommand;
 import frc.robot.commands.GripperConeCommand;
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation; 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
@@ -82,7 +82,6 @@ public class RobotContainer {
     public void resetGyro() {
       m_robotDrive.zeroHeading();
     }
-
     public void periodic() {
       checkButtonInputs();
       m_PDHMonitor.periodic();
@@ -191,6 +190,21 @@ public class RobotContainer {
       }
 
       double speed = 1;//(-joystick1.getZ() + 1) / 2;
+
+      //put code for balancing here
+        //need PIDs for x and y set outside of this function
+        /*
+         if(balancing) {
+          if(xAngle >= 10) {
+            x = xPID(xAngle, 0);
+          }
+          if(yAngle >= 10) {
+            y = yPID(yAngle, 0);
+          }
+          speed = 1;
+          rot = 0.0000001;
+         }
+         */
 
       m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
       SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);

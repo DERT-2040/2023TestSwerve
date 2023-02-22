@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Counter;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,10 +15,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 
 public class ArmSubsystem extends SubsystemBase {
+
     static double m_count = 0;
     double m_prevCount = 0;
     Counter counter;
     Spark gripperTalon;
+    DigitalInput gripperLimitSwitch;
+
+
     CANSparkMax armExtendNeo;
     public RelativeEncoder extendEncoder;
     PIDController extendControl;
@@ -39,6 +44,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         counter = new Counter(4);
         gripperTalon = new Spark(0);
+        gripperLimitSwitch = new DigitalInput(5);
 
         
         armExtendNeo = new CANSparkMax(30, MotorType.kBrushless);
@@ -98,6 +104,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void grip_speed(double power) {
 
+        
         double m_currentCount = counter.get();
     ;
         if (power > 0) {
@@ -105,6 +112,13 @@ public class ArmSubsystem extends SubsystemBase {
          } else {
             m_count = m_count - (m_currentCount - m_prevCount);
          }
+         if(!gripperLimitSwitch.get()) {
+            m_count = 0;
+            if(power < 0) {
+                power = 0;
+            }
+        }
+        SmartDashboard.putBoolean("GripperLimit", !gripperLimitSwitch.get());
          m_prevCount = m_currentCount;
 
         gripperTalon.set(power);
