@@ -22,7 +22,7 @@ public class ArmNegCommand extends CommandBase{
  
      @Override
      public void execute() {
-        m_subsystem.rotate(0.4);
+        m_subsystem.rotate(1);
      }
  
      @Override

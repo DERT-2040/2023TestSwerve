@@ -11,7 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 public class ArmSubsystem extends SubsystemBase {
     CANSparkMax arm;
     RelativeEncoder encoder;
-    int subArmiD = 31; //change id to correct id later
+    int subArmiD = 40; //change id to correct id later
 
     //65 rotations is full extention for extending arm
     //55 rotations = 90 degrees arm rotation
