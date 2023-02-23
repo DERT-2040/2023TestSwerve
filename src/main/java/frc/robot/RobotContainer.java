@@ -320,6 +320,8 @@ public class RobotContainer {
 
   private final TurntableSubsystem m_turntablesubsystem = new TurntableSubsystem();
 
+  private final OpenCVVisionSubsystem m_opencvvisionsubsystem = new OpenCVVisionSubsystem();
+
   private final PDHMonitor m_PDHMonitor = new PDHMonitor();
 
   private final ArmSubsystem m_armSubsystem = new ArmSubsystem();

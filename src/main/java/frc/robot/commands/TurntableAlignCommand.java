@@ -2,7 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.TurntableSubsystem;
-
+import frc.robot.subsystems.OpenCVVisionSubsystem;
 public class TurntableAlignCommand extends CommandBase{
     TurntableSubsystem m_subsystem;
      

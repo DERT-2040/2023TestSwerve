@@ -1,10 +1,10 @@
 package frc.robot.subsystems;
-import org.opencv.core.*;
-import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.opencv.core.*;
+import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;  
