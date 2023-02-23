@@ -17,7 +17,12 @@ public class ArmSubsystem extends SubsystemBase {
     //55 rotations = 90 degrees arm rotation
     public ArmSubsystem() {
         arm = new CANSparkMax(subArmiD, MotorType.kBrushless);
+        arm.restoreFactoryDefaults();
         arm.setIdleMode(IdleMode.kBrake);
+        arm.setSecondaryCurrentLimit(40);
+        arm.setSmartCurrentLimit(40);
+        arm.setSmartCurrentLimit(40,5700);
+     //   arm.setOpenLoopRampRate(0.5);
         encoder = arm.getEncoder();
     }
 
