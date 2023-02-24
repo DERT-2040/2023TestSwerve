@@ -12,6 +12,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxRelativeEncoder;
 
 
 public class ArmSubsystem extends SubsystemBase {
@@ -51,7 +52,8 @@ public class ArmSubsystem extends SubsystemBase {
         arm.setSmartCurrentLimit(40);
         arm.setSmartCurrentLimit(40,5700);
         arm.setOpenLoopRampRate(0.75);
-        rotateEncoder = arm.getEncoder();
+        rotateEncoder = arm.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+        rotateEncoder.setPositionConversionFactor(90.0/107.0);
         rotateEncoder.setPosition(0);
 
 
