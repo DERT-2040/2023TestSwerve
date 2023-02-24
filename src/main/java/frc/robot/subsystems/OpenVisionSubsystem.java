@@ -37,7 +37,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         cap.set(Videoio.CAP_PROP_EXPOSURE, -11);
         cap.set(Videoio.CAP_PROP_CONTRAST, 13);
     }
-    public void ProcessVision() {
+    public static void ProcessVision() {
         //
         // Image Processing
         //
@@ -74,7 +74,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         //Stops if no white pixels
         white_stop = Core.countNonZero(eroded_image);
     }
-    public boolean CheckTurntable() {
+    public static boolean CheckTurntable() {
         int roti_white_stop = Core.countNonZero(eroded_image_roti);
         if ((white_stop != 0) && (roti_white_stop != 0)) {
             //
@@ -146,7 +146,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         }
         return roti_pass;
     }
-    public int CheckRobotAlignment() {
+    public static int CheckRobotAlignment() {
         int alin_white_stop = Core.countNonZero(eroded_image_alin);
         if ((white_stop != 0) && (alin_white_stop != 0)) {
             //
@@ -201,5 +201,8 @@ public class OpenVisionSubsystem extends SubsystemBase{
             }
         }
         return alignmentOutput;
+    }
+    public Mat getErodedImageMulti() {
+        return eroded_image_multi;
     }
 }

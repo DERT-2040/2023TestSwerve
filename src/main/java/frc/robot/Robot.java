@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.RobotController;
@@ -39,8 +42,10 @@ public class Robot extends TimedRobot {
     m_robotContainer.Calibrate();
     m_robotContainer.resetGyro();
     robotOn = false;
-
-
+    CameraServer.startAutomaticCapture();
+    //camera.setBrightness(70);
+    //CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+    
   }
 
   /**
