@@ -117,6 +117,9 @@ public class RobotContainer {
   private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 3);
   private static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
   private static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
+  private static JoystickButton joystick1Button11 = new JoystickButton(joystick1, 11);
+  private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
+
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
 
 
@@ -126,14 +129,14 @@ public class RobotContainer {
   //  here we instantiate the subsystem
   */
 
-  private final DriveSubsystem        m_robotDrive = new DriveSubsystem();
-  private final VisionSubsystem       m_visionSubsystem = new VisionSubsystem();
-  public  final LEDSubsystem          m_LedSubsystem = new LEDSubsystem();
-  private final GripperSubsystem      m_gripperSubsystem = new GripperSubsystem();
-  private final PDHMonitor            m_PDHMonitor = new PDHMonitor();
-  private final ArmSubsystem          m_armSubsystem = new ArmSubsystem();
-  private final IntakeExtendSubsystem m_intakeExtendSubsystem = new IntakeExtendSubsystem();
-  private final IntakeInhaleSubsystem m_intakeInhaleSubsystem = new IntakeInhaleSubsystem();
+  private final DriveSubsystem        m_robotDrive =              new DriveSubsystem();
+  private final VisionSubsystem       m_visionSubsystem =         new VisionSubsystem();
+  public  final LEDSubsystem          m_LedSubsystem =            new LEDSubsystem();
+  private final GripperSubsystem      m_gripperSubsystem =        new GripperSubsystem();
+  private final PDHMonitor            m_PDHMonitor =              new PDHMonitor();
+  private final ArmSubsystem          m_armSubsystem =            new ArmSubsystem();
+  private final IntakeExtendSubsystem m_intakeExtendSubsystem =   new IntakeExtendSubsystem();
+  private final IntakeInhaleSubsystem m_intakeInhaleSubsystem =   new IntakeInhaleSubsystem();
   
 
   /*  ****          Define The robot's Commands       ****   /
@@ -153,8 +156,8 @@ public class RobotContainer {
   private final IntakeExhaleCommand   m_intakeExhaleCommand =   new IntakeExhaleCommand(m_intakeInhaleSubsystem);
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
-  private final ArmExtendCommand      m_ArmExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
-  private final ArmRetractCommand     m_ArmRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
+  private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
+  private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
   
 
   public Command getGripperCommand() {
@@ -182,6 +185,8 @@ public class RobotContainer {
       joystick2Button5.whileTrue(m_intakeInhaleCommand);
       joystick2Button3.whileTrue(m_intakeExtendCommand);
       joystick2Button2.whileTrue(m_intakeRetractCommand);
+      joystick1Button11.whileTrue(m_armExtendCommand);
+      joystick1Button10.whileTrue(m_armRetractCommand);
       
     }
 
