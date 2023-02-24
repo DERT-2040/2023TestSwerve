@@ -23,6 +23,8 @@ import frc.robot.Constants.DriveConstants;
 
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
+import frc.robot.commands.ArmExtendCommand;
+import frc.robot.commands.ArmRetractCommand;
 import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
@@ -43,9 +45,12 @@ import frc.robot.subsystems.IntakeInhaleSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.VisionSubsystem;
+
+
 import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -148,8 +153,9 @@ public class RobotContainer {
   private final IntakeExhaleCommand   m_intakeExhaleCommand =   new IntakeExhaleCommand(m_intakeInhaleSubsystem);
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
+  private final ArmExtendCommand      m_ArmExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
+  private final ArmRetractCommand     m_ArmRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
   
-
 
   public Command getGripperCommand() {
     return m_gripperReleaseCommand;
