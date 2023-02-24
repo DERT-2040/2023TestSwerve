@@ -33,16 +33,11 @@ public class OpenVisionSubsystem extends SubsystemBase{
         blurradius = 5;
         vertical_threshold = 230;
         alignment_error_thershold = 30;
-    }
-    public void ProcessVision() {
         //Setup Camera Device
         cap.set(Videoio.CAP_PROP_EXPOSURE, -11);
         cap.set(Videoio.CAP_PROP_CONTRAST, 13);
-        //Check if the webcam is open
-        if (!cap.isOpened()) {
-            System.out.println("An error has orrured opening the webcam");
-            return;
-        }
+    }
+    public void ProcessVision() {
         //
         // Image Processing
         //

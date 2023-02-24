@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -30,11 +29,11 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.OpenVisionSubsystem;
 import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.TurntableSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
@@ -320,7 +319,7 @@ public class RobotContainer {
 
   private final TurntableSubsystem m_turntablesubsystem = new TurntableSubsystem();
 
-  private final OpenCVVisionSubsystem m_opencvvisionsubsystem = new OpenCVVisionSubsystem();
+  private final OpenVisionSubsystem m_opencvvisionsubsystem = new OpenVisionSubsystem();
 
   private final PDHMonitor m_PDHMonitor = new PDHMonitor();
 
