@@ -1,15 +1,15 @@
 package frc.robot.subsystems;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import org.opencv.core.*;
-import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;
-import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
-import java.util.List;  
+import java.util.List;
 
-class OpenCV_VisionSubsystem extends SubsystemBase {
+import org.opencv.core.*;
+import org.opencv.imgproc.Imgproc;
+import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;;
+
+public class OpenVisionSubsystem extends SubsystemBase{
     static VideoCapture cap;
     static int alignmentOutput;
     static boolean roti_pass;
@@ -22,7 +22,7 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
     static Mat eroded_image_alin;
     static Mat eroded_image_multi;
     static int white_stop;
-    public OpenCV_VisionSubsystem() {
+    public OpenVisionSubsystem() {
         //Vision Device Setup
         cap = new VideoCapture(0);
         //Importent Outputs
@@ -34,8 +34,7 @@ class OpenCV_VisionSubsystem extends SubsystemBase {
         vertical_threshold = 230;
         alignment_error_thershold = 30;
     }
-
-    public static void ProcessVision() {
+    public void ProcessVision() {
         //Setup Camera Device
         cap.set(Videoio.CAP_PROP_EXPOSURE, -11);
         cap.set(Videoio.CAP_PROP_CONTRAST, 13);
