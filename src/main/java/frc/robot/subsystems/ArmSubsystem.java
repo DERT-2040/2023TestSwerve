@@ -22,7 +22,7 @@ public class ArmSubsystem extends SubsystemBase {
         arm.setSecondaryCurrentLimit(40);
         arm.setSmartCurrentLimit(40);
         arm.setSmartCurrentLimit(40,5700);
-     //   arm.setOpenLoopRampRate(0.5);
+        arm.setOpenLoopRampRate(0.75);
         encoder = arm.getEncoder();
     }
 
