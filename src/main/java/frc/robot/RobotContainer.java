@@ -8,7 +8,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
+//import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+
+// COMMANDS  //
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
@@ -30,6 +32,9 @@ import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
 import frc.robot.commands.IntakeRetractCommand;
 import frc.robot.commands.VisionCommand;
+import frc.robot.commands.CargoRequestCommand;
+
+// SUBSYSTEMS  //
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GripperSubsystem;
@@ -39,7 +44,7 @@ import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RunCommand;
+//import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
@@ -58,62 +63,121 @@ import com.kauailabs.navx.frc.AHRS;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
+
+
+  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  public RobotContainer() {
+    // Configure the button bindings
+    configureButtonBindings();
+
+    // Configure default commands
+    //m_robotDrive.setDefaultCommand(
+        // The left stick controls translation of the robot.
+        // Turning is controlled by the X axis of the right stick.
+        /*new RunCommand(
+            () ->
+                m_robotDrive.drive(
+                    joystick1.getY(),
+                    joystick1.getX(),
+                    joystick2.getX(),
+                    true),
+            m_robotDrive));*/
+
+  }
+
+  public void init() {
+    m_LedSubsystem.setColor(true);
+  }
+
+  public void periodic() {
+    checkButtonInputs();
+    m_PDHMonitor.periodic();
+  }
+
 
 
   // The driver's controller
+  // define Joysticks and GamePads
+
   private static Joystick joystick1 = new Joystick(0);
   private static Joystick joystick2 = new Joystick(1);
   private static GenericHID gamePad1 = new GenericHID(2);
-  //XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  //  define buttons and controls
+
   private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
   private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
-
-
-
   private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
-
   private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
   private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 3);
   private static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
   private static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
+  private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
 
+
+  /*  ****          Define The robot's subsystems       ****   /
+  //
+  //  each subsystem is defined in a file located in the subsystems folder
+  //  here we instantiate the subsystem
+  */
+
+  private final DriveSubsystem        m_robotDrive = new DriveSubsystem();
+  private final VisionSubsystem       m_visionSubsystem = new VisionSubsystem();
+  public  final LEDSubsystem          m_LedSubsystem = new LEDSubsystem();
+  private final GripperSubsystem      m_gripperSubsystem = new GripperSubsystem();
+  private final PDHMonitor            m_PDHMonitor = new PDHMonitor();
+  private final ArmSubsystem          m_armSubsystem = new ArmSubsystem();
+  private final IntakeExtendSubsystem m_intakeExtendSubsystem = new IntakeExtendSubsystem();
+  private final IntakeInhaleSubsystem m_intakeInhaleSubsystem = new IntakeInhaleSubsystem();
   
 
-    public void resetGyro() {
-      m_robotDrive.zeroHeading();
-    }
+  /*  ****          Define The robot's Commands       ****   /
+  //
+  //  each command is defined in a file located in the commands folder
+  //  here we instantiate the commands
+  //  commands are used further down in this file to accomplish various tasks
+  //  usally associated with an input defined above
+  */
 
-    public void periodic() {
-      checkButtonInputs();
-      m_PDHMonitor.periodic();
-    }
+  private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
+  private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
+  private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
+  private final IntakeExtendCommand   m_intakeExtendCommand =   new IntakeExtendCommand(m_intakeExtendSubsystem);
+  private final IntakeRetractCommand  m_intakeRetractCommand =  new IntakeRetractCommand(m_intakeExtendSubsystem);
+  private final IntakeInhaleCommand   m_intakeInhaleCommand =   new IntakeInhaleCommand(m_intakeInhaleSubsystem);
+  private final IntakeExhaleCommand   m_intakeExhaleCommand =   new IntakeExhaleCommand(m_intakeInhaleSubsystem);
+  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
+  private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
+  
 
-    public void init() {
-      m_LedSubsystem.setColor(true);
-    }
+
+  public Command getGripperCommand() {
+    return m_gripperReleaseCommand;
+  }
+
+
+
 
     public void checkButtonInputs() {
       //sets LEDs to Purple
-      if(gamePad1.getRawButton(3)) {
+     /*  if(gamePad1.getRawButton(3)) {
         m_LedSubsystem.setColor(false);
-      }
+      }*/
+      gamePad1Button3.whileTrue(m_cargoRequestCommand);
+
       //sets LEDs to Yellow
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
       }
+
       joystick1Button2.whileTrue(m_armCommand);
       joystick1Button3.whileTrue(m_armNegCommand);
-
-      
       joystick2Button4.whileTrue(m_intakeExhaleCommand);
       joystick2Button5.whileTrue(m_intakeInhaleCommand);
       joystick2Button3.whileTrue(m_intakeExtendCommand);
       joystick2Button2.whileTrue(m_intakeRetractCommand);
       
     }
-
-
 
 
     
@@ -224,27 +288,14 @@ public class RobotContainer {
 
       if(visionPose.getX() != -999){
         fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation());
-        //m_robotDrive.resetOdometry(new Pose2d(-(fieldPose.getY() - targetPose.getY() * 2), fieldPose.getX(),new Rotation2d(0)));
+        
 
       }
       
-      //fieldPose = visionPose;
-      //SmartDashboard.putString("Field Pose", fieldPose.toString());
 
-      //SmartDashboard.putString("Reset Pose", new Pose2d(-(visionPose.getY() - targetPose.getY() * 2), visionPose.getX(), fieldPose.getRotation().times(-1)).toString());
-
-      
-      //m_robotDrive.resetOdometry(new Pose2d(-(visionPose.getY() - targetPose.getY() * 2), visionPose.getX(), fieldPose.getRotation().times(-1)));
-
-
-
-      //Transform2d robotToTarget = targetPose.minus(fieldPose);
       Pose2d robotToTarget = new Pose2d(targetPose.getX() - fieldPose.getX(), targetPose.getY() - fieldPose.getY(), new Rotation2d(-targetPose.getRotation().getRadians() + fieldPose.getRotation().getRadians()));
 
 
-      //SmartDashboard.putNumber("odomPose X",odometryPose.getX());
-      //SmartDashboard.putNumber("Vision Pose X",visionPose.getX());
-      //SmartDashboard.putNumber("fieldPose X",fieldPose.getX());
       
 
       double x = robotToTarget.getX();
@@ -254,18 +305,7 @@ public class RobotContainer {
       Pose2d returnPose = new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0)));
 
 
-      if(false){ // original code
-        double deadband = 0.01;
-        returnPose = new Pose2d(0, 0, robotToTarget.getRotation());
-        
-        if(x > deadband || x < -deadband) {
-          returnPose = new Pose2d(robotToTarget.getX(), 0, robotToTarget.getRotation());
-        } 
-        if(y > deadband || y < -deadband) {
-          returnPose = new Pose2d(returnPose.getX(), robotToTarget.getY(), robotToTarget.getRotation());
-        }
-
-      } else {
+  
 
         double m_xError = Math.abs(targetPose.getX() - fieldPose.getX());
         double m_yError = Math.abs(targetPose.getY() - fieldPose.getY());
@@ -290,36 +330,16 @@ public class RobotContainer {
         returnPose = new Pose2d(y, -x, rot);// robotToTarget.getY(), robotToTarget.getRotation());
 
 
-      }
 
-      //SmartDashboard.putString("Return Pose", returnPose.toString());
 
       return returnPose;
-      //return m_visionCommand;
+
     }
 
     public void resetDriveEncoders() {
         m_robotDrive.resetEncoders();
     }
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
 
-    // Configure default commands
-    //m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        /*new RunCommand(
-            () ->
-                m_robotDrive.drive(
-                    joystick1.getY(),
-                    joystick1.getX(),
-                    joystick2.getX(),
-                    true),
-            m_robotDrive));*/
-
-  }
 
   public void Calibrate() {
     SmartDashboard.putData("Calibrate", new DriveCalibrateCommand(m_robotDrive));
@@ -330,29 +350,6 @@ public class RobotContainer {
   
   
   
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final VisionSubsystem m_visionSubsystem = new VisionSubsystem();
-  private final LEDSubsystem m_LedSubsystem = new LEDSubsystem();
-
-
-  private final VisionCommand m_visionCommand = new VisionCommand(m_visionSubsystem);
-
-
-  private final GripperSubsystem m_gripperSubsystem = new GripperSubsystem();
-
-  private final PDHMonitor m_PDHMonitor = new PDHMonitor();
-
-  private final ArmSubsystem m_armSubsystem = new ArmSubsystem();
-  private final ArmCommand m_armCommand = new ArmCommand(m_armSubsystem);
-  private final ArmNegCommand m_armNegCommand = new ArmNegCommand(m_armSubsystem);
-
-  private final IntakeExtendSubsystem m_intakeExtendSubsystem = new IntakeExtendSubsystem();
-  private final IntakeInhaleSubsystem m_intakeInhaleSubsystem = new IntakeInhaleSubsystem();
-  private final IntakeExtendCommand m_intakeExtendCommand = new IntakeExtendCommand(m_intakeExtendSubsystem);
-  private final IntakeRetractCommand m_intakeRetractCommand = new IntakeRetractCommand(m_intakeExtendSubsystem);
-  private final IntakeInhaleCommand m_intakeInhaleCommand = new IntakeInhaleCommand(m_intakeInhaleSubsystem);
-  private final IntakeExhaleCommand m_intakeExhaleCommand = new IntakeExhaleCommand(m_intakeInhaleSubsystem);
-
 
 
   public void LEDIdle() {
@@ -373,12 +370,7 @@ public class RobotContainer {
     //}
     return axis;
   }
-  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
-
-  public Command getGripperCommand() {
-    return m_gripperReleaseCommand;
-  }
-
+  
 
 
 
@@ -468,4 +460,9 @@ public class RobotContainer {
       return null;
     }
 }
+
+public void resetGyro() {
+  m_robotDrive.zeroHeading();
+}
+
 }
