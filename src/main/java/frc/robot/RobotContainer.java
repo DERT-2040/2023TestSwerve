@@ -175,9 +175,6 @@ public class RobotContainer {
 
   
 
-  public Command getGripperCommand() {
-    return m_gripperReleaseCommand;
-  }
 
 
 
