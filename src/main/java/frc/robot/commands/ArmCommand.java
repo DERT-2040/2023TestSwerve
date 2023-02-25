@@ -22,7 +22,8 @@ public class ArmCommand extends CommandBase{
  
      @Override
      public void execute() {
-        m_subsystem.rotate(-1);
+         m_subsystem.rotate(.3);
+         //m_subsystem.setArmAngle(-90);
      }
  
      @Override

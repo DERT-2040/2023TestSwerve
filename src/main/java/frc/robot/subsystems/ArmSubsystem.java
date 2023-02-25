@@ -69,7 +69,7 @@ public class ArmSubsystem extends SubsystemBase {
         armExtendNeo.setSmartCurrentLimit(20,10000);
         armExtendNeo.setOpenLoopRampRate(0.75);
         extendEncoder = armExtendNeo.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
-        extendEncoder.setPosition(0);//-.4 * 58);
+        extendEncoder.setPosition(-.4 * 58);
         extendControl = new PIDController(1.5, 0, 0.1);
 
 
@@ -149,7 +149,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void rotate(double speed) { // from Feb24 code
         arm.set(speed);
         
-        SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
+        //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
+        SmartDashboard.putNumber("Actual Arm Angle", rotateEncoder.getPosition());
     }
 
  
@@ -166,9 +167,9 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmAngle(double angle) {
-        double actualArmAngle = rotateEncoder.getPosition() * (90/60) * (90.0/50.0);
+        double actualArmAngle = rotateEncoder.getPosition(); //* (90/60) * (90.0/50.0) * 2;
         arm.set(rotateControl.calculate(actualArmAngle, angle));
-        SmartDashboard.putNumber("Target Arm Angle", angle);
+        SmartDashboard.putNumber("Actual Arm Angle", actualArmAngle);
         /*if(actualArmAngle < -90) {
             actualArmAngle = -90;
         } else if(actualArmAngle > 50) {
