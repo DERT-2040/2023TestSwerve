@@ -23,8 +23,8 @@ public class ArmRetractCommand extends CommandBase {
 
     @Override
     public void execute() {
-        m_subsystem.setExtendSpeed(0.3);
-    //    m_subsystem.setExtendPosition(-0.1);
+        //m_subsystem.setExtendSpeed(0.3);
+        m_subsystem.setExtendPosition(-0.1);
      
     }
 

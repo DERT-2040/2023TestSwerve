@@ -112,13 +112,15 @@ public class RobotContainer {
 
   private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
   private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
+  private static JoystickButton joystick1Button11 = new JoystickButton(joystick1, 11);
+  private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
+
   private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
   private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
   private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 3);
   private static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
   private static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
-  private static JoystickButton joystick1Button11 = new JoystickButton(joystick1, 11);
-  private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
+  
 
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
 
