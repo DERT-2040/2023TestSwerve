@@ -1,7 +1,5 @@
 package frc.robot.commands;
 
-import org.opencv.osgi.OpenCVInterface;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeExtendSubsystem;
@@ -31,13 +29,13 @@ public class IntakeExtendCommand extends CommandBase {
       if (selectedOption == 0) {
       switch(automaticOption) {
          case 1: 
-         m_subsystem.goToPosition(10);
+         m_subsystem.setChosenLocation(0);
          break;
          case 2:
-         m_subsystem.goToPosition(20);
+         m_subsystem.setChosenLocation(20);
          break;
          case 3:
-         m_subsystem.goToPosition(30);
+         m_subsystem.setChosenLocation(40);
          break;
          default:
          break;
@@ -46,13 +44,13 @@ public class IntakeExtendCommand extends CommandBase {
    } else {
       switch(selectedOption) {
          case 1: 
-         m_subsystem.goToPosition(10);
+         m_subsystem.setChosenLocation(0);
          break;
          case 2:
-         m_subsystem.goToPosition(20);
+         m_subsystem.setChosenLocation(20);
          break;
          case 3:
-         m_subsystem.goToPosition(30);
+         m_subsystem.setChosenLocation(40);
          break;
          default:
          break;
@@ -62,7 +60,6 @@ public class IntakeExtendCommand extends CommandBase {
  
      @Override
      public void end(boolean interrupted) {
-      m_subsystem.extend(0);
       if (automaticOption != 3) {
          automaticOption = automaticOption + 1;
       } else {

@@ -20,6 +20,7 @@ public class IntakeExtendSubsystem extends SubsystemBase {
     int extendID = 21; //3;//21;
     private RelativeEncoder extendEncoder;
     SparkMaxPIDController extendController;
+    int chosenLocation;
 
     public IntakeExtendSubsystem() {
         extendMotor = new CANSparkMax(extendID, MotorType.kBrushless); //extendMotor = new Spark(extendID);//
@@ -38,7 +39,11 @@ public class IntakeExtendSubsystem extends SubsystemBase {
         
     }
 
-    public void goToPosition(int chosenLocation) {
+    public void setChosenLocation(int temp_chosenlocation) {
+        chosenLocation = temp_chosenlocation;
+    }
+    
+    public void goToPosition() {
         extendController.setReference(chosenLocation, ControlType.kPosition);
         SmartDashboard.putNumber("Intake Position", extendEncoder.getPosition());
         SmartDashboard.putNumber("Target Intake Position", chosenLocation);

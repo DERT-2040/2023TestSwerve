@@ -98,6 +98,7 @@ public class RobotContainer {
   public void periodic() {
     checkButtonInputs();
     m_PDHMonitor.periodic();
+    m_intakeExtendSubsystem.goToPosition();
   }
 
 
