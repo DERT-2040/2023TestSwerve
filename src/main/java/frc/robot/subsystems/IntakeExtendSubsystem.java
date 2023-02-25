@@ -40,8 +40,8 @@ public class IntakeExtendSubsystem extends SubsystemBase {
 
     public void goToPosition(int chosenLocation) {
         extendController.setReference(chosenLocation, ControlType.kPosition);
-        SmartDashboard.putNumber("Intake Position", extendEncoder.getPosition());
-        SmartDashboard.putNumber("Target Intake Position", chosenLocation);
+        //SmartDashboard.putNumber("Intake Position", extendEncoder.getPosition());
+        //SmartDashboard.putNumber("Target Intake Position", chosenLocation);
     }
 }
 

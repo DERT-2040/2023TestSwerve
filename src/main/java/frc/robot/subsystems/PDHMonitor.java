@@ -17,9 +17,9 @@ public class PDHMonitor extends SubsystemBase{
         // Get the total current of all channels.
         //SmartDashboard.putNumber("Total Current", pdh.getTotalCurrent());
         //individual channel currents
-        for(int i=0; i < pdh.getNumChannels(); i++) {
-            SmartDashboard.putNumber(i + " Current", pdh.getCurrent(i));
-        }
+        //for(int i=0; i < pdh.getNumChannels(); i++) {
+            //SmartDashboard.putNumber(i + " Current", pdh.getCurrent(i));
+        //}
     }
 
     

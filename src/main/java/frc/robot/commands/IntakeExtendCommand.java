@@ -27,7 +27,7 @@ public class IntakeExtendCommand extends CommandBase {
      @Override
      public void execute() {
       //m_subsystem.extend(1.0);
-      SmartDashboard.putNumber("Extend Auto Option", automaticOption);
+      //SmartDashboard.putNumber("Extend Auto Option", automaticOption);
       if (selectedOption == 0) {
       switch(automaticOption) {
          case 1: 

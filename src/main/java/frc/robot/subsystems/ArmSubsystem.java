@@ -112,14 +112,14 @@ public class ArmSubsystem extends SubsystemBase {
             m_count = 0;
             if(power < 0) {
                 power = 0;
-            }
-        }*/
+            }*/
+       // }
+
         SmartDashboard.putBoolean("GripperLimit", !gripperLimitSwitch.get());
          m_prevCount = m_currentCount;
 
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", m_count);
-        SmartDashboard.putNumber("Gripper Power",power);
     }
 
     public void grip_goto(int location) {
@@ -130,7 +130,7 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             grip_speed(0);
         }
-        SmartDashboard.putNumber("Counter", m_count);
+        //SmartDashboard.putNumber("Counter", m_count);
     }
 
     /*
@@ -162,21 +162,21 @@ public class ArmSubsystem extends SubsystemBase {
  
     public void setExtendPosition(double position) {
         armExtendNeo.set(extendControl.calculate(extendEncoder.getPosition() / 57, position));
-        SmartDashboard.putNumber("Desired Arm Extend", position);
+        //SmartDashboard.putNumber("Desired Arm Extend", position);
     }
 
 
     public void setExtendSpeed(double speed) {
         armExtendNeo.set(speed);
-        SmartDashboard.putNumber("Desired Arm Extend", (extendEncoder.getPosition() / 57));
+        //SmartDashboard.putNumber("Desired Arm Extend", (extendEncoder.getPosition() / 57));
         
     }
 
     public void setArmAngle(double angle) {
         double actualArmAngle = rotateEncoder.getPosition(); //* (90/60) * (90.0/50.0) * 2;
         arm.set(rotateControl.calculate(actualArmAngle, angle));
-        SmartDashboard.putNumber("Actual Arm Angle", actualArmAngle);
-        SmartDashboard.putNumber("Desired Arm Angle", angle);
+        //SmartDashboard.putNumber("Actual Arm Angle", actualArmAngle);
+        //SmartDashboard.putNumber("Desired Arm Angle", angle);
         /*if(actualArmAngle < -90) {
             actualArmAngle = -90;
         } else if(actualArmAngle > 50) {

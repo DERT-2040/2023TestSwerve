@@ -23,7 +23,7 @@ public class IntakeInhaleCommand extends CommandBase {
  
      @Override
      public void execute() {
-      SmartDashboard.putNumber("Automatic Option", automaticOption);
+      //SmartDashboard.putNumber("Automatic Option", automaticOption);
       switch(selectedOption) {
          case 1: 
          m_subsystem.inhale(1);
