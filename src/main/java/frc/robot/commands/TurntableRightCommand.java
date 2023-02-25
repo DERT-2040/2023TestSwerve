@@ -5,12 +5,12 @@ import frc.robot.subsystems.TurntableSubsystem;
 
 public class TurntableRightCommand extends CommandBase {
     TurntableSubsystem m_subsystem;
-     
-     public TurntableRightCommand(TurntableSubsystem subsystem) {
+     double selectedSpeed;
+     public TurntableRightCommand(TurntableSubsystem subsystem, double speed) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
-         
+         selectedSpeed = speed;
      }
 
      
@@ -21,7 +21,7 @@ public class TurntableRightCommand extends CommandBase {
  
      @Override
      public void execute() {
-        m_subsystem.moveTurntable(-0.5);
+        m_subsystem.moveTurntable(selectedSpeed * -0.5);
      }
  
      @Override

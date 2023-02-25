@@ -53,7 +53,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.List;
+
+import javax.tools.Diagnostic;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -112,24 +117,49 @@ public class RobotContainer {
 
   //  define buttons and controls
 
-  private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
-  private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
+  //Joystick 1
+  //Balance Mode Toggle
+  public static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
+  //Joystick 2
+  //Reverse Intake
+  public static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
+  //Cycle Intake Position
+  public static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 3);
+  //Intake Cone
+  public static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
+  //Intake Cube
+  public static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
+  // Gamepad 1
+  //Reset Gripper
+  private static JoystickButton gamePad1Button1 = new JoystickButton(gamePad1, 1);
+  //LED Toggle
+  private static JoystickButton gamePad1Button3 = new JoystickButton(gamePad1,  3); 
+  //Grab Cube
+  private static JoystickButton gamePad1Button5 = new JoystickButton(gamePad1, 5);
+  //Grab Cone
+  private static JoystickButton gamePad1Button6 = new JoystickButton(gamePad1, 6);
+  //Toggle Manuel Mode
+  private static JoystickButton gamePad1Button8 = new JoystickButton(gamePad1, 8);
+  //Automatic Placement Selection
+  private static POVButton gamePad1POVUp = new POVButton(gamePad1, 0);
+  private static POVButton gamePad1POVRight = new POVButton(gamePad1, 90);
+  private static POVButton gamePad1POVDown = new POVButton(gamePad1, 180);
+  private static POVButton gamePad1POVLeft = new POVButton(gamePad1, 270);
+  //Execute Selected Placement
+  private static JoystickButton gamePad1Button10 = new JoystickButton(gamePad1, 10);
+  //Turntable Right
+  private static double gamePad1RightTrigger = gamePad1.getRawAxis(3);
+  //Turntable Left
+  private static double gamePad1LeftTrigger = gamePad1.getRawAxis(2);
+  //Manuel Arm Extend
+  private static double gamePad1RightStickXAxis = gamePad1.getRawAxis(4);
+  //Manuel Arm Rotate
+  private static double gamePad1RightStickYAxis = gamePad1.getRawAxis(5);
+  //Nudge Robot
+  private static double gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
+  private static double gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
 
-  private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
-  private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
-  private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 3);
-  private static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
-  private static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
-  private static JoystickButton joystick1Button11 = new JoystickButton(joystick1, 11);
-  private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
-  private static JoystickButton joystick1Button6 = new JoystickButton(joystick1, 6);
-  private static JoystickButton joystick1Button7 = new JoystickButton(joystick1, 7);
-  public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
 
-
-  private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
-  private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
-  private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
 
 
   /*  ****          Define The robot's subsystems       ****   /
@@ -165,8 +195,8 @@ public class RobotContainer {
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
-  private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
-  private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem);
+  private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem, gamePad1RightTrigger);
+  private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem, gamePad1LeftTrigger);
   private final IntakeInhaleCommand    m_intakeConeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
@@ -181,6 +211,12 @@ public class RobotContainer {
 
 
     public void checkButtonInputs() {
+     gamePad1RightTrigger = gamePad1.getRawAxis(3);
+     gamePad1LeftTrigger = gamePad1.getRawAxis(2);
+     gamePad1RightStickXAxis = gamePad1.getRawAxis(4);
+     gamePad1RightStickYAxis = gamePad1.getRawAxis(5);
+     gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
+     gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
       //sets LEDs to Purple
      /*  if(gamePad1.getRawButton(3)) {
         m_LedSubsystem.setColor(false);
@@ -192,12 +228,16 @@ public class RobotContainer {
         m_LedSubsystem.setColor(true);
       }
 
-      joystick1Button2.whileTrue(m_armCommand);
+      //joystick1Button2.whileTrue(m_armCommand);
       joystick1Button3.whileTrue(m_armNegCommand);
-      joystick1Button11.whileTrue(m_armExtendCommand);
-      joystick1Button10.whileTrue(m_armRetractCommand);
-      joystick1Button6.whileTrue(m_TurntableLeftCommand);
-      joystick1Button7.whileTrue(m_TurntableRightCommand);
+      //joystick1Button11.whileTrue(m_armExtendCommand);
+      //joystick1Button10.whileTrue(m_armRetractCommand);
+      if (gamePad1RightTrigger > 0.1) {
+        m_TurntableRightCommand.schedule();
+      }
+      if (gamePad1LeftTrigger > 0.1) {
+        m_TurntableLeftCommand.schedule();
+      }
       joystick2Button5.whileTrue(m_intakeCubeCommand);
       joystick2Button4.whileTrue(m_intakeConeCommand);
       joystick2Button2.whileTrue(m_intakeReverseCommand);
@@ -242,7 +282,7 @@ public class RobotContainer {
        *  Future step will be to use the photon vision library to merge the april tag location with the swerve obometry position
        */
 
-      if(joystick2Button8.getAsBoolean()) {
+      /*if(joystick2Button8.getAsBoolean()) {
 
       
         double m_maximum = 1;
@@ -273,7 +313,7 @@ public class RobotContainer {
         } else if(rot < -.5) {
           rot = -.5;
         }
-      }
+      }*/
 
       double speed = 1;//(-joystick1.getZ() + 1) / 2;
       
