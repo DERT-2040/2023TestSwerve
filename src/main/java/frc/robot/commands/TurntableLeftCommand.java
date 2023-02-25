@@ -1,12 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.IntakeInhaleSubsystem;
+import frc.robot.subsystems.TurntableSubsystem;
 
-public class IntakeExhaleCommand extends CommandBase {
-    IntakeInhaleSubsystem m_subsystem;
+public class TurntableLeftCommand extends CommandBase {
+    TurntableSubsystem m_subsystem;
      
-     public IntakeExhaleCommand(IntakeInhaleSubsystem subsystem) {
+     public TurntableLeftCommand(TurntableSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
@@ -21,11 +21,11 @@ public class IntakeExhaleCommand extends CommandBase {
  
      @Override
      public void execute() {
-        m_subsystem.inhale(-1);
+        m_subsystem.moveTurntable(0.5);
      }
  
      @Override
      public void end(boolean interrupted) {
-        m_subsystem.inhale(0);
+        m_subsystem.moveTurntable(0);
      }
 }
