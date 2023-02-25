@@ -56,7 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
         rotateEncoder = arm.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
         rotateEncoder.setPositionConversionFactor(90.0/107.0);
         rotateEncoder.setPosition(0);
-        rotateControl = new PIDController(.003, .001, 0);
+        rotateControl = new PIDController(.005, .003, 0);
         
 
 
@@ -170,6 +170,7 @@ public class ArmSubsystem extends SubsystemBase {
         double actualArmAngle = rotateEncoder.getPosition(); //* (90/60) * (90.0/50.0) * 2;
         arm.set(rotateControl.calculate(actualArmAngle, angle));
         SmartDashboard.putNumber("Actual Arm Angle", actualArmAngle);
+        SmartDashboard.putNumber("Desired Arm Angle", angle);
         /*if(actualArmAngle < -90) {
             actualArmAngle = -90;
         } else if(actualArmAngle > 50) {
