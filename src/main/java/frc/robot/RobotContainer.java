@@ -33,6 +33,8 @@ import frc.robot.commands.IntakeExhaleCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
 import frc.robot.commands.IntakeRetractCommand;
+import frc.robot.commands.TurntableLeftCommand;
+import frc.robot.commands.TurntableRightCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
 
@@ -44,6 +46,7 @@ import frc.robot.subsystems.IntakeExtendSubsystem;
 import frc.robot.subsystems.IntakeInhaleSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PDHMonitor;
+import frc.robot.subsystems.TurntableSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 
@@ -119,6 +122,9 @@ public class RobotContainer {
   private static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
   private static JoystickButton joystick1Button11 = new JoystickButton(joystick1, 11);
   private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
+  private static JoystickButton joystick1Button6 = new JoystickButton(joystick1, 6);
+  private static JoystickButton joystick1Button7 = new JoystickButton(joystick1, 7);
+
 
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
 
@@ -137,6 +143,7 @@ public class RobotContainer {
   private final ArmSubsystem          m_armSubsystem =            new ArmSubsystem();
   private final IntakeExtendSubsystem m_intakeExtendSubsystem =   new IntakeExtendSubsystem();
   private final IntakeInhaleSubsystem m_intakeInhaleSubsystem =   new IntakeInhaleSubsystem();
+  private final TurntableSubsystem    m_TurntableSubsystem =      new TurntableSubsystem();
   
 
   /*  ****          Define The robot's Commands       ****   /
@@ -158,6 +165,9 @@ public class RobotContainer {
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
+  private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
+  private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem);
+
   
 
   public Command getGripperCommand() {
@@ -187,6 +197,8 @@ public class RobotContainer {
       joystick2Button2.whileTrue(m_intakeRetractCommand);
       joystick1Button11.whileTrue(m_armExtendCommand);
       joystick1Button10.whileTrue(m_armRetractCommand);
+      joystick1Button6.whileTrue(m_TurntableLeftCommand);
+      joystick1Button7.whileTrue(m_TurntableRightCommand);
       
     }
 
