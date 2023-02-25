@@ -21,7 +21,7 @@ public class TurntableLeftCommand extends CommandBase {
  
      @Override
      public void execute() {
-        m_subsystem.moveTurntable(-1);
+        m_subsystem.moveTurntable(0.5);
      }
  
      @Override
