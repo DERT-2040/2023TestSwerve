@@ -29,9 +29,9 @@ public class IntakeExtendSubsystem extends SubsystemBase {
         extendEncoder.setPosition(0);
         //extendEncoder.setPositionConversionFactor(1/);
         extendController = extendMotor.getPIDController();
-        extendController.setP(1.5);
-        extendController.setI(0);
-        extendController.setD(0.1);
+        extendController.setP(0.04);
+        extendController.setI(0.000001);
+        extendController.setD(0.006);
     }
 
     public void extend(double speed) {
