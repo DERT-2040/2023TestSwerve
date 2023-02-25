@@ -167,7 +167,10 @@ public class RobotContainer {
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
   private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
   private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem);
-  private final IntakeInhaleCommand    m_intakeSpeedCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 0);
+  private final IntakeInhaleCommand    m_intakeConeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
+  private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
+  private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
+
   
 
   public Command getGripperCommand() {
@@ -195,8 +198,10 @@ public class RobotContainer {
       joystick1Button10.whileTrue(m_armRetractCommand);
       joystick1Button6.whileTrue(m_TurntableLeftCommand);
       joystick1Button7.whileTrue(m_TurntableRightCommand);
-      gamePad1Button1.whileTrue(m_intakePositionCommand);
-      gamePad1Button2.whileTrue(m_intakeSpeedCommand);
+      joystick2Button5.whileTrue(m_intakeCubeCommand);
+      joystick2Button4.whileTrue(m_intakeConeCommand);
+      joystick2Button2.whileTrue(m_intakeReverseCommand);
+      joystick2Button3.whileTrue(m_intakePositionCommand);
     }
 
 

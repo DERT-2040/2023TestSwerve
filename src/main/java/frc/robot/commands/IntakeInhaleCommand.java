@@ -24,21 +24,6 @@ public class IntakeInhaleCommand extends CommandBase {
      @Override
      public void execute() {
       SmartDashboard.putNumber("Automatic Option", automaticOption);
-      if (selectedOption == 0) {
-      switch(automaticOption) {
-         case 1: 
-         m_subsystem.inhale(1);
-         break;
-         case 2:
-         m_subsystem.inhale(0.5);
-         break;
-         case 3:
-         m_subsystem.inhale(-1);
-         break;
-         default:
-         break;
-      }
-   } else {
       switch(selectedOption) {
          case 1: 
          m_subsystem.inhale(1);
@@ -52,16 +37,10 @@ public class IntakeInhaleCommand extends CommandBase {
          default:
          break;
       }
-   }
      }
  
      @Override
      public void end(boolean interrupted) {
         m_subsystem.inhale(0);
-        if (automaticOption != 3) {
-         automaticOption = automaticOption + 1;
-      } else {
-         automaticOption = 1;
-      }
      }
 }
