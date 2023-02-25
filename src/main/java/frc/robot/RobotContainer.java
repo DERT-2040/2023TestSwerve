@@ -158,7 +158,8 @@ public class RobotContainer {
   //Nudge Robot
   private static double gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
   private static double gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
-
+  //Auto Drive
+  private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
 
 
 
@@ -282,7 +283,7 @@ public class RobotContainer {
        *  Future step will be to use the photon vision library to merge the april tag location with the swerve obometry position
        */
 
-      /*if(joystick2Button8.getAsBoolean()) {
+      if(joystick2Button8.getAsBoolean()) {
 
       
         double m_maximum = 1;
@@ -313,7 +314,7 @@ public class RobotContainer {
         } else if(rot < -.5) {
           rot = -.5;
         }
-      }*/
+      }
 
       double speed = 1;//(-joystick1.getZ() + 1) / 2;
       

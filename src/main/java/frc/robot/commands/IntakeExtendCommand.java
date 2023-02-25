@@ -63,7 +63,7 @@ public class IntakeExtendCommand extends CommandBase {
       if (automaticOption != 3) {
          automaticOption = automaticOption + 1;
       } else {
-         automaticOption = 1;
+        automaticOption = 1;
       }
      }
 }
