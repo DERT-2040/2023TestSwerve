@@ -33,7 +33,6 @@ public class IntakeExtendSubsystem extends SubsystemBase {
 
     public void goToPosition(int chosenLocation) {
         extendController.setReference(chosenLocation, ControlType.kPosition);
-        extendMotor.set(extendController.calculate);
     }
 }
 

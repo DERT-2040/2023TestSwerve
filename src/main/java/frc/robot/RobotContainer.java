@@ -29,10 +29,8 @@ import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
-import frc.robot.commands.IntakeExhaleCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
-import frc.robot.commands.IntakeRetractCommand;
 import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
 import frc.robot.commands.VisionCommand;
@@ -124,9 +122,14 @@ public class RobotContainer {
   private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
   private static JoystickButton joystick1Button6 = new JoystickButton(joystick1, 6);
   private static JoystickButton joystick1Button7 = new JoystickButton(joystick1, 7);
+  public static  JoystickButton joystick2Button6 = new JoystickButton(joystick2, 6);
+  public static  JoystickButton joystick2Button7 = new JoystickButton(joystick2, 7);
+  public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
 
 
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
+  private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
+  private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
 
 
   /*  ****          Define The robot's subsystems       ****   /
@@ -157,17 +160,14 @@ public class RobotContainer {
   private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
-  private final IntakeExtendCommand   m_intakeExtendCommand =   new IntakeExtendCommand(m_intakeExtendSubsystem);
-  private final IntakeRetractCommand  m_intakeRetractCommand =  new IntakeRetractCommand(m_intakeExtendSubsystem);
-  private final IntakeInhaleCommand   m_intakeInhaleCommand =   new IntakeInhaleCommand(m_intakeInhaleSubsystem);
-  private final IntakeExhaleCommand   m_intakeExhaleCommand =   new IntakeExhaleCommand(m_intakeInhaleSubsystem);
+  private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
   private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
   private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem);
-
+  private final IntakeInhaleCommand    m_intakeSpeedCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 0);
   
 
   public Command getGripperCommand() {
@@ -191,15 +191,12 @@ public class RobotContainer {
 
       joystick1Button2.whileTrue(m_armCommand);
       joystick1Button3.whileTrue(m_armNegCommand);
-      joystick2Button4.whileTrue(m_intakeExhaleCommand);
-      joystick2Button5.whileTrue(m_intakeInhaleCommand);
-      joystick2Button3.whileTrue(m_intakeExtendCommand);
-      joystick2Button2.whileTrue(m_intakeRetractCommand);
       joystick1Button11.whileTrue(m_armExtendCommand);
       joystick1Button10.whileTrue(m_armRetractCommand);
       joystick1Button6.whileTrue(m_TurntableLeftCommand);
       joystick1Button7.whileTrue(m_TurntableRightCommand);
-      
+      gamePad1Button1.whileTrue(m_intakePositionCommand);
+      gamePad1Button2.whileTrue(m_intakeSpeedCommand);
     }
 
 
