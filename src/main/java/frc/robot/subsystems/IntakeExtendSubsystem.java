@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 //import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -22,6 +23,7 @@ public class IntakeExtendSubsystem extends SubsystemBase {
 
     public IntakeExtendSubsystem() {
         extendMotor = new CANSparkMax(extendID, MotorType.kBrushless); //extendMotor = new Spark(extendID);//
+        extendMotor.setIdleMode(IdleMode.kBrake);
         extendEncoder = extendMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
         extendEncoder.setPosition(0);
         //extendEncoder.setPositionConversionFactor(1/);
