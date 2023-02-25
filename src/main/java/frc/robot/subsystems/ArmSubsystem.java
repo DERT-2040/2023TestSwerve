@@ -23,11 +23,11 @@ public class ArmSubsystem extends SubsystemBase {
     int subArmiD = 40; //change id to correct id later
 
  
-  //  static double m_count = 0;
-  //  double m_prevCount = 0;
-  //  Counter counter;
-  //  Spark gripperTalon;
-  //  DigitalInput gripperLimitSwitch;
+    static double m_count;
+    double m_prevCount;
+    Counter counter;
+    Spark gripperTalon;
+    DigitalInput gripperLimitSwitch;
  
  
     CANSparkMax armExtendNeo;
@@ -41,9 +41,14 @@ public class ArmSubsystem extends SubsystemBase {
         //65 rotations is full extention for extending arm
         //55 rotations = 90 degrees arm rotation
 
-    //    counter = new Counter(4);
-    //    gripperTalon = new Spark(0);
-    //    gripperLimitSwitch = new DigitalInput(5);
+        m_count = 0;
+        m_prevCount = 0;
+
+        counter = new Counter(4);
+        gripperTalon = new Spark(0);
+        gripperLimitSwitch = new DigitalInput(5);
+
+        gripperTalon.set(0);
 
         
         arm = new CANSparkMax(subArmiD, MotorType.kBrushless);
@@ -88,27 +93,27 @@ public class ArmSubsystem extends SubsystemBase {
 
 
 
-    //    counter.reset();
+        counter.reset();
  
     }
 
-/* 
+
     public void grip_speed(double power) {
 
         
         double m_currentCount = counter.get();
-    ;
+    
         if (power > 0) {
             m_count = m_count + (m_currentCount - m_prevCount);
          } else {
             m_count = m_count - (m_currentCount - m_prevCount);
          }
-         if(!gripperLimitSwitch.get()) {
+         /*if(!gripperLimitSwitch.get()) {
             m_count = 0;
             if(power < 0) {
                 power = 0;
             }
-        }
+        }*/
         SmartDashboard.putBoolean("GripperLimit", !gripperLimitSwitch.get());
          m_prevCount = m_currentCount;
 
@@ -119,15 +124,16 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void grip_goto(int location) {
         if (location > m_count) {
-            grip_speed(1);
+            grip_speed(0);
         } else if (location < m_count) {
-            grip_speed(-1);
+            grip_speed(-0);
         } else {
             grip_speed(0);
         }
         SmartDashboard.putNumber("Counter", m_count);
     }
 
+    /*
     public void gripCone(boolean ButtonInput) {
         if (ButtonInput) {
         grip_goto(600);

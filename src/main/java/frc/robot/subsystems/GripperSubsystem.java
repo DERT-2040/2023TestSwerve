@@ -13,8 +13,8 @@ public class GripperSubsystem extends SubsystemBase {
     Counter counter;
     Spark gripperTalon;
     public GripperSubsystem() {
-        counter = new Counter(4);
-        gripperTalon = new Spark(0);
+        //counter = new Counter(4);
+        //gripperTalon = new Spark(0);
         counter.reset();
  // Set up the input channel for the counter
   //counter.setUpSource(4);

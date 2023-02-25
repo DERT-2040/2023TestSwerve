@@ -28,6 +28,7 @@ import frc.robot.commands.ArmRetractCommand;
 import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
+import frc.robot.commands.GripperConeCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
@@ -129,6 +130,7 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
   private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
   private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
+  private static JoystickButton gamePad1Button4  = new JoystickButton(gamePad1, 4);
 
 
   /*  ****          Define The robot's subsystems       ****   /
@@ -140,7 +142,7 @@ public class RobotContainer {
   private final DriveSubsystem        m_robotDrive =              new DriveSubsystem();
   private final VisionSubsystem       m_visionSubsystem =         new VisionSubsystem();
   public  final LEDSubsystem          m_LedSubsystem =            new LEDSubsystem();
-  private final GripperSubsystem      m_gripperSubsystem =        new GripperSubsystem();
+  //private final GripperSubsystem      m_gripperSubsystem =        new GripperSubsystem();
   private final PDHMonitor            m_PDHMonitor =              new PDHMonitor();
   private final ArmSubsystem          m_armSubsystem =            new ArmSubsystem();
   private final IntakeExtendSubsystem m_intakeExtendSubsystem =   new IntakeExtendSubsystem();
@@ -160,7 +162,8 @@ public class RobotContainer {
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
   private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
-  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_gripperSubsystem, RobotContainer::getGamepad1Axis0);
+  private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_armSubsystem);
+  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_armSubsystem);
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
@@ -184,7 +187,7 @@ public class RobotContainer {
      /*  if(gamePad1.getRawButton(3)) {
         m_LedSubsystem.setColor(false);
       }*/
-      gamePad1Button3.whileTrue(m_cargoRequestCommand);
+      gamePad1Button2.whileTrue(m_cargoRequestCommand);
 
       //sets LEDs to Yellow
       if(gamePad1.getRawButton(4)) {
@@ -201,6 +204,9 @@ public class RobotContainer {
       joystick2Button4.whileTrue(m_intakeConeCommand);
       joystick2Button2.whileTrue(m_intakeReverseCommand);
       joystick2Button3.whileTrue(m_intakePositionCommand);
+
+      gamePad1Button3.whileTrue(m_gripperConeCommand);
+      gamePad1Button4.whileTrue(m_gripperReleaseCommand);
     }
 
 
