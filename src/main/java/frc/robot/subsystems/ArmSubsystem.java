@@ -159,5 +159,26 @@ public class ArmSubsystem extends SubsystemBase {
     public void setExtendSpeed(double speed) {
         armExtendNeo.set(speed);
     }
-    
+/* 
+    public void setArmAngle(double angle) {
+        double actualArmAngle = rotateEncoder.getPosition() * (90/60) * (90.0/50.0);
+        armRotateNeo.set(rotateControl.calculate(actualArmAngle, angle));
+        SmartDashboard.putNumber("Target Arm Angle", angle);
+        if(actualArmAngle < -90) {
+            actualArmAngle = -90;
+        } else if(actualArmAngle > 50) {
+            actualArmAngle = 50;
+        }
+        //rotateControl.setReference(angle, ControlType.kPosition);
+        int i = 0;
+        while(actualArmAngle > rotateAngles[i] && i < rotateAngles.length) {
+            i++;
+        }
+
+        double extend = extendDistances[i-1] + ((actualArmAngle - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendDistances[i] - extendDistances[i-1]);
+        setExtendPosition(extend);
+        //armExtendNeo.set(extendControl.calculate(extendEncoder.getPosition() / 58, extend));
+        //extendControl.setReference(extend, ControlType.kPosition);
+    }
+    */
 }
