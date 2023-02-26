@@ -117,5 +117,9 @@ public final class Constants {
   public static final class ControlIndexes {
     public static final int gamePad1LeftTriggerIndex = 2;
     public static final int gamePad1RightTriggerIndex = 3;
+    //Arm Rotate
+    public static final int gamePad1RightStickYAxisIndex = 5;
+    //Arm Extend
+    public static final int gamePad1RightStickXAxisIndex = 4;
   }
 }

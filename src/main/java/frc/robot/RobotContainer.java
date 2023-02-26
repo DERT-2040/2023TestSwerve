@@ -212,11 +212,15 @@ public class RobotContainer {
   // Create Robot Triggers
   private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightTriggerIndex, 0.05, m_eventloop));
   private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.05, m_eventloop));
-  
+  private final Trigger trigger_armRotationControl = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.05, m_eventloop).and(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.05, m_eventloop)).and(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.1, m_eventloop)).and(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.1, m_eventloop)));
+  private final Trigger trigger_armExtendControl = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.05, m_eventloop).and(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.05, m_eventloop)).and(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.1, m_eventloop)).and(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.1, m_eventloop)));
+
   // Robot Trigger Controls
   public void ConfigureInputs() {
     trigger_gamePad1RightTrigger.whileTrue(m_TurntableRightCommand);
     trigger_gamePad1LeftTrigger.whileTrue(m_TurntableLeftCommand);
+    //trigger_armExtendControl.whileTrue(SomeCommand);
+    //trigger_armRotationControl.whileTrue(SomeCommand);
     gamePad1Button3.whileTrue(m_cargoRequestCommand);
     joystick1Button3.whileTrue(m_armNegCommand);
     joystick2Button5.whileTrue(m_intakeCubeCommand);
