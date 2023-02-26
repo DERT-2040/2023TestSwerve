@@ -35,8 +35,7 @@ import frc.robot.commands.GripperConeCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
-import frc.robot.commands.TurntableLeftCommand;
-import frc.robot.commands.TurntableRightCommand;
+import frc.robot.commands.TurntableCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
 
@@ -101,11 +100,8 @@ public class RobotContainer {
     m_LedSubsystem.setColor(true);
   }
   
-  // Create Event Loops
-  private final EventLoop m_eventloop = new EventLoop();
 
   public void periodic() {
-    m_eventloop.poll();
     checkButtonInputs();
     m_PDHMonitor.periodic();
     ConfigureInputs();
@@ -203,25 +199,15 @@ public class RobotContainer {
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
-  private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
-  private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem);
+  private final TurntableCommand      m_TurntableRightCommand = new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1RightTriggerIndex, 2);
+  private final TurntableCommand      m_TurntableLeftCommand =  new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1LeftTriggerIndex, 1);
   private final IntakeInhaleCommand    m_intakeConeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
 
-  //Create BooleanSuppliers for Triggers
-  private final BooleanEvent armExtendControl_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.1, m_eventloop)));
-  private final BooleanEvent armRotateControl_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.1, m_eventloop)));
-  private final BooleanEvent NudgeXAxis_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickXAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickXAxis, -0.1, m_eventloop)));
-  private final BooleanEvent NudgeYAxis_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickYAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickYAxis, -0.1, m_eventloop)));
-
   // Create Robot Triggers
-  private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightTriggerIndex, 0.1, m_eventloop));
-  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.1, m_eventloop));
-  private final Trigger trigger_armRotationControl = new Trigger(armRotateControl_Deadzone);
-  private final Trigger trigger_armExtendControl = new Trigger(armExtendControl_Deadzone);
-  private final Trigger trigger_robotNudgeControlXAxis = new Trigger(NudgeXAxis_Deadzone);
-  private final Trigger trigger_robotNudgeControlYAxis = new Trigger(NudgeYAxis_Deadzone);
+  private final Trigger trigger_gamePad1RightTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1RightTriggerIndex) > 0.1);
+  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1LeftTriggerIndex) > 0.1);
 
   // Robot Trigger Controls - If they are commented, then they are awaiting a command
   public void ConfigureInputs() {
