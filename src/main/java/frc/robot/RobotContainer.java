@@ -102,11 +102,7 @@ public class RobotContainer {
     m_LedSubsystem.setColor(true);
   }
 
-  // Create Event Loops
-  private final EventLoop m_eventloop = new EventLoop();
-
   public void periodic() {
-    m_eventloop.poll();
     m_PDHMonitor.periodic();
     m_intakeExtendSubsystem.goToPosition();
     ConfigureInputs();
