@@ -108,25 +108,31 @@ public class ArmSubsystem extends SubsystemBase {
          } else {
             m_count = m_count - (m_currentCount - m_prevCount);
          }
-         /*if(!gripperLimitSwitch.get()) {
+         if(!gripperLimitSwitch.get()) {
             m_count = 0;
+            if(power > 0) {
+                power = 0;
+            }
+        }
+        if(m_count < -900) {
             if(power < 0) {
                 power = 0;
-            }*/
-       // }
+            }
+        }
 
         SmartDashboard.putBoolean("GripperLimit", !gripperLimitSwitch.get());
          m_prevCount = m_currentCount;
 
         gripperTalon.set(power);
         SmartDashboard.putNumber("Counter", m_count);
+        SmartDashboard.putNumber("Current Count", counter.get());
     }
 
     public void grip_goto(int location) {
         if (location > m_count) {
-            grip_speed(0);
+            grip_speed(.1);
         } else if (location < m_count) {
-            grip_speed(-0);
+            grip_speed(-.1);
         } else {
             grip_speed(0);
         }

@@ -40,7 +40,6 @@ import frc.robot.commands.CargoRequestCommand;
 // SUBSYSTEMS  //
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
 import frc.robot.subsystems.IntakeExtendSubsystem;
 import frc.robot.subsystems.IntakeInhaleSubsystem;
 import frc.robot.subsystems.LEDSubsystem;

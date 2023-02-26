@@ -3,7 +3,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.GripperSubsystem;
 
 public class GripperConeCommand extends CommandBase {
 
@@ -23,7 +22,7 @@ public class GripperConeCommand extends CommandBase {
      @Override
      public void execute() {
         m_subsystem.grip_speed(-.5);
-        //m_subsystem.grip_goto(10);
+        //m_subsystem.grip_goto(100);
          
      }
  
