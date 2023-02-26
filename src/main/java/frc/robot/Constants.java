@@ -116,5 +116,6 @@ public final class Constants {
 
   public static final class ControlIndexes {
     public static final int gamePad1LeftTriggerIndex = 2;
+    public static final int gamePad1RightTriggerIndex = 3;
   }
 }

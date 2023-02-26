@@ -33,8 +33,7 @@ import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
-import frc.robot.commands.TurntableLeftCommand;
-import frc.robot.commands.TurntableRightCommand;
+import frc.robot.commands.TurntableCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
 
@@ -109,6 +108,7 @@ public class RobotContainer {
     m_eventloop.poll();
     m_PDHMonitor.periodic();
     m_intakeExtendSubsystem.goToPosition();
+    ConfigureInputs();
   }
 
 
@@ -203,33 +203,35 @@ public class RobotContainer {
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
-  private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
-  private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1LeftTriggerIndex);
+  private final TurntableCommand m_TurntableRightCommand = new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1RightTriggerIndex, 2);
+  private final TurntableCommand  m_TurntableLeftCommand = new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1LeftTriggerIndex, 1);
   private final IntakeInhaleCommand    m_intakeConeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
 
   // Create Robot Triggers
-  private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(3, 0.05, m_eventloop));
+  private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightTriggerIndex, 0.05, m_eventloop));
   private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.05, m_eventloop));
+  
   // Robot Trigger Controls
   public void ConfigureInputs() {
     trigger_gamePad1RightTrigger.whileTrue(m_TurntableRightCommand);
     trigger_gamePad1LeftTrigger.whileTrue(m_TurntableLeftCommand);
+    gamePad1Button3.whileTrue(m_cargoRequestCommand);
+    joystick1Button3.whileTrue(m_armNegCommand);
+    joystick2Button5.whileTrue(m_intakeCubeCommand);
+    joystick2Button4.whileTrue(m_intakeConeCommand);
+    joystick2Button2.whileTrue(m_intakeReverseCommand);
+    joystick2Button3.whileTrue(m_intakePositionCommand);
   }
-  
+
+  //TODO: Remove everything from checkbutton inputs
   public void checkButtonInputs() {
     //gamePad1RightStickXAxis = gamePad1.getRawAxis(4);
     //gamePad1RightStickYAxis = gamePad1.getRawAxis(5);
     //gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
     //gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
-    gamePad1Button3.whileTrue(m_cargoRequestCommand);
-     joystick1Button3.whileTrue(m_armNegCommand);
-     joystick2Button5.whileTrue(m_intakeCubeCommand);
-     joystick2Button4.whileTrue(m_intakeConeCommand);
-     joystick2Button2.whileTrue(m_intakeReverseCommand);
-     joystick2Button3.whileTrue(m_intakePositionCommand);
-     //TODO: MAKE THIS INTO A LED COMMAND __PLEASE
+     //TODO: Possibly Make this into a LED Command instead of leaving it in Robot Container.
     if(gamePad1.getRawButton(4)) {
       m_LedSubsystem.setColor(true);
     }
