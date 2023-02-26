@@ -22,12 +22,13 @@ public class ArmNegCommand extends CommandBase{
  
      @Override
      public void execute() {
-         m_subsystem.rotate(-.3);
-         //m_subsystem.setArmAngle(50);
+         //m_subsystem.rotate(.3);
+         m_subsystem.setArmAngle(30);
      }
  
      @Override
      public void end(boolean interrupted) {
         m_subsystem.rotate(0);
+        m_subsystem.setExtendSpeed(0);
      }
 }

@@ -28,8 +28,8 @@ public class ArmExtendCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //m_subsystem.setExtendSpeed(-0.3);
-    m_subsystem.setExtendPosition(-.95);
+    //m_subsystem.setExtendSpeed(-0.1);
+    m_subsystem.setExtendPosition(-.85);
   }
 
   // Called once the command ends or is interrupted.
