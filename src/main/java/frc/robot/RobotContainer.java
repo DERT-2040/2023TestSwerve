@@ -60,6 +60,8 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
@@ -204,11 +206,10 @@ public class RobotContainer {
   private final LEDCommand            m_LEDCommand =            new LEDCommand(m_LedSubsystem, true);
 
   //Create BooleanSuppliers for Triggers
-  private final BooleanEvent armExtendControl_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.1, m_eventloop)));
-  private final BooleanEvent armRotateControl_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.1, m_eventloop)));
-  private final BooleanEvent NudgeXAxis_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickXAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickXAxis, -0.1, m_eventloop)));
-  private final BooleanEvent NudgeYAxis_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickYAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickYAxis, -0.1, m_eventloop)));
-
+  private final BooleanSupplier armExtendControl_Deadzone = (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.1, m_eventloop));
+  private final BooleanSupplier armRotateControl_Deadzone = (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.1, m_eventloop));
+  private final BooleanSupplier NudgeXAxis_Deadzone = (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickXAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickXAxis, -0.1, m_eventloop));
+  private final BooleanSupplier NudgeYAxis_Deadzone = (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickYAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickYAxis, -0.1, m_eventloop));
   // Create Robot Triggers
   private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightTriggerIndex, 0.1, m_eventloop));
   private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.1, m_eventloop));
@@ -216,6 +217,7 @@ public class RobotContainer {
   private final Trigger trigger_armExtendControl = new Trigger(armExtendControl_Deadzone);
   private final Trigger trigger_robotNudgeControlXAxis = new Trigger(NudgeXAxis_Deadzone);
   private final Trigger trigger_robotNudgeControlYAxis = new Trigger(NudgeYAxis_Deadzone);
+
 
   // Robot Trigger Controls
   public void ConfigureInputs() {
