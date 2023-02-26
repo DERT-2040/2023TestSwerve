@@ -201,20 +201,9 @@ public class RobotContainer {
   private final IntakeInhaleCommand   m_intakeReverseCommand  = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
   private final LEDCommand            m_LEDCommand =            new LEDCommand(m_LedSubsystem, true);
 
-  //Create BooleanSuppliers for Triggers
-  private final BooleanSupplier armExtendControl_Deadzone = (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.1, m_eventloop));
-  private final BooleanSupplier armRotateControl_Deadzone = (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.1, m_eventloop));
-  private final BooleanSupplier NudgeXAxis_Deadzone = (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickXAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickXAxis, -0.1, m_eventloop));
-  private final BooleanSupplier NudgeYAxis_Deadzone = (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickYAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickYAxis, -0.1, m_eventloop));
   // Create Robot Triggers
-  private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightTriggerIndex, 0.1, m_eventloop));
-  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.1, m_eventloop));
-  private final Trigger trigger_armRotationControl = new Trigger(armRotateControl_Deadzone);
-  private final Trigger trigger_armExtendControl = new Trigger(armExtendControl_Deadzone);
-  private final Trigger trigger_robotNudgeControlXAxis = new Trigger(NudgeXAxis_Deadzone);
-  private final Trigger trigger_robotNudgeControlYAxis = new Trigger(NudgeYAxis_Deadzone);
-
-
+  private final Trigger trigger_gamePad1RightTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1RightTriggerIndex) >= 0.1);
+  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1LeftTriggerIndex) >= 0.1);
   // Robot Trigger Controls
   public void ConfigureInputs() {
     trigger_gamePad1RightTrigger.whileTrue(m_TurntableRightCommand);
