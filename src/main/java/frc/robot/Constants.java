@@ -122,7 +122,7 @@ public final class Constants {
     public static final int gamePad1RightStickYAxisIndex = 5;
     //Arm Extend
     public static final int gamePad1RightStickXAxisIndex = 4;
-    //Nude Robot
+    //Nudge Robot
     public static final int gamePad1LeftStickXAxis = 0;
     public static final int gamePad1LeftStickYAxis = 1;
   }
