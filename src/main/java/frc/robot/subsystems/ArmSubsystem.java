@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,7 +19,7 @@ import com.revrobotics.SparkMaxRelativeEncoder;
 public class ArmSubsystem extends SubsystemBase {
 
     CANSparkMax arm;
-    RelativeEncoder rotateEncoder;
+    DutyCycleEncoder rotateEncoder;
     PIDController rotateControl;
     int subArmiD = 40; //change id to correct id later
 
@@ -58,9 +59,10 @@ public class ArmSubsystem extends SubsystemBase {
         arm.setSmartCurrentLimit(40);
         arm.setSmartCurrentLimit(40,5700);
         arm.setOpenLoopRampRate(0.75);
-        rotateEncoder = arm.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
+        rotateEncoder = new DutyCycleEncoder(6);
+        /*rotateEncoder = arm.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
         rotateEncoder.setPositionConversionFactor(90.0/107.0);
-        rotateEncoder.setPosition(0);
+        rotateEncoder.setPosition(0);*/
         rotateControl = new PIDController(.005, .003, 0);
         
 
@@ -162,7 +164,7 @@ public class ArmSubsystem extends SubsystemBase {
         arm.set(speed);
         
         //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
-        SmartDashboard.putNumber("Actual Arm Angle", rotateEncoder.getPosition());
+        SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
     }
 
  
@@ -179,7 +181,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void setArmAngle(double angle) {
-        double actualArmAngle = rotateEncoder.getPosition(); //* (90/60) * (90.0/50.0) * 2;
+        double actualArmAngle = rotateEncoder.getAbsolutePosition(); //* (90/60) * (90.0/50.0) * 2;
         arm.set(rotateControl.calculate(actualArmAngle, angle));
         //SmartDashboard.putNumber("Actual Arm Angle", actualArmAngle);
         //SmartDashboard.putNumber("Desired Arm Angle", angle);
