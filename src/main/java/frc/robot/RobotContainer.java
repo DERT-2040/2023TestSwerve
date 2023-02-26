@@ -155,6 +155,8 @@ public class RobotContainer {
   private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
   //Execute Selected Placement
   private static JoystickButton gamePad1Button10 =      new JoystickButton(gamePad1, 10);
+  //Reset Selected Placement
+  private static JoystickButton gamePad1Button9 =       new JoystickButton(gamePad1, 9);
   //Enable Auto-Drive
   private static JoystickButton joystick2Button8 =      new JoystickButton(joystick2, 8);
 
