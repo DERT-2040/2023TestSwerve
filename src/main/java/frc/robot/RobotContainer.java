@@ -102,7 +102,6 @@ public class RobotContainer {
   
 
   public void periodic() {
-    checkButtonInputs();
     m_PDHMonitor.periodic();
     ConfigureInputs();
   }
@@ -150,9 +149,9 @@ public class RobotContainer {
   private static POVButton      gamePad1POVDownLeft =   new POVButton(gamePad1, 225);
   private static POVButton      gamePad1POVLeft =       new POVButton(gamePad1, 270);
   private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
-  //Execute Selected Placement
+  //Turntable Right
   private static JoystickButton gamePad1Button10 =      new JoystickButton(gamePad1, 10);
-  //Reset Selected Placement
+  //Turntable Left
   private static JoystickButton gamePad1Button9 =       new JoystickButton(gamePad1, 9);
   //Enable Auto-Drive
   private static JoystickButton joystick2Button8 =      new JoystickButton(joystick2, 8);
@@ -205,53 +204,26 @@ public class RobotContainer {
   private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
 
-  // Create Robot Triggers
-  private final Trigger trigger_gamePad1RightTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1RightTriggerIndex) > 0.1);
-  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1LeftTriggerIndex) > 0.1);
-
   // Robot Trigger Controls - If they are commented, then they are awaiting a command
   public void ConfigureInputs() {
-    trigger_gamePad1RightTrigger.whileTrue(m_TurntableRightCommand);
-    trigger_gamePad1LeftTrigger.whileTrue(m_TurntableLeftCommand);
-    //trigger_armExtendControl.whileTrue(SomeCommand);
-    //trigger_armRotationControl.whileTrue(SomeCommand);
-    //trigger_robotNudgeControlXAxis.whileTrue(SomeCommand);
-    //trigger_robotNudgeControlYAxis.whileTrue(SomeCommand);
     gamePad1Button3.whileTrue(m_cargoRequestCommand);
     joystick1Button3.whileTrue(m_armNegCommand);
     joystick2Button5.whileTrue(m_intakeCubeCommand);
     joystick2Button4.whileTrue(m_intakeConeCommand);
     joystick2Button2.whileTrue(m_intakeReverseCommand);
     joystick2Button3.whileTrue(m_intakePositionCommand);
-    //gamePad1Button3.whileTrue(m_LEDCommand);
     gamePad1Button1.whileTrue(m_gripperReleaseCommand);
     gamePad1Button6.whileTrue(m_gripperConeCommand);
-    //gamePad1Button5.whileTrue(m_gripperCubeCommand);
-  }
-
-
-
-
-
-    public void checkButtonInputs() {
-      //sets LEDs to Purple
-     /*  if(gamePad1.getRawButton(3)) {
-        m_LedSubsystem.setColor(false);
-      }*/
-      //gamePad1Button2.whileTrue(m_cargoRequestCommand);
-
-      //sets LEDs to Yellow
-      if(gamePad1.getRawButton(4)) {
-        m_LedSubsystem.setColor(true);
-      }
-
-      joystick1Button2.whileTrue(m_armCommand);
-      joystick1Button3.whileTrue(m_armNegCommand);
-      joystick1Button11.whileTrue(m_armExtendCommand);
-      joystick1Button10.whileTrue(m_armRetractCommand);
-      joystick1Button6.whileTrue(m_TurntableLeftCommand);
-      joystick1Button7.whileTrue(m_TurntableRightCommand);
+    if(gamePad1.getRawButton(4)) {
+      m_LedSubsystem.setColor(true);
     }
+    joystick1Button2.whileTrue(m_armCommand);
+    joystick1Button3.whileTrue(m_armNegCommand);
+    joystick1Button11.whileTrue(m_armExtendCommand);
+    joystick1Button10.whileTrue(m_armRetractCommand);
+    gamePad1Button9.whileTrue(m_TurntableLeftCommand);
+    gamePad1Button10.whileTrue(m_TurntableRightCommand);
+  }
 
 
     
