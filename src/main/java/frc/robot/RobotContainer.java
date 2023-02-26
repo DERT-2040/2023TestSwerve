@@ -123,36 +123,40 @@ public class RobotContainer {
 
   //Joystick 1
   //Balance Mode Toggle
-  public static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
+  public static JoystickButton joystick1Button3 =       new JoystickButton(joystick1, 3);
   //Joystick 2
   //Reverse Intake
-  public static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
+  public static JoystickButton joystick2Button2 =       new JoystickButton(joystick2, 2);
   //Cycle Intake Position
-  public static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 3);
+  public static JoystickButton joystick2Button3 =       new JoystickButton(joystick2, 3);
   //Intake Cone
-  public static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
+  public static JoystickButton joystick2Button4 =       new JoystickButton(joystick2, 4);
   //Intake Cube
-  public static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
+  public static JoystickButton joystick2Button5 =       new JoystickButton(joystick2, 5);
   // Gamepad 1
   //Reset Gripper
-  private static JoystickButton gamePad1Button1 = new JoystickButton(gamePad1, 1);
+  private static JoystickButton gamePad1Button1 =       new JoystickButton(gamePad1, 1);
   //LED Toggle
-  private static JoystickButton gamePad1Button3 = new JoystickButton(gamePad1,  3); 
+  private static JoystickButton gamePad1Button3 =       new JoystickButton(gamePad1,  3); 
   //Grab Cube
-  private static JoystickButton gamePad1Button5 = new JoystickButton(gamePad1, 5);
+  private static JoystickButton gamePad1Button5 =       new JoystickButton(gamePad1, 5);
   //Grab Cone
-  private static JoystickButton gamePad1Button6 = new JoystickButton(gamePad1, 6);
+  private static JoystickButton gamePad1Button6 =       new JoystickButton(gamePad1, 6);
   //Toggle Manuel Mode
-  private static JoystickButton gamePad1Button8 = new JoystickButton(gamePad1, 8);
+  private static JoystickButton gamePad1Button8 =       new JoystickButton(gamePad1, 8);
   //Automatic Placement Selection
-  private static POVButton gamePad1POVUp = new POVButton(gamePad1, 0);
-  private static POVButton gamePad1POVRight = new POVButton(gamePad1, 90);
-  private static POVButton gamePad1POVDown = new POVButton(gamePad1, 180);
-  private static POVButton gamePad1POVLeft = new POVButton(gamePad1, 270);
+  private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
+  private static POVButton      gamePad1POVUpRight =    new POVButton(gamePad1, 45);
+  private static POVButton      gamePad1POVRight =      new POVButton(gamePad1, 90);
+  private static POVButton      gamePad1POVDownRight =  new POVButton(gamePad1, 135);
+  private static POVButton      gamePad1POVDown =       new POVButton(gamePad1, 180);
+  private static POVButton      gamePad1POVDownLeft =   new POVButton(gamePad1, 225);
+  private static POVButton      gamePad1POVLeft =       new POVButton(gamePad1, 270);
+  private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
   //Execute Selected Placement
-  private static JoystickButton gamePad1Button10 = new JoystickButton(gamePad1, 10);
+  private static JoystickButton gamePad1Button10 =      new JoystickButton(gamePad1, 10);
   //Enable Auto-Drive
-  private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
+  private static JoystickButton joystick2Button8 =      new JoystickButton(joystick2, 8);
 
 
 
