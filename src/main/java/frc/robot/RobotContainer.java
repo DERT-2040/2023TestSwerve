@@ -15,10 +15,13 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
+import frc.robot.Constants.ControlIndexes;
 import frc.robot.Constants.DriveConstants;
 
 // COMMANDS  //
@@ -53,6 +56,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.List;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -94,10 +100,15 @@ public class RobotContainer {
   public void init() {
     m_LedSubsystem.setColor(true);
   }
+  
+  // Create Event Loops
+  private final EventLoop m_eventloop = new EventLoop();
 
   public void periodic() {
+    m_eventloop.poll();
     checkButtonInputs();
     m_PDHMonitor.periodic();
+    ConfigureInputs();
   }
 
 
@@ -111,25 +122,51 @@ public class RobotContainer {
 
   //  define buttons and controls
 
-  private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
-  private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
+  //Joystick 1
+  //Balance Mode Toggle
+  public static JoystickButton joystick1Button3 =       new JoystickButton(joystick1, 3);
+  //Joystick 2
+  //Reverse Intake
+  public static JoystickButton joystick2Button2 =       new JoystickButton(joystick2, 2);
+  //Cycle Intake Position
+  public static JoystickButton joystick2Button3 =       new JoystickButton(joystick2, 3);
+  //Intake Cone
+  public static JoystickButton joystick2Button4 =       new JoystickButton(joystick2, 4);
+  //Intake Cube
+  public static JoystickButton joystick2Button5 =       new JoystickButton(joystick2, 5);
+  // Gamepad 1
+  //Reset Gripper
+  private static JoystickButton gamePad1Button1 =       new JoystickButton(gamePad1, 1);
+  //LED Toggle
+  private static JoystickButton gamePad1Button3 =       new JoystickButton(gamePad1,  3); 
+  //Grab Cube
+  private static JoystickButton gamePad1Button5 =       new JoystickButton(gamePad1, 5);
+  //Grab Cone
+  private static JoystickButton gamePad1Button6 =       new JoystickButton(gamePad1, 6);
+  //Toggle Manuel Mode
+  private static JoystickButton gamePad1Button8 =       new JoystickButton(gamePad1, 8);
+  //Automatic Placement Selection
+  private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
+  private static POVButton      gamePad1POVUpRight =    new POVButton(gamePad1, 45);
+  private static POVButton      gamePad1POVRight =      new POVButton(gamePad1, 90);
+  private static POVButton      gamePad1POVDownRight =  new POVButton(gamePad1, 135);
+  private static POVButton      gamePad1POVDown =       new POVButton(gamePad1, 180);
+  private static POVButton      gamePad1POVDownLeft =   new POVButton(gamePad1, 225);
+  private static POVButton      gamePad1POVLeft =       new POVButton(gamePad1, 270);
+  private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
+  //Execute Selected Placement
+  private static JoystickButton gamePad1Button10 =      new JoystickButton(gamePad1, 10);
+  //Reset Selected Placement
+  private static JoystickButton gamePad1Button9 =       new JoystickButton(gamePad1, 9);
+  //Enable Auto-Drive
+  private static JoystickButton joystick2Button8 =      new JoystickButton(joystick2, 8);
 
-  private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
-  private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
-  private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 3);
-  private static JoystickButton joystick2Button4 = new JoystickButton(joystick2, 4);
-  private static JoystickButton joystick2Button5 = new JoystickButton(joystick2, 5);
+  //TEMPORARY BUTTONS
+  private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
   private static JoystickButton joystick1Button11 = new JoystickButton(joystick1, 11);
   private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
   private static JoystickButton joystick1Button6 = new JoystickButton(joystick1, 6);
   private static JoystickButton joystick1Button7 = new JoystickButton(joystick1, 7);
-  public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
-
-
-  private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
-  private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
-  private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
-  private static JoystickButton gamePad1Button4  = new JoystickButton(gamePad1, 4);
 
 
   /*  ****          Define The robot's subsystems       ****   /
@@ -172,7 +209,39 @@ public class RobotContainer {
   private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
 
-  
+  //Create BooleanSuppliers for Triggers
+  private final BooleanEvent armExtendControl_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.1, m_eventloop)));
+  private final BooleanEvent armRotateControl_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.1, m_eventloop)));
+  private final BooleanEvent NudgeXAxis_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickXAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickXAxis, -0.1, m_eventloop)));
+  private final BooleanEvent NudgeYAxis_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickYAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickYAxis, -0.1, m_eventloop)));
+
+  // Create Robot Triggers
+  private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightTriggerIndex, 0.1, m_eventloop));
+  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.1, m_eventloop));
+  private final Trigger trigger_armRotationControl = new Trigger(armRotateControl_Deadzone);
+  private final Trigger trigger_armExtendControl = new Trigger(armExtendControl_Deadzone);
+  private final Trigger trigger_robotNudgeControlXAxis = new Trigger(NudgeXAxis_Deadzone);
+  private final Trigger trigger_robotNudgeControlYAxis = new Trigger(NudgeYAxis_Deadzone);
+
+  // Robot Trigger Controls - If they are commented, then they are awaiting a command
+  public void ConfigureInputs() {
+    trigger_gamePad1RightTrigger.whileTrue(m_TurntableRightCommand);
+    trigger_gamePad1LeftTrigger.whileTrue(m_TurntableLeftCommand);
+    //trigger_armExtendControl.whileTrue(SomeCommand);
+    //trigger_armRotationControl.whileTrue(SomeCommand);
+    //trigger_robotNudgeControlXAxis.whileTrue(SomeCommand);
+    //trigger_robotNudgeControlYAxis.whileTrue(SomeCommand);
+    gamePad1Button3.whileTrue(m_cargoRequestCommand);
+    joystick1Button3.whileTrue(m_armNegCommand);
+    joystick2Button5.whileTrue(m_intakeCubeCommand);
+    joystick2Button4.whileTrue(m_intakeConeCommand);
+    joystick2Button2.whileTrue(m_intakeReverseCommand);
+    joystick2Button3.whileTrue(m_intakePositionCommand);
+    //gamePad1Button3.whileTrue(m_LEDCommand);
+    gamePad1Button1.whileTrue(m_gripperReleaseCommand);
+    gamePad1Button6.whileTrue(m_gripperConeCommand);
+    //gamePad1Button5.whileTrue(m_gripperCubeCommand);
+  }
 
 
 
@@ -183,7 +252,7 @@ public class RobotContainer {
      /*  if(gamePad1.getRawButton(3)) {
         m_LedSubsystem.setColor(false);
       }*/
-      gamePad1Button2.whileTrue(m_cargoRequestCommand);
+      //gamePad1Button2.whileTrue(m_cargoRequestCommand);
 
       //sets LEDs to Yellow
       if(gamePad1.getRawButton(4)) {
@@ -196,13 +265,6 @@ public class RobotContainer {
       joystick1Button10.whileTrue(m_armRetractCommand);
       joystick1Button6.whileTrue(m_TurntableLeftCommand);
       joystick1Button7.whileTrue(m_TurntableRightCommand);
-      joystick2Button5.whileTrue(m_intakeCubeCommand);
-      joystick2Button4.whileTrue(m_intakeConeCommand);
-      joystick2Button2.whileTrue(m_intakeReverseCommand);
-      joystick2Button3.whileTrue(m_intakePositionCommand);
-
-      gamePad1Button3.whileTrue(m_gripperConeCommand);
-      gamePad1Button4.whileTrue(m_gripperReleaseCommand);
     }
 
 
