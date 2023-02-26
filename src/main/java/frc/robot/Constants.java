@@ -113,4 +113,8 @@ public final class Constants {
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
+
+  public static final class ControlIndexes {
+    public static final int gamePad1LeftTriggerIndex = 2;
+  }
 }

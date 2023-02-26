@@ -15,11 +15,13 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.ControlIndexes;
 
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
@@ -100,8 +102,11 @@ public class RobotContainer {
     m_LedSubsystem.setColor(true);
   }
 
+  // Create Event Loops
+  private final EventLoop m_eventloop = new EventLoop();
+
   public void periodic() {
-    checkButtonInputs();
+    m_eventloop.poll();
     m_PDHMonitor.periodic();
     m_intakeExtendSubsystem.goToPosition();
   }
@@ -147,7 +152,7 @@ public class RobotContainer {
   private static POVButton gamePad1POVLeft = new POVButton(gamePad1, 270);
   //Execute Selected Placement
   private static JoystickButton gamePad1Button10 = new JoystickButton(gamePad1, 10);
-  //Turntable Right
+/*  //Turntable Right
   private static double gamePad1RightTrigger = gamePad1.getRawAxis(3);
   //Turntable Left
   private static double gamePad1LeftTrigger = gamePad1.getRawAxis(2);
@@ -158,6 +163,9 @@ public class RobotContainer {
   //Nudge Robot
   private static double gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
   private static double gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
+*/
+  //Enable Auto-Drive
+  private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
 
 
 
@@ -195,60 +203,45 @@ public class RobotContainer {
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
-  private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem, gamePad1RightTrigger);
-  private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem, gamePad1LeftTrigger);
+  private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
+  private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1LeftTriggerIndex);
   private final IntakeInhaleCommand    m_intakeConeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
 
-  
-
-  public Command getGripperCommand() {
-    return m_gripperReleaseCommand;
+  // Create Robot Triggers
+  private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(3, 0.05, m_eventloop));
+  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.05, m_eventloop));
+  // Robot Trigger Controls
+  public void ConfigureInputs() {
+    trigger_gamePad1RightTrigger.whileTrue(m_TurntableRightCommand);
+    trigger_gamePad1LeftTrigger.whileTrue(m_TurntableLeftCommand);
   }
-
-
-
-
-    public void checkButtonInputs() {
-     gamePad1RightTrigger = gamePad1.getRawAxis(3);
-     gamePad1LeftTrigger = gamePad1.getRawAxis(2);
-     gamePad1RightStickXAxis = gamePad1.getRawAxis(4);
-     gamePad1RightStickYAxis = gamePad1.getRawAxis(5);
-     gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
-     gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
-      //sets LEDs to Purple
-     /*  if(gamePad1.getRawButton(3)) {
-        m_LedSubsystem.setColor(false);
-      }*/
-      gamePad1Button3.whileTrue(m_cargoRequestCommand);
-
-      //sets LEDs to Yellow
-      if(gamePad1.getRawButton(4)) {
-        m_LedSubsystem.setColor(true);
-      }
-
-      //joystick1Button2.whileTrue(m_armCommand);
-      joystick1Button3.whileTrue(m_armNegCommand);
-      //joystick1Button11.whileTrue(m_armExtendCommand);
-      //joystick1Button10.whileTrue(m_armRetractCommand);
-      if (gamePad1RightTrigger > 0.1) {
-        m_TurntableRightCommand.schedule();
-      }
-      if (gamePad1LeftTrigger > 0.1) {
-        m_TurntableLeftCommand.schedule();
-      }
-      joystick2Button5.whileTrue(m_intakeCubeCommand);
-      joystick2Button4.whileTrue(m_intakeConeCommand);
-      joystick2Button2.whileTrue(m_intakeReverseCommand);
-      joystick2Button3.whileTrue(m_intakePositionCommand);
+  
+  public void checkButtonInputs() {
+    //gamePad1RightStickXAxis = gamePad1.getRawAxis(4);
+    //gamePad1RightStickYAxis = gamePad1.getRawAxis(5);
+    //gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
+    //gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
+    gamePad1Button3.whileTrue(m_cargoRequestCommand);
+     joystick1Button3.whileTrue(m_armNegCommand);
+     joystick2Button5.whileTrue(m_intakeCubeCommand);
+     joystick2Button4.whileTrue(m_intakeConeCommand);
+     joystick2Button2.whileTrue(m_intakeReverseCommand);
+     joystick2Button3.whileTrue(m_intakePositionCommand);
+     //TODO: MAKE THIS INTO A LED COMMAND __PLEASE
+    if(gamePad1.getRawButton(4)) {
+      m_LedSubsystem.setColor(true);
     }
-
+    }
 
     
     double filteredX = 0;
     double filteredY = 0;
     
+    public Command getGripperCommand() {
+      return m_gripperReleaseCommand;
+    }
 
     public void drive() {
       
@@ -282,7 +275,7 @@ public class RobotContainer {
        *  Future step will be to use the photon vision library to merge the april tag location with the swerve obometry position
        */
 
-      /*if(joystick2Button8.getAsBoolean()) {
+      if(joystick2Button8.getAsBoolean()) {
 
       
         double m_maximum = 1;
@@ -313,7 +306,7 @@ public class RobotContainer {
         } else if(rot < -.5) {
           rot = -.5;
         }
-      }*/
+      }
 
       double speed = 1;//(-joystick1.getZ() + 1) / 2;
       

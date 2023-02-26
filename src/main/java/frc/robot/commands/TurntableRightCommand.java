@@ -5,12 +5,11 @@ import frc.robot.subsystems.TurntableSubsystem;
 
 public class TurntableRightCommand extends CommandBase {
     TurntableSubsystem m_subsystem;
-     double selectedSpeed;
-     public TurntableRightCommand(TurntableSubsystem subsystem, double speed) {
+     double selectedSpeed = 1;
+     public TurntableRightCommand(TurntableSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
-         selectedSpeed = speed;
      }
 
      
