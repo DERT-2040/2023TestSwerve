@@ -202,8 +202,8 @@ public class RobotContainer {
   private final LEDCommand            m_LEDCommand =            new LEDCommand(m_LedSubsystem, true);
 
   // Create Robot Triggers
-  private final Trigger trigger_gamePad1RightTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1RightTriggerIndex) >= 0.1);
-  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1LeftTriggerIndex) >= 0.1);
+  private final Trigger trigger_gamePad1RightTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1RightTriggerIndex) > 0.1);
+  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(() -> gamePad1.getRawAxis(ControlIndexes.gamePad1LeftTriggerIndex) > 0.1);
   // Robot Trigger Controls
   public void ConfigureInputs() {
     trigger_gamePad1RightTrigger.whileTrue(m_TurntableRightCommand);
