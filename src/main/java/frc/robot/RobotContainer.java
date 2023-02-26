@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
 import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
@@ -33,6 +34,7 @@ import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
+import frc.robot.commands.LEDCommand;
 import frc.robot.commands.TurntableCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
@@ -58,6 +60,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import javax.tools.Diagnostic;
 
@@ -152,18 +155,6 @@ public class RobotContainer {
   private static POVButton gamePad1POVLeft = new POVButton(gamePad1, 270);
   //Execute Selected Placement
   private static JoystickButton gamePad1Button10 = new JoystickButton(gamePad1, 10);
-/*  //Turntable Right
-  private static double gamePad1RightTrigger = gamePad1.getRawAxis(3);
-  //Turntable Left
-  private static double gamePad1LeftTrigger = gamePad1.getRawAxis(2);
-  //Manuel Arm Extend
-  private static double gamePad1RightStickXAxis = gamePad1.getRawAxis(4);
-  //Manuel Arm Rotate
-  private static double gamePad1RightStickYAxis = gamePad1.getRawAxis(5);
-  //Nudge Robot
-  private static double gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
-  private static double gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
-*/
   //Enable Auto-Drive
   private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
 
@@ -203,17 +194,26 @@ public class RobotContainer {
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
-  private final TurntableCommand m_TurntableRightCommand = new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1RightTriggerIndex, 2);
-  private final TurntableCommand  m_TurntableLeftCommand = new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1LeftTriggerIndex, 1);
-  private final IntakeInhaleCommand    m_intakeConeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
-  private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
-  private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
+  private final TurntableCommand      m_TurntableRightCommand = new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1RightTriggerIndex, 2);
+  private final TurntableCommand      m_TurntableLeftCommand =  new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1LeftTriggerIndex, 1);
+  private final IntakeInhaleCommand   m_intakeConeCommand   =   new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
+  private final IntakeInhaleCommand   m_intakeCubeCommand   =   new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
+  private final IntakeInhaleCommand   m_intakeReverseCommand  = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
+  private final LEDCommand            m_LEDCommand =            new LEDCommand(m_LedSubsystem, true);
+
+  //Create BooleanSuppliers for Triggers
+  private final BooleanEvent armExtendControl_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.1, m_eventloop)));
+  private final BooleanEvent armRotateControl_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.1, m_eventloop)));
+  private final BooleanEvent NudgeXAxis_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickXAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickXAxis, -0.1, m_eventloop)));
+  private final BooleanEvent NudgeYAxis_Deadzone = new BooleanEvent(m_eventloop, (gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftStickYAxis, 0.1, m_eventloop)).or(gamePad1.axisLessThan(ControlIndexes.gamePad1LeftStickYAxis, -0.1, m_eventloop)));
 
   // Create Robot Triggers
-  private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightTriggerIndex, 0.05, m_eventloop));
-  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.05, m_eventloop));
-  private final Trigger trigger_armRotationControl = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.05, m_eventloop).and(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.05, m_eventloop)).and(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.1, m_eventloop)).and(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.1, m_eventloop)));
-  private final Trigger trigger_armExtendControl = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickXAxisIndex, 0.05, m_eventloop).and(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickXAxisIndex, -0.05, m_eventloop)).and(gamePad1.axisLessThan(ControlIndexes.gamePad1RightStickYAxisIndex, 0.1, m_eventloop)).and(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightStickYAxisIndex, -0.1, m_eventloop)));
+  private final Trigger trigger_gamePad1RightTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1RightTriggerIndex, 0.1, m_eventloop));
+  private final Trigger trigger_gamePad1LeftTrigger = new Trigger(gamePad1.axisGreaterThan(ControlIndexes.gamePad1LeftTriggerIndex, 0.1, m_eventloop));
+  private final Trigger trigger_armRotationControl = new Trigger(armRotateControl_Deadzone);
+  private final Trigger trigger_armExtendControl = new Trigger(armExtendControl_Deadzone);
+  private final Trigger trigger_robotNudgeControlXAxis = new Trigger(NudgeXAxis_Deadzone);
+  private final Trigger trigger_robotNudgeControlYAxis = new Trigger(NudgeYAxis_Deadzone);
 
   // Robot Trigger Controls
   public void ConfigureInputs() {
@@ -221,26 +221,16 @@ public class RobotContainer {
     trigger_gamePad1LeftTrigger.whileTrue(m_TurntableLeftCommand);
     //trigger_armExtendControl.whileTrue(SomeCommand);
     //trigger_armRotationControl.whileTrue(SomeCommand);
+    //trigger_robotNudgeControlXAxis.whileTrue(SomeCommand);
+    //trigger_robotNudgeControlYAxis.whileTrue(SomeCommand);
     gamePad1Button3.whileTrue(m_cargoRequestCommand);
     joystick1Button3.whileTrue(m_armNegCommand);
     joystick2Button5.whileTrue(m_intakeCubeCommand);
     joystick2Button4.whileTrue(m_intakeConeCommand);
     joystick2Button2.whileTrue(m_intakeReverseCommand);
     joystick2Button3.whileTrue(m_intakePositionCommand);
+    gamePad1Button3.whileTrue(m_LEDCommand);
   }
-
-  //TODO: Remove everything from checkbutton inputs
-  public void checkButtonInputs() {
-    //gamePad1RightStickXAxis = gamePad1.getRawAxis(4);
-    //gamePad1RightStickYAxis = gamePad1.getRawAxis(5);
-    //gamePad1LeftStickXAxis = gamePad1.getRawAxis(0);
-    //gamePad1LeftStickYAxis = gamePad1.getRawAxis(1);
-     //TODO: Possibly Make this into a LED Command instead of leaving it in Robot Container.
-    if(gamePad1.getRawButton(4)) {
-      m_LedSubsystem.setColor(true);
-    }
-    }
-
     
     double filteredX = 0;
     double filteredY = 0;
