@@ -184,6 +184,8 @@ public class RobotContainer {
   
 
 
+  //0 is low, 1 is mid, and 2 is high
+  private int armPositionSetting = 0;
 
 
 
