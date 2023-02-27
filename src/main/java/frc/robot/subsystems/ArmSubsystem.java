@@ -161,10 +161,31 @@ public class ArmSubsystem extends SubsystemBase {
         }
     }  */
 
+    public void manualRotateArm(double speed) {
+        if((((rotateEncoder.getAbsolutePosition() - .76 ) * 352) < -100 && speed < 0) || (((rotateEncoder.getAbsolutePosition() - .76 ) * 352) > 50) && speed > 0) {
+            arm.set(0);
+         } else {
+            
+            
+             arm.set(speed);
+             //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
+         }
+    }
+
+
+    //rotates arm and extends to correct distance
     public void rotate(double speed) { // from Feb24 code
-        arm.set(speed);
-        
-        //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
+        //PRevents the arm from going higher than a certain amount
+        if((((rotateEncoder.getAbsolutePosition() - .76 ) * 352) < -100 && speed < 0) || (((rotateEncoder.getAbsolutePosition() - .76 ) * 352) > 50) && speed > 0) {
+           arm.set(0);
+        } else {
+           
+           
+            arm.set(speed);
+            extendAutomatically(((rotateEncoder.getAbsolutePosition() - .76 ) * 352));
+            //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
+        }
+
         SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
     }
 
@@ -184,10 +205,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setArmAngle(double angle) {
         double actualArmAngle = (rotateEncoder.getAbsolutePosition()  - .76 ) * 352; //* (90/60) * (90.0/50.0) * 2;
-        arm.set(rotateControl.calculate(actualArmAngle, angle));
+        rotate(rotateControl.calculate(actualArmAngle, angle));
         SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
         
         SmartDashboard.putNumber("Desired Arm Angle", angle);
+        
+    }
+
+    public void extendAutomatically(double actualArmAngle) {
         if(actualArmAngle < -90) {
             actualArmAngle = -90;
         } else if(actualArmAngle > 50) {

@@ -24,6 +24,7 @@ import frc.robot.Constants.DriveConstants;
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
+import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.ArmRetractCommand;
 import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
@@ -131,6 +132,13 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
   private static JoystickButton gamePad1Button4  = new JoystickButton(gamePad1, 4);
 
+  private double getRightY() {
+    return gamePad1.getRawAxis(5);
+  }
+  private double getRightX() {
+    return -gamePad1.getRawAxis(4);
+  }
+
 
   /*  ****          Define The robot's subsystems       ****   /
   //
@@ -160,9 +168,10 @@ public class RobotContainer {
   private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
+  private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX);
   private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_armSubsystem);
-  private final GripperConeCommand m_gripperConeCommand = new GripperConeCommand(m_armSubsystem);
+  private final GripperConeCommand    m_gripperConeCommand =    new GripperConeCommand(m_armSubsystem);
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
@@ -203,6 +212,22 @@ public class RobotContainer {
 
       gamePad1Button3.whileTrue(m_gripperConeCommand);
       gamePad1Button4.whileTrue(m_gripperReleaseCommand);
+
+      //Makes sure the armManualCommand only runs when joystick is in use
+      if(Math.abs(getRightY()) > .2) {
+        if(!m_armManualCommand.isScheduled()) {
+          m_armManualCommand.schedule();
+        }
+        
+      } else if(Math.abs(getRightX()) > .3) {
+        if(!m_armManualCommand.isScheduled()) {
+          m_armManualCommand.schedule();
+        }
+      } else {
+        if(m_armManualCommand.isScheduled()) {
+          m_armManualCommand.cancel();
+        }
+      }
     }
 
 
