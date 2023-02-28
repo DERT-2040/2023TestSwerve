@@ -35,7 +35,8 @@ import frc.robot.commands.GripperConeCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
-import frc.robot.commands.TurntableCommand;
+import frc.robot.commands.TurntableLeftCommand;
+import frc.robot.commands.TurntableRightCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
 
@@ -134,9 +135,9 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button1 =       new JoystickButton(gamePad1, 1);
   //LED Toggle
   private static JoystickButton gamePad1Button3 =       new JoystickButton(gamePad1,  3); 
-  //Grab Cube
+  //Turntable Left
   private static JoystickButton gamePad1Button5 =       new JoystickButton(gamePad1, 5);
-  //Grab Cone
+  //Turntable Right
   private static JoystickButton gamePad1Button6 =       new JoystickButton(gamePad1, 6);
   //Toggle Manuel Mode
   private static JoystickButton gamePad1Button8 =       new JoystickButton(gamePad1, 8);
@@ -198,13 +199,12 @@ public class RobotContainer {
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
-  private final TurntableCommand      m_TurntableRightCommand = new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1RightTriggerIndex, 2);
-  private final TurntableCommand      m_TurntableLeftCommand =  new TurntableCommand(m_TurntableSubsystem, gamePad1, ControlIndexes.gamePad1LeftTriggerIndex, 1);
+  private final TurntableRightCommand      m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
+  private final TurntableLeftCommand     m_TurntableLeftCommand =  new TurntableLeftCommand(m_TurntableSubsystem);
   private final IntakeInhaleCommand    m_intakeConeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
 
-  // Robot Trigger Controls - If they are commented, then they are awaiting a command
   public void ConfigureInputs() {
     gamePad1Button3.whileTrue(m_cargoRequestCommand);
     joystick1Button3.whileTrue(m_armNegCommand);
@@ -213,7 +213,8 @@ public class RobotContainer {
     joystick2Button2.whileTrue(m_intakeReverseCommand);
     joystick2Button3.whileTrue(m_intakePositionCommand);
     gamePad1Button1.whileTrue(m_gripperReleaseCommand);
-    gamePad1Button6.whileTrue(m_gripperConeCommand);
+    gamePad1Button6.whileTrue(m_TurntableRightCommand);
+    gamePad1Button5.whileTrue(m_TurntableLeftCommand);
     if(gamePad1.getRawButton(4)) {
       m_LedSubsystem.setColor(true);
     }
