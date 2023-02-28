@@ -26,6 +26,7 @@ import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
 import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.ArmRetractCommand;
+import frc.robot.commands.ArmSelectedPositionCommand;
 import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
@@ -54,6 +55,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 import java.util.List;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -131,6 +134,10 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
   private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
   private static JoystickButton gamePad1Button4  = new JoystickButton(gamePad1, 4);
+  //start button
+  private static JoystickButton gamePad1Button8  = new JoystickButton(gamePad1, 8);
+  
+  
 
   private double getRightY() {
     return gamePad1.getRawAxis(5);
@@ -169,6 +176,7 @@ public class RobotContainer {
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
   private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX);
+  private final ArmSelectedPositionCommand m_armSelectedPositionCommand =   new ArmSelectedPositionCommand(m_armSubsystem, this::getArmPositionSetting);
   private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_armSubsystem);
   private final GripperConeCommand    m_gripperConeCommand =    new GripperConeCommand(m_armSubsystem);
@@ -176,16 +184,20 @@ public class RobotContainer {
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
   private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
-  private final TurntableLeftCommand  m_TurntableLeftCommand = new TurntableLeftCommand(m_TurntableSubsystem);
-  private final IntakeInhaleCommand    m_intakeConeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
-  private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
-  private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
+  private final TurntableLeftCommand  m_TurntableLeftCommand =  new TurntableLeftCommand(m_TurntableSubsystem);
+  private final IntakeInhaleCommand    m_intakeConeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
+  private final IntakeInhaleCommand    m_intakeCubeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
+  private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
 
   
 
 
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
+
+  public int getArmPositionSetting() {
+    return armPositionSetting;
+  }
 
 
 
@@ -214,6 +226,9 @@ public class RobotContainer {
 
       gamePad1Button3.whileTrue(m_gripperConeCommand);
       gamePad1Button4.whileTrue(m_gripperReleaseCommand);
+
+
+      gamePad1Button8.whileTrue(m_armSelectedPositionCommand);
 
       //Makes sure the armManualCommand only runs when joystick is in use
       if(Math.abs(getRightY()) > .2) {

@@ -28,6 +28,7 @@ public class ArmManualCommand extends CommandBase {
  
      @Override
      public void execute() {
+        m_subsystem.setSetting(2);
         if(Math.abs(armExtend.getAsDouble()) > .3) {
             if(Math.abs(armRotate.getAsDouble()) > .2) {
                 m_subsystem.manualRotateArm(.3 * armRotate.getAsDouble());
