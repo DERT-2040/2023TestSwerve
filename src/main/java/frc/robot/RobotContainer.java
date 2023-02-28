@@ -54,6 +54,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 import java.util.List;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -92,8 +94,10 @@ public class RobotContainer {
 
   }
 
+  int last_pov;
   public void init() {
     m_LedSubsystem.setColor(true);
+    last_pov = gamePad1.getPOV();
   }
 
   public void periodic() {
@@ -131,7 +135,14 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
   private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
   private static JoystickButton gamePad1Button4  = new JoystickButton(gamePad1, 4);
-
+  private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
+  private static POVButton      gamePad1POVUpRight =    new POVButton(gamePad1, 45);
+  private static POVButton      gamePad1POVRight =      new POVButton(gamePad1, 90);
+  private static POVButton      gamePad1POVDownRight =  new POVButton(gamePad1, 135);
+  private static POVButton      gamePad1POVDown =       new POVButton(gamePad1, 180);
+  private static POVButton      gamePad1POVDownLeft =   new POVButton(gamePad1, 225);
+  private static POVButton      gamePad1POVLeft =       new POVButton(gamePad1, 270);
+  private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
   private double getRightY() {
     return gamePad1.getRawAxis(5);
   }
@@ -181,11 +192,9 @@ public class RobotContainer {
   private final IntakeInhaleCommand    m_intakeCubeCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand   = new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
 
-  
-
-
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
+  private int armExtensionSetting = 0;
 
 
 
@@ -196,9 +205,31 @@ public class RobotContainer {
       }*/
       gamePad1Button2.whileTrue(m_cargoRequestCommand);
 
+
+      if (last_pov != gamePad1.getPOV()) {
+        if (gamePad1.getPOV() == 0) {
+          if (armPositionSetting != 2) {
+          armPositionSetting += 1;
+          } else {
+            armPositionSetting = 0;
+          }
+        }
+        if (gamePad1.getPOV() == 180) {
+          if (armPositionSetting != 0) {
+          armPositionSetting -= 1;
+          } else {
+            armPositionSetting = 2;
+          }
+        }
+      }
+      int last_pov = gamePad1.getPOV();
       //sets LEDs to Yellow
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
+      }
+
+      if(gamePad1POVUp.getAsBoolean()) {
+
       }
 
       joystick1Button2.whileTrue(m_armCommand);
