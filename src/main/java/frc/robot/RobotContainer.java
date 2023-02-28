@@ -225,6 +225,8 @@ public class RobotContainer {
       //set last_pov for next loop
       last_pov = gamePad1.getPOV();
 
+      SmartDashboard.putNumber("Arm Position Setting", armPositionSetting);
+
       //sets LEDs to Yellow
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
