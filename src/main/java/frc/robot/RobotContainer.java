@@ -95,6 +95,7 @@ public class RobotContainer {
   }
 
   int last_pov;
+
   public void init() {
     m_LedSubsystem.setColor(true);
     last_pov = gamePad1.getPOV();
@@ -213,8 +214,7 @@ public class RobotContainer {
           } else {
             armPositionSetting = 0;
           }
-        }
-        if (gamePad1.getPOV() == 180) {
+        } else if (gamePad1.getPOV() == 180) {
           if (armPositionSetting != 0) {
           armPositionSetting -= 1;
           } else {
@@ -222,7 +222,9 @@ public class RobotContainer {
           }
         }
       }
-      int last_pov = gamePad1.getPOV();
+      //set last_pov for next loop
+      last_pov = gamePad1.getPOV();
+
       //sets LEDs to Yellow
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
