@@ -28,7 +28,9 @@ public class ArmSubsystem extends SubsystemBase {
     double m_prevCount;
     Counter counter;
     Spark gripperTalon;
-    DigitalInput gripperLimitSwitch;
+    //DigitalInput gripperLimitSwitch;
+    DutyCycleEncoder gripperEncoder;
+    PIDController gripperController;
  
  
     CANSparkMax armExtendNeo;
@@ -51,7 +53,9 @@ public class ArmSubsystem extends SubsystemBase {
 
         counter = new Counter(4);
         gripperTalon = new Spark(0);
-        gripperLimitSwitch = new DigitalInput(5);
+        //gripperLimitSwitch = new DigitalInput(5);
+        gripperEncoder = new DutyCycleEncoder(5);
+        gripperController = new PIDController(.015, .001, 0);
 
         gripperTalon.set(0);
 
@@ -89,13 +93,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         
 
-
-
-
    //     rotateControl = new PIDController(.003, .001, 0);
-
-
-
 
 
         counter.reset();
@@ -105,6 +103,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void grip_speed(double power) {
 
+        SmartDashboard.putNumber("Gripper Encoder Position", (gripperEncoder.getAbsolutePosition() - .5711) / .23);
+
         
         double m_currentCount = counter.get();
     
@@ -113,7 +113,7 @@ public class ArmSubsystem extends SubsystemBase {
          } else {
             m_count = m_count - (m_currentCount - m_prevCount);
          }
-         if(!gripperLimitSwitch.get()) {
+         /*if(!gripperLimitSwitch.get()) {
             m_count = 0;
             if(power > 0) {
                 power = 0;
@@ -123,9 +123,9 @@ public class ArmSubsystem extends SubsystemBase {
             if(power < 0) {
                 power = 0;
             }
-        }
+        }*/
 
-        SmartDashboard.putBoolean("GripperLimit", !gripperLimitSwitch.get());
+        //SmartDashboard.putBoolean("GripperLimit", !gripperLimitSwitch.get());
          m_prevCount = m_currentCount;
 
         gripperTalon.set(power);
