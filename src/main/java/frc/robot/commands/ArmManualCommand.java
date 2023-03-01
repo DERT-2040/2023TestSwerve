@@ -35,11 +35,11 @@ public class ArmManualCommand extends CommandBase {
         if(!manualMode.getAsBoolean()) {
             if(Math.abs(armExtend.getAsDouble()) > .3) {
                 if(Math.abs(armRotate.getAsDouble()) > .2) {
-                    m_subsystem.manualRotateArm(.3 * armRotate.getAsDouble());
+                    m_subsystem.manualRotateArm(.7 * armRotate.getAsDouble());
                 }
                 m_subsystem.setExtendSpeed(.4 * armExtend.getAsDouble());
             } else {
-                m_subsystem.rotate(.3 * armRotate.getAsDouble());
+                m_subsystem.rotate(.5 * armRotate.getAsDouble());
             }
         } else {
             if(Math.abs(armExtend.getAsDouble()) > .1) {
@@ -48,7 +48,7 @@ public class ArmManualCommand extends CommandBase {
             }
             
             if(Math.abs(armRotate.getAsDouble()) > .1) {
-                m_subsystem.manualRotateArm(.3 * armRotate.getAsDouble());
+                m_subsystem.manualRotateArm(.7 * armRotate.getAsDouble());
             }
         }
         

@@ -159,10 +159,11 @@ public class RobotContainer {
   private static POVButton      gamePad1POVLeft =       new POVButton(gamePad1, 270);
   private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
   private double getRightY() {
-    return gamePad1.getRawAxis(5);
+    return Math.pow(gamePad1.getRawAxis(5), 3);
+    
   }
   private double getRightX() {
-    return -gamePad1.getRawAxis(4);
+    return -Math.pow(gamePad1.getRawAxis(4), 3);
   }
 
 
