@@ -20,8 +20,8 @@ public class GripperCubeCommand extends CommandBase {
  
      @Override
      public void execute() {
+         m_subsystem.grip_goto(0.52);
         //m_subsystem.grip_speed(.5);
-        //m_subsystem.grip_goto(100);
          
      }
  

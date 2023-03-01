@@ -10,13 +10,15 @@ public class LEDSubsystem extends SubsystemBase {
     AddressableLEDBuffer m_ledBuffer;
     int counter;
     boolean voltage;
+    boolean isYellow;
 
     public LEDSubsystem() {
         m_led = new AddressableLED(1);
         m_ledBuffer = new AddressableLEDBuffer(6);
         m_led.setLength(m_ledBuffer.getLength());
+        isYellow = false;
 
-        setColor(true);
+        setColor(false);
         m_led.start();
         counter = 0;
         voltage = true;
@@ -24,6 +26,7 @@ public class LEDSubsystem extends SubsystemBase {
     }
 
     public void setColor(boolean yellow) {
+        isYellow = yellow;
         if(voltage) {
             if(yellow) {
                 for(int i=0; i<m_ledBuffer.getLength(); i++) {
@@ -37,8 +40,12 @@ public class LEDSubsystem extends SubsystemBase {
                 }
             }
             m_led.setData(m_ledBuffer);
-            SmartDashboard.putBoolean("LED Color", yellow);
+            SmartDashboard.putBoolean("LED Color", isYellow);
         }
+    }
+
+    public void switchColor() {
+        setColor(!isYellow);
     }
 
 

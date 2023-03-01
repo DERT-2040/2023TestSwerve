@@ -31,6 +31,7 @@ import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperConeCommand;
+import frc.robot.commands.GripperCubeCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
@@ -134,13 +135,18 @@ public class RobotContainer {
   private static JoystickButton joystick1Button7 = new JoystickButton(joystick1, 7);
   public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
 
-
+  //blue
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
+  //green
   private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
+  //red
   private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
+  //yellow
   private static JoystickButton gamePad1Button4  = new JoystickButton(gamePad1, 4);
   //start button
   private static JoystickButton gamePad1Button8  = new JoystickButton(gamePad1, 8);
+  //Right Joystick press
+  private static JoystickButton gamePad1Button10  = new JoystickButton(gamePad1, 10);
   
   
   private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
@@ -187,10 +193,11 @@ public class RobotContainer {
   private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
-  private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX);
+  private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX, this::getArmManualMode);
   private final ArmSelectedPositionCommand m_armSelectedPositionCommand =   new ArmSelectedPositionCommand(m_armSubsystem, this::getArmPositionSetting);
   private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_armSubsystem);
+  private final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_armSubsystem);
   private final GripperConeCommand    m_gripperConeCommand =    new GripperConeCommand(m_armSubsystem);
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
@@ -207,6 +214,11 @@ public class RobotContainer {
 
   public int getArmPositionSetting() {
     return armPositionSetting;
+  }
+
+  private boolean armManualMode = false;
+  public boolean getArmManualMode() {
+    return armManualMode;
   }
 
 
@@ -241,9 +253,9 @@ public class RobotContainer {
       SmartDashboard.putNumber("Arm Position Setting", armPositionSetting);
 
       //sets LEDs to Yellow
-      if(gamePad1.getRawButton(4)) {
+      /*if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
-      }
+      }*/
 
       if(gamePad1POVUp.getAsBoolean()) {
 
@@ -260,11 +272,17 @@ public class RobotContainer {
       joystick2Button2.whileTrue(m_intakeReverseCommand);
       joystick2Button3.whileTrue(m_intakePositionCommand);
 
-      gamePad1Button3.whileTrue(m_gripperConeCommand);
-      gamePad1Button4.whileTrue(m_gripperReleaseCommand);
+      gamePad1Button1.whileTrue(m_gripperReleaseCommand);
+      gamePad1Button3.whileTrue(m_gripperCubeCommand);
+      gamePad1Button4.whileTrue(m_gripperConeCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);
+
+      if(gamePad1.getRawButtonPressed(10)) {
+        armManualMode = !armManualMode;
+        SmartDashboard.putBoolean("Manual Mode", armManualMode);
+      }
 
       //Makes sure the armManualCommand only runs when joystick is in use
       if(Math.abs(getRightY()) > .2) {

@@ -23,10 +23,6 @@ public class ArmSubsystem extends SubsystemBase {
     PIDController rotateControl;
     int subArmiD = 40; //change id to correct id later
 
- 
-    static double m_count;
-    double m_prevCount;
-    Counter counter;
     Spark gripperTalon;
     //DigitalInput gripperLimitSwitch;
     DutyCycleEncoder gripperEncoder;
@@ -40,22 +36,22 @@ public class ArmSubsystem extends SubsystemBase {
     int armSetting;
 
     double[] rotateAngles =        {-200, -90, -70,  -45,  0,    50,   200};
-    double[] extendDistancesHigh = {-.9,  -.9, -.3,  -.2,  -.1,  -.1,  -.1};
-    double[] extendDistancesMid =  {-.9,  -.9, -.9,  -.5,  -.1   -.1,  -.1};
-    double[] extendDistancesLow =  {-.9,  -.9, -.9,  -.9,  -.1,  -.1,  -.1};
+    double[] extendDistancesHigh = {-.9,  -.9, -.3,  -.2,  -.2,  -.2,  -.2};
+    double[] extendDistancesMid =  {-.9,  -.9, -.9,  -.5,  -.2,  -.2,  -.2};
+    double[] extendDistancesLow =  {-.9,  -.9, -.9,  -.9,  -.2,  -.2,  -.2};
 
     public ArmSubsystem() {
         //65 rotations is full extention for extending arm
         //55 rotations = 90 degrees arm rotation
 
-        m_count = 0;
-        m_prevCount = 0;
+        //m_count = 0;
+        //m_prevCount = 0;
 
-        counter = new Counter(4);
+        //counter = new Counter(4);
         gripperTalon = new Spark(0);
         //gripperLimitSwitch = new DigitalInput(5);
         gripperEncoder = new DutyCycleEncoder(5);
-        gripperController = new PIDController(.015, .001, 0);
+        gripperController = new PIDController(12, .001, 0);
 
         gripperTalon.set(0);
 
@@ -96,52 +92,54 @@ public class ArmSubsystem extends SubsystemBase {
    //     rotateControl = new PIDController(.003, .001, 0);
 
 
-        counter.reset();
+        //counter.reset();
  
     }
 
 
     public void grip_speed(double power) {
+        double gripPosition = (gripperEncoder.getAbsolutePosition() - .5711) / .23;
+        SmartDashboard.putNumber("Gripper Encoder Position", gripPosition);
 
-        SmartDashboard.putNumber("Gripper Encoder Position", (gripperEncoder.getAbsolutePosition() - .5711) / .23);
 
         
-        double m_currentCount = counter.get();
+        //double m_currentCount = counter.get();
     
-        if (power > 0) {
+        /*if (power > 0) {
             m_count = m_count + (m_currentCount - m_prevCount);
          } else {
             m_count = m_count - (m_currentCount - m_prevCount);
-         }
-         /*if(!gripperLimitSwitch.get()) {
-            m_count = 0;
+         }*/
+        if(gripPosition < 0.05) {
             if(power > 0) {
                 power = 0;
             }
-        }
-        if(m_count < -900) {
+        } else if(gripPosition > 1) {
             if(power < 0) {
                 power = 0;
             }
-        }*/
+        }
 
         //SmartDashboard.putBoolean("GripperLimit", !gripperLimitSwitch.get());
-         m_prevCount = m_currentCount;
+        // m_prevCount = m_currentCount;
 
         gripperTalon.set(power);
-        SmartDashboard.putNumber("Counter", m_count);
-        SmartDashboard.putNumber("Current Count", counter.get());
+        //SmartDashboard.putNumber("Counter", m_count);
+        //SmartDashboard.putNumber("Current Count", counter.get());
     }
 
-    public void grip_goto(int location) {
-        if (location > m_count) {
+    //0 to 1
+    public void grip_goto(double location) {
+        /*if (location > m_count) {
             grip_speed(.1);
         } else if (location < m_count) {
             grip_speed(-.1);
         } else {
             grip_speed(0);
-        }
+        }*/
         //SmartDashboard.putNumber("Counter", m_count);
+
+        grip_speed(-gripperController.calculate((gripperEncoder.getAbsolutePosition() - .5711) / .23, location));
     }
 
     /*
@@ -236,6 +234,15 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void setExtendSpeed(double speed) {
+        if(extendEncoder.getPosition() / 57 < -.9) {
+            if(speed < 0) {
+                speed = 0;
+            }
+        } else if(extendEncoder.getPosition() / 57 > -.1) {
+            if(speed > 0) {
+                speed = 0;
+            }
+        }
         armExtendNeo.set(speed);
         SmartDashboard.putNumber("Actual Arm Extend", (extendEncoder.getPosition() / 57));
         

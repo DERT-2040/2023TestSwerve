@@ -21,8 +21,8 @@ public class GripperConeCommand extends CommandBase {
  
      @Override
      public void execute() {
-        m_subsystem.grip_speed(-.5);
-        //m_subsystem.grip_goto(100);
+        //m_subsystem.grip_speed(-.9);
+        m_subsystem.grip_goto(0.05);
          
      }
  
