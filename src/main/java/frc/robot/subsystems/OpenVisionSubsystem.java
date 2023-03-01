@@ -4,24 +4,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.opencv.core.*;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.MatOfPoint2f;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;;
+import org.opencv.videoio.Videoio;
 
 public class OpenVisionSubsystem extends SubsystemBase{
-    static VideoCapture cap;
-    static int alignmentOutput;
-    static boolean roti_pass;
-    static int erodecycles;
-    static int blurradius;
-    static int vertical_threshold;
-    static int alignment_error_thershold;
-    static Mat eroded_image = new Mat();
-    static Mat eroded_image_roti;
-    static Mat eroded_image_alin;
-    static Mat eroded_image_multi;
-    static int white_stop;
     public OpenVisionSubsystem() {
         //Vision Device Setup
         cap = new VideoCapture(0);
@@ -37,6 +32,18 @@ public class OpenVisionSubsystem extends SubsystemBase{
         cap.set(Videoio.CAP_PROP_EXPOSURE, -11);
         cap.set(Videoio.CAP_PROP_CONTRAST, 13);
     }
+    static VideoCapture cap;
+    static int alignmentOutput;
+    static boolean roti_pass;
+    static int erodecycles;
+    static int blurradius;
+    static int vertical_threshold;
+    static int alignment_error_thershold;
+    static Mat eroded_image;
+    static Mat eroded_image_roti;
+    static Mat eroded_image_alin;
+    static Mat eroded_image_multi;
+    static int white_stop;
     public static void ProcessVision() {
         //
         // Image Processing
