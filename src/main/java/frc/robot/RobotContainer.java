@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-//import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
@@ -29,8 +27,8 @@ import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.ArmRetractCommand;
 import frc.robot.commands.ArmSelectedPositionCommand;
 import frc.robot.commands.ArmNegCommand;
-//import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
+import frc.robot.commands.DriveCommand;
 import frc.robot.commands.GripperConeCommand;
 import frc.robot.commands.GripperCubeCommand;
 import frc.robot.commands.GripperReleaseCommand;
@@ -48,17 +46,15 @@ import frc.robot.subsystems.IntakeExtendSubsystem;
 import frc.robot.subsystems.IntakeInhaleSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.subsystems.PDHMonitor;
+import frc.robot.subsystems.SuperVisoryDrive;
 import frc.robot.subsystems.TurntableSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
-//import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import java.util.List;
@@ -66,7 +62,7 @@ import java.util.List;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Timer;
+
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -109,6 +105,10 @@ public class RobotContainer {
   public void periodic() {
     checkButtonInputs();
     m_PDHMonitor.periodic();
+
+    if(!m_driveCommand.isScheduled()) {   //  Make sure the drive command is scheduled
+      m_driveCommand.schedule();
+    }
   }
 
 
@@ -124,7 +124,6 @@ public class RobotContainer {
 
   private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
   private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
-
   private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
   private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
   private static JoystickButton joystick2Button3 = new JoystickButton(joystick2, 3);
@@ -158,6 +157,7 @@ public class RobotContainer {
   private static POVButton      gamePad1POVDownLeft =   new POVButton(gamePad1, 225);
   private static POVButton      gamePad1POVLeft =       new POVButton(gamePad1, 270);
   private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
+
   private double getRightY() {
     return Math.pow(gamePad1.getRawAxis(5), 3);
     
@@ -173,16 +173,15 @@ public class RobotContainer {
   //  here we instantiate the subsystem
   */
 
-  private final DriveSubsystem        m_robotDrive =              new DriveSubsystem();
-  private final VisionSubsystem       m_visionSubsystem =         new VisionSubsystem();
-  public  final LEDSubsystem          m_LedSubsystem =            new LEDSubsystem();
-  //private final GripperSubsystem      m_gripperSubsystem =        new GripperSubsystem();
-  private final PDHMonitor            m_PDHMonitor =              new PDHMonitor();
-  private final ArmSubsystem          m_armSubsystem =            new ArmSubsystem();
-  private final IntakeExtendSubsystem m_intakeExtendSubsystem =   new IntakeExtendSubsystem();
-  private final IntakeInhaleSubsystem m_intakeInhaleSubsystem =   new IntakeInhaleSubsystem();
-  private final TurntableSubsystem    m_TurntableSubsystem =      new TurntableSubsystem();
-  
+  public static final DriveSubsystem  m_robotDrive             =  new DriveSubsystem();
+  private final SuperVisoryDrive      m_drive                  =  new SuperVisoryDrive();
+  public static final VisionSubsystem m_visionSubsystem        =  new VisionSubsystem();
+  public  final LEDSubsystem          m_LedSubsystem           =  new LEDSubsystem();
+  private final PDHMonitor            m_PDHMonitor             =  new PDHMonitor();
+  private final ArmSubsystem          m_armSubsystem           =  new ArmSubsystem();
+  private final IntakeExtendSubsystem m_intakeExtendSubsystem  =  new IntakeExtendSubsystem();
+  private final IntakeInhaleSubsystem m_intakeInhaleSubsystem  =  new IntakeInhaleSubsystem();
+  private final TurntableSubsystem    m_TurntableSubsystem     =  new TurntableSubsystem();
 
   /*  ****          Define The robot's Commands       ****   /
   //
@@ -191,7 +190,12 @@ public class RobotContainer {
   //  commands are used further down in this file to accomplish various tasks
   //  usally associated with an input defined above
   */
-
+  private final DriveCommand          m_driveCommand          = new DriveCommand(m_drive, 
+        -joystick1.getX(),              // pass driver joystick x request
+        joystick1.getY(),               // pass driver joystick y request
+        joystick2.getX(),               // pass driver rotate request
+        joystick2Button8.getAsBoolean() // pass auto drive  command (enables robot to drive to selected location)
+        );
   private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
@@ -221,6 +225,12 @@ public class RobotContainer {
   private boolean armManualMode = false;
   public boolean getArmManualMode() {
     return armManualMode;
+  }
+
+  public Pose2d getVision(){  /// this is redundant   we have an issue with Robot calling this and SuperVisoryDrive as well
+
+    return(m_drive.getVision());
+
   }
 
 
@@ -318,161 +328,9 @@ public class RobotContainer {
     }
 
 
-    
-    double filteredX = 0;
-    double filteredY = 0;
-    
-
-    public void drive() {
-      
-      double executionTime = Timer.getFPGATimestamp();
-      
-
-    //Joystick values
-      double x = -joystick1.getX();
-      double y = joystick1.getY();
-      double rot = joystick2.getX();
-      double deadband = 0.2;
-      if(x > -deadband && x < deadband) {
-        x = 0;
-      }
-      if(y > -deadband && y < deadband) {
-        y = 0;
-      }
-      if(rot > -deadband && rot < deadband) {
-        rot = 0;
-      }
-
-      x = Math.pow(x, 3);
-      y = Math.pow(y, 3);
-      rot = Math.pow(rot, 3);
-
-      /*  Next step should be to convert getVision / getPose from returning translation from camera to the April Tag to
-       *  the actual field position
-       *  then here we can define a desired filed location
-       *  and calculate the translation from current position to the desired and auto travel that path
-       * 
-       *  Future step will be to use the photon vision library to merge the april tag location with the swerve obometry position
-       */
-
-      if(joystick2Button8.getAsBoolean()) {
-
-      
-        double m_maximum = 1;
-
-        Pose2d pose = getVision();
-        x = pose.getX();
-        y = pose.getY();
-        
-
-        double test = Math.max(Math.abs(x),Math.abs(y));
-        if(test > m_maximum){
-          x = x * m_maximum / test;
-          y = y * m_maximum / test;
-        }
-
-        double filter = 0.25;
-        filteredX = (x - filteredX) * filter + filteredX;
-        x = filteredX;
-        filteredY = (y - filteredY) * filter + filteredY;
-        y = filteredY;
-        
-        
-        
-        rot = pose.getRotation().getDegrees() / (180);
-        
-        if(rot > .5) {
-          rot = .5;
-        } else if(rot < -.5) {
-          rot = -.5;
-        }
-      }
-
-      double speed = 1;//(-joystick1.getZ() + 1) / 2;
-      
-      if(RobotController.getBatteryVoltage() < 10) {
-        speed = 0;
-      }
-
-      m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
-      SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);
-    }
-
-
-    // Target Pose is the desired location on the field to drive to
-      Pose2d targetPose = new Pose2d(14, 2.75, new Rotation2d(0));
-      
-      PIDController m_xControl = new PIDController(2,0.2,0);
-      PIDController m_yControl = new PIDController(1,0.2,0);
 
 
 
-    //gets target position  preform drive to the targeted postion on the field when a button is pushed
-
-    public Pose2d getVision() {
-
-      //SmartDashboard.putString("robotDrivePose ", m_robotDrive.getPose().toString());
-      Pose2d odometryPose = new Pose2d(m_robotDrive.getPose().getX(), m_robotDrive.getPose().getY() /*+ targetPose.getY() * 2*/, m_robotDrive.getPose().getRotation());
-      //SmartDashboard.putString("Odometry Pose", odometryPose.toString());
-      //SmartDashboard.putString("Raw Odom Pose", m_robotDrive.getPose().toString());
-      Pose2d visionPose = m_visionSubsystem.getPose();
-      //SmartDashboard.putString("Vision Pose", visionPose.toString());
-
-
-      Pose2d fieldPose = odometryPose;
-      m_xControl.setIntegratorRange(-0.1,0.1);
-      m_yControl.setIntegratorRange(-0.1,0.1);
-
-
-      if(visionPose.getX() != -999){
-        fieldPose = new Pose2d((odometryPose.getX() + visionPose.getX()) / 2, (odometryPose.getY() + visionPose.getY()) / 2, odometryPose.getRotation());
-        
-
-      }
-      
-
-      Pose2d robotToTarget = new Pose2d(targetPose.getX() - fieldPose.getX(), targetPose.getY() - fieldPose.getY(), new Rotation2d(-targetPose.getRotation().getRadians() + fieldPose.getRotation().getRadians()));
-
-
-      
-
-      double x = robotToTarget.getX();
-      double y = robotToTarget.getY();
-      Rotation2d rot = robotToTarget.getRotation();
-
-      Pose2d returnPose = new Pose2d(0, 0, new Rotation2d(Units.degreesToRadians(0)));
-
-
-  
-
-        double m_xError = Math.abs(targetPose.getX() - fieldPose.getX());
-        double m_yError = Math.abs(targetPose.getY() - fieldPose.getY());
-
-        SmartDashboard.putNumber("x error",m_xError);
-        SmartDashboard.putNumber("y error",m_yError);
-
-        if(m_xError > 0.1016/2){  // only update drive if error is more than 2 inches
-          x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
-        } else{
-          x = 0;
-        }
-
-        if(m_yError > 0.1016/2){ // only update drive if error is more than 2 in
-          y = m_yControl.calculate(fieldPose.getY(), targetPose.getY());
-        } else {
-          y = 0;
-        }
-          rot = robotToTarget.getRotation();
-        
-
-        returnPose = new Pose2d(y, -x, rot);// robotToTarget.getY(), robotToTarget.getRotation());
-
-
-
-
-      return returnPose;
-
-    }
 
     public void resetDriveEncoders() {
         m_robotDrive.resetEncoders();
