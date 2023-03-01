@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -46,6 +50,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeExtendSubsystem;
 import frc.robot.subsystems.IntakeInhaleSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.OpenVisionSubsystem;
 import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.TurntableSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -103,6 +108,7 @@ public class RobotContainer {
   public void init() {
     m_LedSubsystem.setColor(true);
     last_pov = gamePad1.getPOV();
+    MakeCameraServer();
   }
 
   public void periodic() {
@@ -225,7 +231,20 @@ public class RobotContainer {
       }
     }
 
-    public void checkButtonInputs() {  
+    public static CvSink cvSink;
+    public static CvSource outputStream;
+    public static UsbCamera camera;
+    public void MakeCameraServer() {
+      UsbCamera camera = CameraServer.startAutomaticCapture();
+      camera.setBrightness(11);
+      camera.setFPS(10);
+      outputStream = CameraServer.putVideo("TurntableCam Output", 1280, 720);
+      cvSink = CameraServer.getVideo();
+    }
+
+    public void checkButtonInputs() {
+
+      outputStream.putFrame(OpenVisionSubsystem.getErodedImageMulti());
 
       SmartDashboard.putNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
       //sets LEDs to Purple
