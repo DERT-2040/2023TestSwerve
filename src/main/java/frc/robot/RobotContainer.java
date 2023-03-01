@@ -204,7 +204,7 @@ public class RobotContainer {
 
     public void checkButtonInputs() {  
 
-      SmartDashboard.getNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
+      SmartDashboard.putNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
       //sets LEDs to Purple
      /*  if(gamePad1.getRawButton(3)) {
         m_LedSubsystem.setColor(false);
