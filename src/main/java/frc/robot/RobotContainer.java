@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
@@ -187,9 +188,23 @@ public class RobotContainer {
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
 
+    public int CheckAlliance() {
+      //Blue Alliance = 1
+      //Red Alliance = 2
+      DriverStation.Alliance alliance;
+      alliance = DriverStation.getAlliance();
+      if (alliance == Alliance.Blue) {
+        return 1;
+      } else if (alliance == Alliance.Red) {
+        return 2;
+      } else {
+        return 0;
+      }
+    }
 
+    public void checkButtonInputs() {  
 
-    public void checkButtonInputs() {
+      SmartDashboard.getNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
       //sets LEDs to Purple
      /*  if(gamePad1.getRawButton(3)) {
         m_LedSubsystem.setColor(false);
