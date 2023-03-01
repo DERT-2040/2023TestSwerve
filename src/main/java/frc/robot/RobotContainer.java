@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -21,6 +20,8 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
 // COMMANDS  //
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
 import frc.robot.commands.ArmManualCommand;
@@ -38,6 +39,8 @@ import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
 import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 // SUBSYSTEMS  //
 import frc.robot.subsystems.ArmSubsystem;
@@ -49,22 +52,12 @@ import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.SuperVisoryDrive;
 import frc.robot.subsystems.TurntableSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
-
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.subsystems.GyroScope;
 
 import java.util.List;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.SPI;
 
-
-import com.kauailabs.navx.frc.AHRS;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -77,21 +70,8 @@ public class RobotContainer {
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the button bindings
-    configureButtonBindings();
 
-    // Configure default commands
-    //m_robotDrive.setDefaultCommand(
-        // The left stick controls translation of the robot.
-        // Turning is controlled by the X axis of the right stick.
-        /*new RunCommand(
-            () ->
-                m_robotDrive.drive(
-                    joystick1.getY(),
-                    joystick1.getX(),
-                    joystick2.getX(),
-                    true),
-            m_robotDrive));*/
+    configureButtonBindings();
 
   }
 
@@ -104,13 +84,16 @@ public class RobotContainer {
 
   public void periodic() {
     checkButtonInputs();
+
     m_PDHMonitor.periodic();
 
     if(!m_driveCommand.isScheduled()) {   //  Make sure the drive command is scheduled
       m_driveCommand.schedule();
     }
-  }
 
+
+
+  }
 
 
   // The driver's controller
@@ -174,7 +157,7 @@ public class RobotContainer {
   */
 
   public static final DriveSubsystem  m_robotDrive             =  new DriveSubsystem();
-  private final SuperVisoryDrive      m_drive                  =  new SuperVisoryDrive();
+  public static final SuperVisoryDrive m_drive                 =  new SuperVisoryDrive();
   public static final VisionSubsystem m_visionSubsystem        =  new VisionSubsystem();
   public  final LEDSubsystem          m_LedSubsystem           =  new LEDSubsystem();
   private final PDHMonitor            m_PDHMonitor             =  new PDHMonitor();
@@ -182,6 +165,7 @@ public class RobotContainer {
   private final IntakeExtendSubsystem m_intakeExtendSubsystem  =  new IntakeExtendSubsystem();
   private final IntakeInhaleSubsystem m_intakeInhaleSubsystem  =  new IntakeInhaleSubsystem();
   private final TurntableSubsystem    m_TurntableSubsystem     =  new TurntableSubsystem();
+  public final  GyroScope             m_Gyro                   =  new GyroScope();
 
   /*  ****          Define The robot's Commands       ****   /
   //
@@ -229,7 +213,7 @@ public class RobotContainer {
 
   public Pose2d getVision(){  /// this is redundant   we have an issue with Robot calling this and SuperVisoryDrive as well
 
-    return(m_drive.getVision());
+    return(m_drive.getVision());  // BUT need to make sure getVision is called every loop
 
   }
 
@@ -330,16 +314,14 @@ public class RobotContainer {
 
 
 
-
+/* 
 
     public void resetDriveEncoders() {
         m_robotDrive.resetEncoders();
     }
 
+*/
 
-  public void Calibrate() {
-    SmartDashboard.putData("Calibrate", new DriveCalibrateCommand(m_robotDrive));
-  }
   
   
   
@@ -431,34 +413,8 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+    
   }
-  public static AHRS getAHRS() {
-    //Starts the IMU
-    try {
-      /***********************************************************************
-       * navX-MXP: - Communication via RoboRIO MXP (SPI, I2C) and USB. - See
-       * http://navx-mxp.kauailabs.com/guidance/selecting-an-interface.
-       * 
-       * navX-Micro: - Communication via I2C (RoboRIO MXP or Onboard) and USB. - See
-       * http://navx-micro.kauailabs.com/guidance/selecting-an-interface.
-       * 
-       * VMX-pi: - Communication via USB. - See
-       * https://vmx-pi.kauailabs.com/installation/roborio-installation/
-       * 
-       * Multiple navX-model devices on a single robot are supported.
-       ************************************************************************/
-      AHRS ahrs = new AHRS(SPI.Port.kMXP);
-      // ahrs = new AHRS(SerialPort.Port.kUSB1);
-      ahrs.enableLogging(true);
-      return ahrs;
-    } catch (RuntimeException ex) {
-      DriverStation.reportError("Error instantiating navX MXP:  " + ex.getMessage(), true);
-      return null;
-    }
-}
 
-public void resetGyro() {
-  m_robotDrive.zeroHeading();
-}
 
 }

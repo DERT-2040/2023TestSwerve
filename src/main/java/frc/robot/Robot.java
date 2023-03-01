@@ -8,11 +8,8 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
-//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-//import frc.robot.commands.DriveCalibrateCommand;
-//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.cameraserver.CameraServer;
 
 /**
@@ -37,8 +34,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
-    m_robotContainer.Calibrate();
-    m_robotContainer.resetGyro();
+    RobotContainer.m_drive.Calibrate();
+    m_robotContainer.m_Gyro.resetGyro();
     robotOn = false;
     CameraServer.startAutomaticCapture();
 
@@ -111,10 +108,12 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.resetDriveEncoders();
+    RobotContainer.m_robotDrive.resetEncoders();
+
+   // m_robotContainer.resetDriveEncoders();
    // m_robotContainer.resetGyro();
     
-    m_robotContainer.resetGyro();
+    m_robotContainer.m_Gyro.resetGyro();
 
     m_robotContainer.init();
   

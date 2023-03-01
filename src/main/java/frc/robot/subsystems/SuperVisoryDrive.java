@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.commands.DriveCalibrateCommand;
 
 public class SuperVisoryDrive extends SubsystemBase {
   /** Creates a new SuperVisoryDrive. */
@@ -184,5 +185,9 @@ public class SuperVisoryDrive extends SubsystemBase {
 
   }
 
-
+  public void Calibrate() {
+    SmartDashboard.putData("Calibrate", new DriveCalibrateCommand(RobotContainer.m_robotDrive));
+  }
+  
 }
+
