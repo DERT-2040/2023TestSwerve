@@ -174,7 +174,7 @@ public class RobotContainer {
   */
 
   public static final DriveSubsystem  m_robotDrive             =  new DriveSubsystem();
-  private final SuperVisoryDrive      m_drive                  =  new SuperVisoryDrive();
+  public static final SuperVisoryDrive      m_drive                  =  new SuperVisoryDrive();
   public static final VisionSubsystem m_visionSubsystem        =  new VisionSubsystem();
   public  final LEDSubsystem          m_LedSubsystem           =  new LEDSubsystem();
   private final PDHMonitor            m_PDHMonitor             =  new PDHMonitor();
@@ -332,9 +332,6 @@ public class RobotContainer {
 
 
 
-    public void resetDriveEncoders() {
-        m_robotDrive.resetEncoders();
-    }
 
 
   public void Calibrate() {
@@ -357,7 +354,7 @@ public class RobotContainer {
   }
 
 
-
+/* 
   public static double getGamepad1Axis0() {
     
     double axis = gamePad1.getRawAxis(0);
@@ -368,7 +365,7 @@ public class RobotContainer {
   }
   
 
-
+*/
 
 
 

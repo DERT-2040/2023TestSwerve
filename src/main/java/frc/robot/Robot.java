@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.SuperVisoryDrive;
 //import frc.robot.commands.DriveCalibrateCommand;
 //import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -111,7 +112,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.resetDriveEncoders();
+    
+    RobotContainer.m_drive.resetDriveEncoders();
+    
+   // m_robotContainer.resetDriveEncoders();
    // m_robotContainer.resetGyro();
     
     m_robotContainer.resetGyro();

@@ -185,4 +185,8 @@ public class SuperVisoryDrive extends SubsystemBase {
   }
 
 
+  public void resetDriveEncoders() {
+    RobotContainer.m_robotDrive.resetEncoders();
+
+  }
 }
