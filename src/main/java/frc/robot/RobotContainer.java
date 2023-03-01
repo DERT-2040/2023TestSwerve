@@ -165,7 +165,18 @@ public class RobotContainer {
   private double getRightX() {
     return -Math.pow(gamePad1.getRawAxis(4), 3);
   }
-
+  public double drvX() {
+    return (-joystick1.getX());   
+  }
+  public double drvY() {
+    return (joystick1.getY());        
+  }
+  public double drvRot() {
+    return (joystick2.getX());         
+  }
+  public boolean drvAuto() {
+    return (joystick2Button8.getAsBoolean());     
+  }
 
   /*  ****          Define The robot's subsystems       ****   /
   //
@@ -190,12 +201,7 @@ public class RobotContainer {
   //  commands are used further down in this file to accomplish various tasks
   //  usally associated with an input defined above
   */
-  private final DriveCommand          m_driveCommand          = new DriveCommand(m_drive, 
-        -joystick1.getX(),              // pass driver joystick x request
-        joystick1.getY(),               // pass driver joystick y request
-        joystick2.getX(),               // pass driver rotate request
-        joystick2Button8.getAsBoolean() // pass auto drive  command (enables robot to drive to selected location)
-        );
+  private final DriveCommand          m_driveCommand          = new DriveCommand(m_drive, this::drvX, this::drvY, this::drvRot, this::drvAuto);
   private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
@@ -226,6 +232,9 @@ public class RobotContainer {
   public boolean getArmManualMode() {
     return armManualMode;
   }
+
+
+
 
   public Pose2d getVision(){  /// this is redundant   we have an issue with Robot calling this and SuperVisoryDrive as well
 
