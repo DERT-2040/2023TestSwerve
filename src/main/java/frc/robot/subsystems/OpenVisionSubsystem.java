@@ -36,13 +36,12 @@ public class OpenVisionSubsystem extends SubsystemBase{
         alignmentOutput = 0;
         roti_pass = false;
         //Program Settings
+        rotation_direction = 1;
+        image_rotation_angle = 90;
         erodecycles = 1;
         blurradius = 5;
-        vertical_threshold = 230;
+        vertical_threshold = 600;
         alignment_error_thershold = 30;
-        //Setup Camera Device
-        cap.set(Videoio.CAP_PROP_EXPOSURE, -11);
-        cap.set(Videoio.CAP_PROP_CONTRAST, 13);
     }
     public static UsbCamera camera;
     public static CvSink cameraCap;
@@ -58,18 +57,23 @@ public class OpenVisionSubsystem extends SubsystemBase{
     static Mat eroded_image_alin;
     static Mat eroded_image_multi;
     static int white_stop;
+    static int image_rotation_angle;
+    static int rotation_direction;
     public static void ProcessVision() {
         //
         // Image Processing
         //
         Mat frame = new Mat();
-        frame = cameraCap.grabFrame(frame);
+        cameraCap.grabFrame(frame);
         //Rotate image clockwise 90 degrees to orient it right
-        Mat rotation_matrix = Imgproc.getRotationMatrix2D(new Point((frame.cols()/2),(frame.rows()/2)), 90, 1);
-        frame = Imgproc.warpAffine(, frame, rotation_matrix, 1);
+        Mat rotation_matrix = Imgproc.getRotationMatrix2D(new Point((frame.cols()/2),(frame.rows()/2)), image_rotation_angle, rotation_direction);
+        //Rotation Mat
+        Mat rotated_frame = new Mat();
+        //Warp affine to complete the operation
+        Imgproc.warpAffine(frame, rotated_frame, rotation_matrix, new Size(frame.cols(),frame.rows()), Imgproc.INTER_LINEAR);
         //Apply Box Blur
         Mat blurred_image = new Mat();
-        Imgproc.blur(frame, blurred_image, new Size(blurradius, blurradius));
+        Imgproc.blur(rotated_frame, blurred_image, new Size(blurradius, blurradius));
         //Convert to HSV
         Mat hsv_img = new Mat();
         Imgproc.cvtColor(blurred_image, hsv_img, Imgproc.COLOR_BGR2HSV);

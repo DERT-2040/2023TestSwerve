@@ -5,9 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -63,10 +61,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-
 import java.util.List;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
@@ -238,7 +233,9 @@ public class RobotContainer {
 
     public void checkButtonInputs() {
 
+      if (OpenVisionSubsystem.getErodedImageMulti() != null) {
       outputStream.putFrame(OpenVisionSubsystem.getErodedImageMulti());
+      }
 
       SmartDashboard.putNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
       //sets LEDs to Purple
