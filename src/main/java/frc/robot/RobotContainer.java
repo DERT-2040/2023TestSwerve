@@ -108,7 +108,7 @@ public class RobotContainer {
   public void init() {
     m_LedSubsystem.setColor(true);
     last_pov = gamePad1.getPOV();
-    MakeCameraServer();
+    SetupTurntableCamera();
   }
 
   public void periodic() {
@@ -231,15 +231,9 @@ public class RobotContainer {
       }
     }
 
-    public static CvSink cvSink;
     public static CvSource outputStream;
-    public static UsbCamera camera;
-    public void MakeCameraServer() {
-      UsbCamera camera = CameraServer.startAutomaticCapture();
-      camera.setBrightness(11);
-      camera.setFPS(10);
-      outputStream = CameraServer.putVideo("TurntableCam Output", 1280, 720);
-      cvSink = CameraServer.getVideo();
+    public void SetupTurntableCamera() {
+      outputStream = CameraServer.putVideo("TurntableCam Output", 720, 1280);
     }
 
     public void checkButtonInputs() {
@@ -277,10 +271,6 @@ public class RobotContainer {
       //sets LEDs to Yellow
       if(gamePad1.getRawButton(4)) {
         m_LedSubsystem.setColor(true);
-      }
-
-      if(gamePad1POVUp.getAsBoolean()) {
-
       }
 
       joystick1Button2.whileTrue(m_armCommand);

@@ -1,4 +1,8 @@
 package frc.robot.subsystems;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.ArrayList;
@@ -17,9 +21,17 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
 public class OpenVisionSubsystem extends SubsystemBase{
+    public void SetupTurntableCamera() {
+
+    }
     public OpenVisionSubsystem() {
         //Vision Device Setup
-        cap = new VideoCapture(0);
+        UsbCamera camera = CameraServer.startAutomaticCapture();
+        cameraCap = CameraServer.getVideo();
+        //Settings
+        camera.setResolution(1280, 720);
+        camera.setBrightness(11);
+        camera.setFPS(10);
         //Importent Outputs
         alignmentOutput = 0;
         roti_pass = false;
@@ -32,6 +44,8 @@ public class OpenVisionSubsystem extends SubsystemBase{
         cap.set(Videoio.CAP_PROP_EXPOSURE, -11);
         cap.set(Videoio.CAP_PROP_CONTRAST, 13);
     }
+    public static UsbCamera camera;
+    public static CvSink cameraCap;
     static VideoCapture cap;
     static int alignmentOutput;
     static boolean roti_pass;
@@ -49,7 +63,10 @@ public class OpenVisionSubsystem extends SubsystemBase{
         // Image Processing
         //
         Mat frame = new Mat();
-        cap.read(frame);
+        frame = cameraCap.grabFrame(frame);
+        //Rotate image clockwise 90 degrees to orient it right
+        Mat rotation_matrix = Imgproc.getRotationMatrix2D(new Point((frame.cols()/2),(frame.rows()/2)), 90, 1);
+        frame = Imgproc.warpAffine(, frame, rotation_matrix, 1);
         //Apply Box Blur
         Mat blurred_image = new Mat();
         Imgproc.blur(frame, blurred_image, new Size(blurradius, blurradius));
