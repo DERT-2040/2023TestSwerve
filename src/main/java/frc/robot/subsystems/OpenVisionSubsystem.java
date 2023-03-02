@@ -150,7 +150,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
             //Draw the Rectangle (Not Neeeded)
             Imgproc.rectangle(eroded_image_multi, pt1, pt2, new Scalar(255, 0, 0));
             //Pass or Fail math
-            double boxRatio = (largestRect.width / largestRect.height);
+            //double boxRatio = (largestRect.width / largestRect.height);
             int box_pixel_size = largestRect.height * largestRect.width;
             double ratio = (Imgproc.contourArea(turntableContours.get(roti_idx))) / box_pixel_size;
             boolean pass_bw = false;
