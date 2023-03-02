@@ -20,9 +20,6 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 public class OpenVisionSubsystem extends SubsystemBase{
-    public void SetupTurntableCamera() {
-
-    }
     public OpenVisionSubsystem() {
         //Vision Device Setup
         UsbCamera camera = CameraServer.startAutomaticCapture();
