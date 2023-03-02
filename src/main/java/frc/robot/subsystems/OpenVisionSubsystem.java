@@ -68,6 +68,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         threshold1_mask = new Mat();
         threshold2_mask = new Mat();
         kernel_Mat = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
+        hierarchey = new Mat();
     }
     private static int h_thresh_1;
     private static int h_thresh_2;
@@ -99,6 +100,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
     static Mat threshold1_mask;
     static Mat threshold2_mask;
     static Mat kernel_Mat;
+    static Mat hierarchey;
     public void ProcessVision() {
         //
         // Image Processing
@@ -137,12 +139,11 @@ public class OpenVisionSubsystem extends SubsystemBase{
             Point rotiStart = new Point(0, 0);
             Point rotiEnd = new Point(eroded_image_roti.cols(), (eroded_image_roti.rows()-vertical_threshold));
             Imgproc.rectangle(eroded_image_roti, rotiStart, rotiEnd, new Scalar(0, 0, 0), -1);
-            int roti_white_stop = Core.countNonZero(eroded_image_roti)
+            int roti_white_stop = Core.countNonZero(eroded_image_roti);
             if (roti_white_stop != 0) {
             //List of contours
             List<MatOfPoint> turntableContours = new ArrayList<>();
             //Find and sort contours
-            Mat hierarchey = new Mat();
             Imgproc.findContours(eroded_image_roti, turntableContours, hierarchey, Imgproc.RETR_EXTERNAL, Imgproc.CHAIN_APPROX_SIMPLE);
             double roti_area = 0;
             int roti_idx = 0;
