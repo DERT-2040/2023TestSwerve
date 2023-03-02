@@ -37,6 +37,7 @@ import frc.robot.commands.GripperConeCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
+import frc.robot.commands.OpenVisionCommand;
 import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
 import frc.robot.commands.VisionCommand;
@@ -61,6 +62,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
+import java.nio.channels.Pipe;
 import java.util.List;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -134,8 +136,9 @@ public class RobotContainer {
   private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
   private static JoystickButton joystick1Button6 = new JoystickButton(joystick1, 6);
   private static JoystickButton joystick1Button7 = new JoystickButton(joystick1, 7);
-  public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
-
+  private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
+  private static JoystickButton joystick2Button10 = new JoystickButton(joystick2, 10);
+  private static JoystickButton joystick2Button11 = new JoystickButton(joystick2, 11);
 
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
   private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
@@ -176,6 +179,7 @@ public class RobotContainer {
   private final IntakeExtendSubsystem m_intakeExtendSubsystem =   new IntakeExtendSubsystem();
   private final IntakeInhaleSubsystem m_intakeInhaleSubsystem =   new IntakeInhaleSubsystem();
   private final TurntableSubsystem    m_TurntableSubsystem =      new TurntableSubsystem();
+  private final OpenVisionSubsystem m_OpenVisionSubsystem = new OpenVisionSubsystem();
   
 
   /*  ****          Define The robot's Commands       ****   /
@@ -202,7 +206,9 @@ public class RobotContainer {
   private final IntakeInhaleCommand    m_intakeConeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
-
+  //Temp Command
+  private final OpenVisionCommand m_CheckTurntableCommand = new OpenVisionCommand(m_OpenVisionSubsystem, 1);
+  private final OpenVisionCommand m_CheckAlignCommand = new OpenVisionCommand(m_OpenVisionSubsystem, 2);
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
   //private int armExtensionSetting = 0;
@@ -283,6 +289,9 @@ public class RobotContainer {
 
       gamePad1Button3.whileTrue(m_gripperConeCommand);
       gamePad1Button4.whileTrue(m_gripperReleaseCommand);
+
+      joystick2Button10.onTrue(m_CheckTurntableCommand);
+      joystick2Button11.onTrue(m_CheckAlignCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);
