@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
-import org.opencv.videoio.Videoio;
 
 public class OpenVisionSubsystem extends SubsystemBase{
     public void SetupTurntableCamera() {
@@ -31,8 +29,25 @@ public class OpenVisionSubsystem extends SubsystemBase{
         cameraCap = CameraServer.getVideo();
         //Settings
         camera.setResolution(640, 360);
-        camera.setBrightness(11);
+        camera.setBrightness(10);
+        camera.setExposureManual(11);
         camera.setFPS(10);
+        //HSV Filter Settings
+        //H Thresh (Lower Bound, Upper Bound)
+        h_thresh_1 = 16;
+        h_thresh_2 = 47;
+        Preferences.initInt("h_thresh_1", h_thresh_1);
+        Preferences.initInt("h_thresh_2", h_thresh_2);
+        //S Filter Settings (Lower Bound, Upper Bound)
+        s_thresh_1 = 140;
+        s_thresh_2 = 215;
+        Preferences.initInt("s_thresh_1", s_thresh_1);
+        Preferences.initInt("s_thresh_2", s_thresh_2);
+        //V Filter Settings (Lower Bound, Upper Bound)
+        v_thresh_1 = 87;
+        v_thresh_2 = 255;
+        Preferences.initInt("v_thresh_1", v_thresh_1);
+        Preferences.initInt("v_thresh_2", v_thresh_2);
         //Importent Outputs
         alignmentOutput = 0;
         roti_pass = false;
@@ -44,6 +59,12 @@ public class OpenVisionSubsystem extends SubsystemBase{
         vertical_threshold = 200;
         alignment_error_thershold = 30;
     }
+    private static int h_thresh_1;
+    private static int h_thresh_2;
+    private static int s_thresh_1;
+    private static int s_thresh_2;
+    private static int v_thresh_1;
+    private static int v_thresh_2;
     public static UsbCamera camera;
     public static CvSink cameraCap;
     static VideoCapture cap;
@@ -74,8 +95,8 @@ public class OpenVisionSubsystem extends SubsystemBase{
         //Convert to HSV
         Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2HSV);
         //Define HSV Filter Settings
-        Scalar lower_threshold1 = new Scalar(16, 140, 87);
-        Scalar upper_threshold1 = new Scalar(47, 215, 225);
+        Scalar lower_threshold1 = new Scalar(Preferences.getInt("h_thresh_1", h_thresh_1), Preferences.getInt("s_thresh_1", s_thresh_1), Preferences.getInt("v_thresh_1", v_thresh_1));
+        Scalar upper_threshold1 = new Scalar(Preferences.getInt("h_thresh_2", h_thresh_2), Preferences.getInt("s_thresh_2", s_thresh_2), Preferences.getInt("v_thresh_2", v_thresh_2));
         Scalar lower_threshold2 = new Scalar(0, 0, 255);
         Scalar upper_threshold2 = new Scalar(0, 0, 255);
         //Apply HSV Filters
@@ -129,7 +150,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
             //Draw the Rectangle (Not Neeeded)
             Imgproc.rectangle(eroded_image_multi, pt1, pt2, new Scalar(255, 0, 0));
             //Pass or Fail math
-            double boxRatio = ((double)largestRect.width / largestRect.height);
+            double boxRatio = (largestRect.width / largestRect.height);
             int box_pixel_size = largestRect.height * largestRect.width;
             double ratio = (Imgproc.contourArea(turntableContours.get(roti_idx))) / box_pixel_size;
             boolean pass_bw = false;
