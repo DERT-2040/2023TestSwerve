@@ -234,7 +234,7 @@ public class RobotContainer {
 
     public static CvSource outputStream;
     public void SetupTurntableCamera() {
-      outputStream = CameraServer.putVideo("TurntableCam Output", 720, 1280);
+      outputStream = CameraServer.putVideo("TurntableCam Output", 360, 640);
     }
 
     public void checkButtonInputs() {

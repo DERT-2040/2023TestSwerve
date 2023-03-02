@@ -30,7 +30,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         UsbCamera camera = CameraServer.startAutomaticCapture();
         cameraCap = CameraServer.getVideo();
         //Settings
-        camera.setResolution(1280, 720);
+        camera.setResolution(640, 360);
         camera.setBrightness(11);
         camera.setFPS(10);
         //Importent Outputs
@@ -41,7 +41,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         image_rotation_angle = 90;
         erodecycles = 1;
         blurradius = 5;
-        vertical_threshold = 600;
+        vertical_threshold = 200;
         alignment_error_thershold = 30;
     }
     public static UsbCamera camera;
@@ -53,14 +53,13 @@ public class OpenVisionSubsystem extends SubsystemBase{
     static int blurradius;
     static int vertical_threshold;
     static int alignment_error_thershold;
-    static Mat eroded_image;
     static Mat eroded_image_roti;
     static Mat eroded_image_alin;
     static Mat eroded_image_multi;
     static int white_stop;
     static int image_rotation_angle;
     static int rotation_direction;
-    public static void ProcessVision() {
+    public void ProcessVision() {
         //
         // Image Processing
         //
@@ -68,16 +67,12 @@ public class OpenVisionSubsystem extends SubsystemBase{
         cameraCap.grabFrame(frame);
         //Rotate image clockwise 90 degrees to orient it right
         Mat rotation_matrix = Imgproc.getRotationMatrix2D(new Point((frame.cols()/2),(frame.rows()/2)), image_rotation_angle, rotation_direction);
-        //Rotation Mat
-        Mat rotated_frame = new Mat();
         //Warp affine to complete the operation
-        Imgproc.warpAffine(frame, rotated_frame, rotation_matrix, new Size(frame.cols(),frame.rows()), Imgproc.INTER_LINEAR);
+        Imgproc.warpAffine(frame, frame, rotation_matrix, new Size(frame.cols(),frame.rows()), Imgproc.INTER_LINEAR);
         //Apply Box Blur
-        Mat blurred_image = new Mat();
-        Imgproc.blur(rotated_frame, blurred_image, new Size(blurradius, blurradius));
+        Imgproc.blur(frame, frame, new Size(blurradius, blurradius));
         //Convert to HSV
-        Mat hsv_img = new Mat();
-        Imgproc.cvtColor(blurred_image, hsv_img, Imgproc.COLOR_BGR2HSV);
+        Imgproc.cvtColor(frame, frame, Imgproc.COLOR_BGR2HSV);
         //Define HSV Filter Settings
         Scalar lower_threshold1 = new Scalar(16, 140, 87);
         Scalar upper_threshold1 = new Scalar(47, 215, 225);
@@ -85,25 +80,24 @@ public class OpenVisionSubsystem extends SubsystemBase{
         Scalar upper_threshold2 = new Scalar(0, 0, 255);
         //Apply HSV Filters
         Mat threshold1_mask = new Mat();
-        Core.inRange(hsv_img, lower_threshold1, upper_threshold1, threshold1_mask);
+        Core.inRange(threshold1_mask, lower_threshold1, upper_threshold1, threshold1_mask);
         Mat threshold2_mask = new Mat();
-        Core.inRange(hsv_img, lower_threshold2, upper_threshold2, threshold2_mask);
+        Core.inRange(threshold2_mask, lower_threshold2, upper_threshold2, threshold2_mask);
         //Merge Masks
-        Mat combinedMask = new Mat();
-        Core.bitwise_or(threshold1_mask, threshold2_mask, combinedMask);
+        Core.bitwise_or(threshold1_mask, threshold2_mask, frame);
         //Define Erosion Structure
         Mat kernel_Mat = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
         //Preform Erosion
-        Imgproc.erode(combinedMask, eroded_image, kernel_Mat, new Point(-1, -1), erodecycles);
+        Imgproc.erode(frame, frame, kernel_Mat, new Point(-1, -1), erodecycles);
         //Clone Images (Multi-Channel Image is not needed)
-        eroded_image_multi = eroded_image.clone();
+        eroded_image_multi = frame.clone();
         Imgproc.cvtColor(eroded_image_multi, eroded_image_multi, Imgproc.COLOR_GRAY2BGR);
-        eroded_image_alin = eroded_image.clone();
-        eroded_image_roti = eroded_image.clone();
+        eroded_image_alin = frame.clone();
+        eroded_image_roti = frame.clone();
         //Stops if no white pixels
-        white_stop = Core.countNonZero(eroded_image);
+        white_stop = Core.countNonZero(frame);
     }
-    public static boolean CheckTurntable() {
+    public boolean CheckTurntable() {
         int roti_white_stop = Core.countNonZero(eroded_image_roti);
         if ((white_stop != 0) && (roti_white_stop != 0)) {
             //
@@ -145,7 +139,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
             } else {
                 pass_bw = false;
             }
-            if (boxRatio <= 1.1 && largestRect.width >= 125) {
+            if (largestRect.width >= 10) {
                 pass_box_size = true;
             } else {
                 pass_box_size = false;
@@ -175,7 +169,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         }
         return roti_pass;
     }
-    public static int CheckRobotAlignment() {
+    public int CheckRobotAlignment() {
         int alin_white_stop = Core.countNonZero(eroded_image_alin);
         if ((white_stop != 0) && (alin_white_stop != 0)) {
             //
