@@ -17,7 +17,16 @@ public class OpenVisionCommand extends CommandBase {
      
      @Override
      public void initialize() {
-      m_subsystem.ProcessVision();
+      switch (m_mode) {
+         case 1:
+         m_subsystem.ProcessVision();
+         SmartDashboard.putBoolean("Turntable Pass/Fail", m_subsystem.CheckTurntable());
+         break;
+         case 2:
+         m_subsystem.ProcessVision();
+         SmartDashboard.putNumber("Alignment Output", m_subsystem.CheckRobotAlignment());
+         break;
+      }
      }
  
      @Override
@@ -27,13 +36,6 @@ public class OpenVisionCommand extends CommandBase {
  
      @Override
      public void end(boolean interrupted) {
-      switch (m_mode) {
-         case 1:
-         SmartDashboard.putBoolean("Turntable Pass/Fail", m_subsystem.CheckTurntable());
-         break;
-         case 2:
-         SmartDashboard.putNumber("Alignment Output", m_subsystem.CheckRobotAlignment());
-         break;
-      }
+
      }
 }

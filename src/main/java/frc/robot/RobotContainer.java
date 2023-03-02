@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-
+import frc.robot.Constants.OpenVisionConstants;
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
@@ -233,7 +233,7 @@ public class RobotContainer {
 
     public static CvSource outputStream;
     public void SetupTurntableCamera() {
-      outputStream = CameraServer.putVideo("TurntableCam Output", 360, 640);
+      outputStream = CameraServer.putVideo("TurntableCam Output", OpenVisionConstants.cameraHeight, OpenVisionConstants.cameraWidth);
     }
 
     public void checkButtonInputs() {
@@ -289,8 +289,8 @@ public class RobotContainer {
       gamePad1Button3.whileTrue(m_gripperConeCommand);
       gamePad1Button4.whileTrue(m_gripperReleaseCommand);
 
-      joystick2Button10.onTrue(m_CheckTurntableCommand);
-      joystick2Button11.onTrue(m_CheckAlignCommand);
+      joystick2Button10.whileTrue(m_CheckTurntableCommand);
+      joystick2Button11.whileTrue(m_CheckAlignCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);

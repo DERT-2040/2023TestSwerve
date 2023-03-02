@@ -113,4 +113,8 @@ public final class Constants {
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
+  public static final class OpenVisionConstants {
+    public static final int cameraWidth = 640;
+    public static final int cameraHeight = 360;
+  }
 }
