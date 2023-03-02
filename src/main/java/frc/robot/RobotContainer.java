@@ -324,6 +324,9 @@ public class RobotContainer {
     double filteredY = 0;
     
 
+    PIDController balancingPID = new PIDController(1, 0, 0);
+
+
     public void drive() {
       
       double executionTime = Timer.getFPGATimestamp();
@@ -389,6 +392,19 @@ public class RobotContainer {
         }
       }
 
+      if(joystick2Button9.getAsBoolean()) {
+        //if(Math.abs(ahrs.getPitch()) > 10) {
+          SmartDashboard.putNumber("Balancing PID", balancingPID.calculate(ahrs.getRoll(), 0));
+        //}
+
+      }
+
+      //Vertical axis
+      SmartDashboard.putNumber("Yaw", ahrs.getYaw());
+      //sideways axis
+      SmartDashboard.putNumber("Pitch", ahrs.getPitch());
+      //forward camera facing axis
+      SmartDashboard.putNumber("Roll", ahrs.getRoll());
       double speed = 1;//(-joystick1.getZ() + 1) / 2;
       
       if(RobotController.getBatteryVoltage() < 10) {
@@ -579,7 +595,14 @@ public class RobotContainer {
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
   }
+
+  static AHRS ahrs = AHRS();
+
   public static AHRS getAHRS() {
+    return ahrs;
+  }
+
+  public static AHRS AHRS() {
     //Starts the IMU
     try {
       /***********************************************************************
