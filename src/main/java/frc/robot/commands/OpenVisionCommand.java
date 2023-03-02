@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.OpenVisionSubsystem;
-import frc.robot.subsystems.TurntableSubsystem;
 
 public class OpenVisionCommand extends CommandBase {
    OpenVisionSubsystem m_subsystem;
