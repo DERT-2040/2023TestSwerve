@@ -31,13 +31,13 @@ public class IntakeExtendCommand extends CommandBase {
       if (selectedOption == 0) {
       switch(automaticOption) {
          case 1: 
-         m_subsystem.goToPosition(10);
+         m_subsystem.goToPosition(0);
          break;
          case 2:
          m_subsystem.goToPosition(20);
          break;
          case 3:
-         m_subsystem.goToPosition(30);
+         m_subsystem.goToPosition(40);
          break;
          default:
          break;
@@ -46,13 +46,13 @@ public class IntakeExtendCommand extends CommandBase {
    } else {
       switch(selectedOption) {
          case 1: 
-         m_subsystem.goToPosition(10);
+         m_subsystem.goToPosition(0);
          break;
          case 2:
          m_subsystem.goToPosition(20);
          break;
          case 3:
-         m_subsystem.goToPosition(30);
+         m_subsystem.goToPosition(40);
          break;
          default:
          break;

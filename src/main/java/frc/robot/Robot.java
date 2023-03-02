@@ -61,6 +61,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     if(RobotController.getBatteryVoltage() < 10.5) {
       m_robotContainer.LEDVoltage();
+    } else {
+      m_robotContainer.resetLEDVoltage();
     }
 
   }

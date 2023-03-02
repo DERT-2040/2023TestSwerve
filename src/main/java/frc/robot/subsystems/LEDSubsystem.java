@@ -93,5 +93,10 @@ public class LEDSubsystem extends SubsystemBase {
         m_led.setData(m_ledBuffer);
         voltage = false;
     }
+
+    
+    public void resetVoltage() {
+        voltage = true;
+    }
 }
     

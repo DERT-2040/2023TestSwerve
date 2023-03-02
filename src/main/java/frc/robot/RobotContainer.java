@@ -109,6 +109,7 @@ public class RobotContainer {
   public void periodic() {
     checkButtonInputs();
     m_PDHMonitor.periodic();
+    m_intakeExtendSubsystem.periodic();
   }
 
 
@@ -496,6 +497,10 @@ public class RobotContainer {
 
   public void LEDVoltage() {
     m_LedSubsystem.lowVoltage();
+  }
+
+  public void resetLEDVoltage() {
+    m_LedSubsystem.resetVoltage();
   }
 
 
