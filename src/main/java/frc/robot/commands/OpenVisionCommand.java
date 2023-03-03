@@ -17,6 +17,16 @@ public class OpenVisionCommand extends CommandBase {
      
      @Override
      public void initialize() {
+      
+     }
+ 
+     @Override
+     public void execute() {
+      
+     }
+ 
+     @Override
+     public void end(boolean interrupted) {
       switch (m_mode) {
          case 1:
          m_subsystem.ProcessVision();
@@ -27,15 +37,5 @@ public class OpenVisionCommand extends CommandBase {
          SmartDashboard.putNumber("Alignment Output", m_subsystem.CheckRobotAlignment());
          break;
       }
-     }
- 
-     @Override
-     public void execute() {
-      
-     }
- 
-     @Override
-     public void end(boolean interrupted) {
-
      }
 }

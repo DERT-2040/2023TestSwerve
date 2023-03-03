@@ -28,7 +28,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         //Settings
         camera.setResolution(OpenVisionConstants.cameraWidth, OpenVisionConstants.cameraHeight);
         camera.setBrightness(10);
-        camera.setExposureManual(11);
+        camera.setExposureManual(50);
         camera.setFPS(10);
         //HSV Filter Settings
         //H Thresh (Lower Bound, Upper Bound)
@@ -57,18 +57,17 @@ public class OpenVisionSubsystem extends SubsystemBase{
         vertical_threshold = 200;
         alignment_error_thershold = 30;
         //Other Objects
-        rotation_matrix = Imgproc.getRotationMatrix2D(new Point((OpenVisionConstants.cameraWidth/2),(OpenVisionConstants.cameraHeight/2)), image_rotation_angle, rotation_direction);
         lower_threshold2 = new Scalar(0, 0, 255);
         upper_threshold2 = new Scalar(0, 0, 255);
         eroded_image_roti = new Mat();
         eroded_image_alin = new Mat();
-        eroded_image_multi = new Mat();
         frame = new Mat();
         rotation_matrix = new Mat();
         threshold1_mask = new Mat();
         threshold2_mask = new Mat();
         kernel_Mat = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
         hierarchey = new Mat();
+        rotation_matrix = Imgproc.getRotationMatrix2D(new Point((OpenVisionConstants.cameraWidth/2),(OpenVisionConstants.cameraHeight/2)), image_rotation_angle, rotation_direction);
     }
     private static int h_thresh_1;
     private static int h_thresh_2;
@@ -107,7 +106,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
         //
         cameraCap.grabFrame(frame);
         //Warp affine to complete the operation
-        Imgproc.warpAffine(frame, frame, rotation_matrix, new Size(frame.cols(),frame.rows()), Imgproc.INTER_LINEAR);
+        Imgproc.warpAffine(frame, frame, rotation_matrix, new Size((OpenVisionConstants.cameraHeight),(OpenVisionConstants.cameraWidth)), Imgproc.INTER_LINEAR);
         //Apply Box Blur
         Imgproc.blur(frame, frame, new Size(blurradius, blurradius));
         //Convert to HSV
@@ -116,8 +115,8 @@ public class OpenVisionSubsystem extends SubsystemBase{
         lower_threshold1 = new Scalar(Preferences.getInt("h_thresh_1", h_thresh_1), Preferences.getInt("s_thresh_1", s_thresh_1), Preferences.getInt("v_thresh_1", v_thresh_1));
         upper_threshold1 = new Scalar(Preferences.getInt("h_thresh_2", h_thresh_2), Preferences.getInt("s_thresh_2", s_thresh_2), Preferences.getInt("v_thresh_2", v_thresh_2));
         //Apply HSV Filters
-        Core.inRange(threshold1_mask, lower_threshold1, upper_threshold1, threshold1_mask);
-        Core.inRange(threshold2_mask, lower_threshold2, upper_threshold2, threshold2_mask);
+        Core.inRange(frame, lower_threshold1, upper_threshold1, threshold1_mask);
+        Core.inRange(frame, lower_threshold2, upper_threshold2, threshold2_mask);
         //Merge Masks
         Core.bitwise_or(threshold1_mask, threshold2_mask, frame);
         //Preform Erosion

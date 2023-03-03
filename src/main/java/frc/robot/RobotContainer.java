@@ -231,17 +231,16 @@ public class RobotContainer {
       }
     }
 
+
     public static CvSource outputStream;
     public void SetupTurntableCamera() {
-      outputStream = CameraServer.putVideo("TurntableCam Output", OpenVisionConstants.cameraHeight, OpenVisionConstants.cameraWidth);
+      outputStream = CameraServer.putVideo("TurntableCam Output", 360, 640);
     }
 
     public void checkButtonInputs() {
-
       if (OpenVisionSubsystem.getErodedImageMulti() != null) {
       outputStream.putFrame(OpenVisionSubsystem.getErodedImageMulti());
       }
-
       SmartDashboard.putNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
       //sets LEDs to Purple
      /*  if(gamePad1.getRawButton(3)) {
