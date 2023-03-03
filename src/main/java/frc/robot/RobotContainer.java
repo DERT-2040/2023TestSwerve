@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -21,7 +23,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-
+import frc.robot.Constants.OpenVisionConstants;
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
@@ -36,6 +38,7 @@ import frc.robot.commands.GripperCubeCommand;
 import frc.robot.commands.GripperReleaseCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
+import frc.robot.commands.OpenVisionCommand;
 import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
 import frc.robot.commands.VisionCommand;
@@ -47,6 +50,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeExtendSubsystem;
 import frc.robot.subsystems.IntakeInhaleSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
+import frc.robot.subsystems.OpenVisionSubsystem;
 import frc.robot.subsystems.PDHMonitor;
 import frc.robot.subsystems.TurntableSubsystem;
 import frc.robot.subsystems.VisionSubsystem;
@@ -59,10 +63,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
-import edu.wpi.first.wpilibj2.command.button.POVButton;
-
 import java.util.List;
-
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
@@ -104,6 +105,7 @@ public class RobotContainer {
   public void init() {
     m_LedSubsystem.setColor(true);
     last_pov = gamePad1.getPOV();
+    SetupTurntableCamera();
   }
 
   public void periodic() {
@@ -117,8 +119,8 @@ public class RobotContainer {
   // The driver's controller
   // define Joysticks and GamePads
 
-  private static Joystick joystick1 = new Joystick(0);
-  private static Joystick joystick2 = new Joystick(1);
+  private static Joystick joystick1 = new Joystick(1);
+  private static Joystick joystick2 = new Joystick(0);
   private static GenericHID gamePad1 = new GenericHID(2);
 
   //  define buttons and controls
@@ -135,20 +137,21 @@ public class RobotContainer {
   private static JoystickButton joystick1Button10 = new JoystickButton(joystick1, 10);
   private static JoystickButton joystick1Button6 = new JoystickButton(joystick1, 6);
   private static JoystickButton joystick1Button7 = new JoystickButton(joystick1, 7);
-  public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
-
+  private static JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
+  private static JoystickButton joystick2Button10 = new JoystickButton(joystick2, 10);
+  private static JoystickButton joystick2Button11 = new JoystickButton(joystick2, 11);
   //blue
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
-  //green
   private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
-  //red
   private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
   //yellow
   private static JoystickButton gamePad1Button4  = new JoystickButton(gamePad1, 4);
+  private static JoystickButton gamePad1Button6 = new JoystickButton(gamePad1, 6);
   //start button
   private static JoystickButton gamePad1Button8  = new JoystickButton(gamePad1, 8);
   //Right Joystick press
   private static JoystickButton gamePad1Button10  = new JoystickButton(gamePad1, 10);
+  private static JoystickButton gamePad1Button5 = new JoystickButton(gamePad1, 5);
   
   
   private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
@@ -183,6 +186,7 @@ public class RobotContainer {
   private final IntakeExtendSubsystem m_intakeExtendSubsystem =   new IntakeExtendSubsystem();
   private final IntakeInhaleSubsystem m_intakeInhaleSubsystem =   new IntakeInhaleSubsystem();
   private final TurntableSubsystem    m_TurntableSubsystem =      new TurntableSubsystem();
+  private final OpenVisionSubsystem m_OpenVisionSubsystem = new OpenVisionSubsystem();
   
 
   /*  ****          Define The robot's Commands       ****   /
@@ -210,7 +214,9 @@ public class RobotContainer {
   private final IntakeInhaleCommand    m_intakeConeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
-
+  //Temp Command
+  private final OpenVisionCommand m_CheckTurntableCommand = new OpenVisionCommand(m_OpenVisionSubsystem, 1);
+  private final OpenVisionCommand m_CheckAlignCommand = new OpenVisionCommand(m_OpenVisionSubsystem, 2);
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
   //private int armExtensionSetting = 0;
@@ -239,8 +245,16 @@ public class RobotContainer {
       }
     }
 
-    public void checkButtonInputs() {  
 
+    public static CvSource outputStream;
+    public void SetupTurntableCamera() {
+      outputStream = CameraServer.putVideo("TurntableCam Output", 360, 640);
+    }
+
+    public void checkButtonInputs() {
+      if (OpenVisionSubsystem.getErodedImageMulti() != null) {
+      outputStream.putFrame(OpenVisionSubsystem.getErodedImageMulti());
+      }
       SmartDashboard.putNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
       //sets LEDs to Purple
      /*  if(gamePad1.getRawButton(3)) {
@@ -282,8 +296,8 @@ public class RobotContainer {
       joystick1Button3.whileTrue(m_armNegCommand);
       joystick1Button11.whileTrue(m_armExtendCommand);
       joystick1Button10.whileTrue(m_armRetractCommand);
-      joystick1Button6.whileTrue(m_TurntableLeftCommand);
-      joystick1Button7.whileTrue(m_TurntableRightCommand);
+      gamePad1Button5.whileTrue(m_TurntableLeftCommand);
+      gamePad1Button6.whileTrue(m_TurntableRightCommand);
       joystick2Button5.whileTrue(m_intakeCubeCommand);
       joystick2Button4.whileTrue(m_intakeConeCommand);
       joystick2Button2.whileTrue(m_intakeReverseCommand);
@@ -292,6 +306,12 @@ public class RobotContainer {
       gamePad1Button1.whileTrue(m_gripperReleaseCommand);
       gamePad1Button3.whileTrue(m_gripperCubeCommand);
       gamePad1Button4.whileTrue(m_gripperConeCommand);
+
+      joystick2Button10.whileTrue(m_CheckTurntableCommand);
+      joystick2Button11.whileTrue(m_CheckAlignCommand);
+
+      joystick2Button10.whileTrue(m_CheckTurntableCommand);
+      joystick2Button11.whileTrue(m_CheckAlignCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);
