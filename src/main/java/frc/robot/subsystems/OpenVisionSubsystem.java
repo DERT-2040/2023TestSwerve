@@ -3,6 +3,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.OpenVisionConstants;
 
@@ -54,20 +55,18 @@ public class OpenVisionSubsystem extends SubsystemBase{
         image_rotation_angle = 90;
         erodecycles = 1;
         blurradius = 5;
-        vertical_threshold = 200;
+        vertical_threshold = 320;
         alignment_error_thershold = 30;
         //Other Objects
         lower_threshold2 = new Scalar(0, 0, 255);
         upper_threshold2 = new Scalar(0, 0, 255);
         eroded_image_roti = new Mat();
         eroded_image_alin = new Mat();
-        frame = new Mat();
-        rotation_matrix = new Mat();
         threshold1_mask = new Mat();
         threshold2_mask = new Mat();
         kernel_Mat = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(5, 5));
         hierarchey = new Mat();
-        rotation_matrix = Imgproc.getRotationMatrix2D(new Point((OpenVisionConstants.cameraWidth/2),(OpenVisionConstants.cameraHeight/2)), image_rotation_angle, rotation_direction);
+        incoming_frame = new Mat();
     }
     private static int h_thresh_1;
     private static int h_thresh_2;
@@ -90,8 +89,7 @@ public class OpenVisionSubsystem extends SubsystemBase{
     static int white_stop;
     static int image_rotation_angle;
     static int rotation_direction;
-    static Mat frame;
-    static Mat rotation_matrix;
+    static Mat incoming_frame;
     static Scalar lower_threshold1;
     static Scalar upper_threshold1;
     static Scalar lower_threshold2;
@@ -104,9 +102,10 @@ public class OpenVisionSubsystem extends SubsystemBase{
         //
         // Image Processing
         //
-        cameraCap.grabFrame(frame);
-        //Warp affine to complete the operation
-        Imgproc.warpAffine(frame, frame, rotation_matrix, new Size((OpenVisionConstants.cameraHeight),(OpenVisionConstants.cameraWidth)), Imgproc.INTER_LINEAR);
+        cameraCap.grabFrame(incoming_frame);
+        //Rotate the image 90 degrees
+        Mat frame = new Mat();
+        Core.rotate(incoming_frame, frame, Core.ROTATE_90_COUNTERCLOCKWISE);
         //Apply Box Blur
         Imgproc.blur(frame, frame, new Size(blurradius, blurradius));
         //Convert to HSV
@@ -161,12 +160,13 @@ public class OpenVisionSubsystem extends SubsystemBase{
             //Draw the Rectangle (Not Neeeded)
             Imgproc.rectangle(eroded_image_multi, pt1, pt2, new Scalar(255, 0, 0));
             //Pass or Fail math
-            //double boxRatio = (largestRect.width / largestRect.height);
+            double boxRatio = ((double)largestRect.width / largestRect.height);
             int box_pixel_size = largestRect.height * largestRect.width;
+            SmartDashboard.putNumber("Box Ratio", boxRatio);
             double ratio = (Imgproc.contourArea(turntableContours.get(roti_idx))) / box_pixel_size;
             boolean pass_bw = false;
             boolean pass_box_size = false;
-            if (ratio >= 0.48) {
+            if (boxRatio <= 1.1) {
                     pass_bw = true;
                 } else {
                     pass_bw = false;

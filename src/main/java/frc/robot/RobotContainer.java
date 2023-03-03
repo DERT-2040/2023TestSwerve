@@ -117,8 +117,8 @@ public class RobotContainer {
   // The driver's controller
   // define Joysticks and GamePads
 
-  private static Joystick joystick1 = new Joystick(0);
-  private static Joystick joystick2 = new Joystick(1);
+  private static Joystick joystick1 = new Joystick(1);
+  private static Joystick joystick2 = new Joystick(0);
   private static GenericHID gamePad1 = new GenericHID(2);
 
   //  define buttons and controls
@@ -140,9 +140,10 @@ public class RobotContainer {
   private static JoystickButton joystick2Button11 = new JoystickButton(joystick2, 11);
 
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
-  private static JoystickButton gamePad1Button1  = new JoystickButton(gamePad1, 1);
+  private static JoystickButton gamePad1Button5  = new JoystickButton(gamePad1, 5);
   private static JoystickButton gamePad1Button2  = new JoystickButton(gamePad1, 2);
   private static JoystickButton gamePad1Button4  = new JoystickButton(gamePad1, 4);
+  private static JoystickButton gamePad1Button6 = new JoystickButton(gamePad1, 6);
   //start button
   private static JoystickButton gamePad1Button8  = new JoystickButton(gamePad1, 8);
   
@@ -278,8 +279,8 @@ public class RobotContainer {
       joystick1Button3.whileTrue(m_armNegCommand);
       joystick1Button11.whileTrue(m_armExtendCommand);
       joystick1Button10.whileTrue(m_armRetractCommand);
-      joystick1Button6.whileTrue(m_TurntableLeftCommand);
-      joystick1Button7.whileTrue(m_TurntableRightCommand);
+      gamePad1Button5.whileTrue(m_TurntableLeftCommand);
+      gamePad1Button6.whileTrue(m_TurntableRightCommand);
       joystick2Button5.whileTrue(m_intakeCubeCommand);
       joystick2Button4.whileTrue(m_intakeConeCommand);
       joystick2Button2.whileTrue(m_intakeReverseCommand);
