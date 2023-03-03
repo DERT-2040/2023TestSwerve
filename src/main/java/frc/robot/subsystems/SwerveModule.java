@@ -174,6 +174,7 @@ public class SwerveModule {  // Class Definition  ******************************
     //SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
     //SmartDashboard.putNumber("Target", state.angle.getRadians());
     //SmartDashboard.putNumber("Velocity", m_turningEncoder.get);
+    SmartDashboard.putNumber(turnOffsetKey + " Turn Position", GetTurningCalibrationValue());
     SmartDashboard.putNumber(turnOffsetKey + " Drive Output Current", m_driveMotor.getOutputCurrent());
     SmartDashboard.putNumber(turnOffsetKey + " Turn Output Current", m_turningMotor.getOutputCurrent());
     SmartDashboard.putNumber(turnOffsetKey + " Drive Temp F", m_driveMotor.getMotorTemperature() * (9/5) + 32);

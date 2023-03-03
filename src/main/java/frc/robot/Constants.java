@@ -48,9 +48,9 @@ public final class Constants {
     public static final boolean kFrontRightDriveEncoderReversed = false;
     public static final boolean kRearRightDriveEncoderReversed = true;
 
-    public static final double kTrackWidth = 0.37465;
+    public static final double kTrackWidth = 0.52705;//0.37465;
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = 0.37465;
+    public static final double kWheelBase = 0.73025;
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics =
         new SwerveDriveKinematics(
