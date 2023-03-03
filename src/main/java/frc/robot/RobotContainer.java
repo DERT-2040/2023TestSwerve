@@ -119,8 +119,8 @@ public class RobotContainer {
   // The driver's controller
   // define Joysticks and GamePads
 
-  private static Joystick joystick1 = new Joystick(1);
-  private static Joystick joystick2 = new Joystick(0);
+  private static Joystick joystick1 = new Joystick(0);
+  private static Joystick joystick2 = new Joystick(1);
   private static GenericHID gamePad1 = new GenericHID(2);
 
   //  define buttons and controls
