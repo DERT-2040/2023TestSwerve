@@ -18,12 +18,14 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.simulation.JoystickSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OpenVisionConstants;
+import frc.robot.commands.AlignTurntableCommand;
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
@@ -153,7 +155,6 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button10  = new JoystickButton(gamePad1, 10);
   private static JoystickButton gamePad1Button5 = new JoystickButton(gamePad1, 5);
   
-  
   private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
   private static POVButton      gamePad1POVUpRight =    new POVButton(gamePad1, 45);
   private static POVButton      gamePad1POVRight =      new POVButton(gamePad1, 90);
@@ -214,9 +215,10 @@ public class RobotContainer {
   private final IntakeInhaleCommand    m_intakeConeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
+  private final AlignTurntableCommand m_AlignTurntableCommand = new AlignTurntableCommand(m_OpenVisionSubsystem);
   //Temp Command
-  private final OpenVisionCommand m_CheckTurntableCommand = new OpenVisionCommand(m_OpenVisionSubsystem, 1);
-  private final OpenVisionCommand m_CheckAlignCommand = new OpenVisionCommand(m_OpenVisionSubsystem, 2);
+  private final OpenVisionCommand m_CheckTurntableCommand = new OpenVisionCommand(m_OpenVisionSubsystem);
+  private final OpenVisionCommand m_CheckAlignCommand = new OpenVisionCommand(m_OpenVisionSubsystem);
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
   //private int armExtensionSetting = 0;
@@ -310,8 +312,8 @@ public class RobotContainer {
       joystick2Button10.whileTrue(m_CheckTurntableCommand);
       joystick2Button11.whileTrue(m_CheckAlignCommand);
 
-      joystick2Button10.whileTrue(m_CheckTurntableCommand);
-      joystick2Button11.whileTrue(m_CheckAlignCommand);
+      joystick2Button10.whileTrue(m_AlignTurntableCommand);
+      joystick2Button11.whileTrue(m_CheckTurntableCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);

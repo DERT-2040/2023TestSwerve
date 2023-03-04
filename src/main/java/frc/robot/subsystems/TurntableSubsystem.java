@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class TurntableSubsystem extends SubsystemBase {
-    Talon turntableMotor;
+    static Talon turntableMotor;
     int turntableMotorID = 3;
 
     public TurntableSubsystem() {
@@ -17,7 +17,7 @@ public class TurntableSubsystem extends SubsystemBase {
     }
 
     //WE SPIN WAAAAAAAHHHHHHHHHOOOOOOOOOOOOOOOOOOOO
-    public void moveTurntable(double speed) {
+    public static void moveTurntable(double speed) {
         turntableMotor.set(speed);
     }
 
