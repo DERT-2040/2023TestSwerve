@@ -7,6 +7,7 @@ import frc.robot.subsystems.OpenVisionSubsystem;
 public class OpenVisionCommand extends CommandBase {
    OpenVisionSubsystem m_subsystem;
    int m_mode;
+   int process_timer = 1;
      public OpenVisionCommand(OpenVisionSubsystem subsystem, int mode) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
@@ -17,7 +18,14 @@ public class OpenVisionCommand extends CommandBase {
      
      @Override
      public void initialize() {
-      
+      if (process_timer != 10) {
+         m_subsystem.ProcessVision();
+         SmartDashboard.putBoolean("Turntable Pass/Fail", m_subsystem.CheckTurntable());
+      } else {
+         m_subsystem.ProcessVision();
+         SmartDashboard.putBoolean("Turntable Pass/Fail", m_subsystem.CheckTurntable());
+         process_timer = 1;
+      }
      }
  
      @Override
