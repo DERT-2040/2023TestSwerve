@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OpenVisionConstants;
-import frc.robot.commands.AlignTurntableCommand;
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
@@ -215,7 +214,6 @@ public class RobotContainer {
   private final IntakeInhaleCommand    m_intakeConeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
-  private final AlignTurntableCommand m_AlignTurntableCommand = new AlignTurntableCommand(m_OpenVisionSubsystem);
   //Temp Command
   private final OpenVisionCommand m_CheckTurntableCommand = new OpenVisionCommand(m_OpenVisionSubsystem);
 
@@ -310,7 +308,6 @@ public class RobotContainer {
       gamePad1Button4.whileTrue(m_gripperConeCommand);
 
       joystick2Button10.whileTrue(m_CheckTurntableCommand);
-      joystick2Button11.whileTrue(m_CheckTurntableCommand);
 
       
 
