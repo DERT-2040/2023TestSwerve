@@ -218,7 +218,7 @@ public class RobotContainer {
   private final AlignTurntableCommand m_AlignTurntableCommand = new AlignTurntableCommand(m_OpenVisionSubsystem);
   //Temp Command
   private final OpenVisionCommand m_CheckTurntableCommand = new OpenVisionCommand(m_OpenVisionSubsystem);
-  private final OpenVisionCommand m_CheckAlignCommand = new OpenVisionCommand(m_OpenVisionSubsystem);
+
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
   //private int armExtensionSetting = 0;
@@ -310,10 +310,9 @@ public class RobotContainer {
       gamePad1Button4.whileTrue(m_gripperConeCommand);
 
       joystick2Button10.whileTrue(m_CheckTurntableCommand);
-      joystick2Button11.whileTrue(m_CheckAlignCommand);
-
-      joystick2Button10.whileTrue(m_AlignTurntableCommand);
       joystick2Button11.whileTrue(m_CheckTurntableCommand);
+
+      
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);
