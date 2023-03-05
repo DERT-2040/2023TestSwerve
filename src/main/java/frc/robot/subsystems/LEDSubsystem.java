@@ -14,7 +14,7 @@ public class LEDSubsystem extends SubsystemBase {
 
     public LEDSubsystem() {
         m_led = new AddressableLED(1);
-        m_ledBuffer = new AddressableLEDBuffer(6);
+        m_ledBuffer = new AddressableLEDBuffer(150);
         m_led.setLength(m_ledBuffer.getLength());
         isYellow = false;
 
@@ -55,7 +55,7 @@ public class LEDSubsystem extends SubsystemBase {
             for(int i=0; i<m_ledBuffer.getLength(); i++) {
                 //sets the LEDs to yellow
                 
-                m_ledBuffer.setRGB(i, 0, (int)((Math.sin(.01 * counter) + 1) * 255 / 2), (int)((-Math.sin(.01 * counter) + 1) * 255 / 2));
+                m_ledBuffer.setRGB(i, 0, (int)( .5 * (Math.sin(.1 * counter + i * .25) + 1) * 255 / 2), (int)((-Math.sin(.1 * counter + i * .25) + 1) * 255 / 2));
                 SmartDashboard.putNumber("Green", (int)((Math.sin(.01 * counter) + 1) * 255 / 2));
                 SmartDashboard.putNumber("Blue", (int)((-Math.sin(.01 * counter) + 1) * 255 / 2));
                 //m_ledBuffer.setRGB(i, 255, 255, 255);
