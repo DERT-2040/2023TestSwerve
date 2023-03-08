@@ -26,25 +26,24 @@ public class ArmManualCommand extends CommandBase {
      
      @Override
      public void initialize() {
-        
+        m_subsystem.setSetting(2);
      }
  
      @Override
      public void execute() {
-        m_subsystem.setSetting(2);
         if(!manualMode.getAsBoolean()) {
             if(Math.abs(armExtend.getAsDouble()) > .3) {
                 if(Math.abs(armRotate.getAsDouble()) > .2) {
                     m_subsystem.manualRotateArm(.7 * armRotate.getAsDouble());
                 }
-                m_subsystem.setExtendSpeed(.4 * armExtend.getAsDouble());
+                m_subsystem.setExtendSpeed(-.4 * armExtend.getAsDouble());
             } else {
                 m_subsystem.rotate(.5 * armRotate.getAsDouble());
             }
         } else {
             if(Math.abs(armExtend.getAsDouble()) > .1) {
                 
-                m_subsystem.setExtendSpeed(.4 * armExtend.getAsDouble());
+                m_subsystem.setExtendSpeed(-.4 * armExtend.getAsDouble());
             }
             
             if(Math.abs(armRotate.getAsDouble()) > .1) {

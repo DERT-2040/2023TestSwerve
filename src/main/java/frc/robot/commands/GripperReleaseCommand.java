@@ -24,7 +24,7 @@ public class GripperReleaseCommand extends CommandBase {
      @Override
      public void execute() {
       //m_subsystem.grip_speed(.9);
-      m_subsystem.grip_goto(.97);
+      m_subsystem.grip_goto(1);
          
          
      }

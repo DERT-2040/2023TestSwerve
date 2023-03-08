@@ -221,7 +221,7 @@ public class RobotContainer {
 
   private boolean armManualMode = false;
   public boolean getArmManualMode() {
-    return armManualMode;
+    return !armManualMode;
   }
 
 

@@ -8,18 +8,26 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LEDSubsystem extends SubsystemBase {
     AddressableLED m_led;
     AddressableLEDBuffer m_ledBuffer;
+    AddressableLED m_led1;
+    AddressableLEDBuffer m_ledBuffer1;
     int counter;
     boolean voltage;
     boolean isYellow;
 
     public LEDSubsystem() {
         m_led = new AddressableLED(1);
-        m_ledBuffer = new AddressableLEDBuffer(150);
+        m_ledBuffer = new AddressableLEDBuffer(37);
         m_led.setLength(m_ledBuffer.getLength());
+
+        /*m_led1 = new AddressableLED(5);
+        m_ledBuffer1 = new AddressableLEDBuffer(37);
+        m_led1.setLength(m_ledBuffer.getLength());*/
+
         isYellow = false;
 
         setColor(false);
         m_led.start();
+        //m_led1.start();
         counter = 0;
         voltage = true;
 
@@ -33,13 +41,24 @@ public class LEDSubsystem extends SubsystemBase {
                     //sets the LEDs to yellow
                     m_ledBuffer.setRGB(i, 70, 25, 0);
                 }
+
+                /*for(int i=0; i<m_ledBuffer1.getLength(); i++) {
+                    //sets the LEDs to yellow
+                    m_ledBuffer1.setRGB(i, 70, 25, 0);
+                }*/
+
             } else {
                 for(int i=0; i<m_ledBuffer.getLength(); i++) {
                     //sets the LEDs to purple
-                    m_ledBuffer.setRGB(i, 80, 0, 40);
+                    m_ledBuffer.setRGB(i, 75, 0, 45);
                 }
+                /*for(int i=0; i<m_ledBuffer1.getLength(); i++) {
+                    //sets the LEDs to purple
+                    m_ledBuffer1.setRGB(i, 75, 0, 45);
+                }*/
             }
             m_led.setData(m_ledBuffer);
+            //m_led1.setData(m_ledBuffer1);
             SmartDashboard.putBoolean("LED Color", isYellow);
         }
     }
@@ -55,12 +74,19 @@ public class LEDSubsystem extends SubsystemBase {
             for(int i=0; i<m_ledBuffer.getLength(); i++) {
                 //sets the LEDs to yellow
                 
-                m_ledBuffer.setRGB(i, 0, (int)( .5 * (Math.sin(.1 * counter + i * .25) + 1) * 255 / 2), (int)((-Math.sin(.1 * counter + i * .25) + 1) * 255 / 2));
-                SmartDashboard.putNumber("Green", (int)((Math.sin(.01 * counter) + 1) * 255 / 2));
-                SmartDashboard.putNumber("Blue", (int)((-Math.sin(.01 * counter) + 1) * 255 / 2));
+                m_ledBuffer.setRGB(i, 0, (int)( .5 * ((Math.sin(.12 * counter + i * .25) + 1) * 20 / 2 + 35)), (int)((-Math.sin(.12 * counter + i * .25) + 1) * 45 / 2));
+            
                 //m_ledBuffer.setRGB(i, 255, 255, 255);
             }
+            /*for(int i=0; i<m_ledBuffer1.getLength(); i++) {
+                //sets the LEDs to yellow
+                
+                m_ledBuffer1.setRGB(i, 0, (int)( .5 * (Math.sin(.1 * counter + i * .25) + 1) * 255 / 2), (int)((-Math.sin(.1 * counter + i * .25) + 1) * 255 / 2));
+                
+                //m_ledBuffer.setRGB(i, 255, 255, 255);
+            }*/
             m_led.setData(m_ledBuffer);
+            //m_led1.setData(m_ledBuffer1);
 
 
                 /*for(int i=0; i<m_ledBuffer.getLength(); i+=2) {
@@ -90,7 +116,12 @@ public class LEDSubsystem extends SubsystemBase {
             //sets the LEDs to red
             m_ledBuffer.setRGB(i, 255, 0, 0);
         }
+        /*for(int i=0; i<m_ledBuffer1.getLength(); i++) {
+            //sets the LEDs to red
+            m_ledBuffer1.setRGB(i, 255, 0, 0);
+        }*/
         m_led.setData(m_ledBuffer);
+        //m_led1.setData(m_ledBuffer1);
         voltage = false;
     }
 

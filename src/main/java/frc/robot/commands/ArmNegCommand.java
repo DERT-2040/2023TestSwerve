@@ -22,8 +22,8 @@ public class ArmNegCommand extends CommandBase{
  
      @Override
      public void execute() {
-         //m_subsystem.rotate(.3);
-         m_subsystem.setArmAngle(30);
+         m_subsystem.manualRotateArm(.3);
+         //m_subsystem.setArmAngle(30);
      }
  
      @Override

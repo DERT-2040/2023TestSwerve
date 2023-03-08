@@ -21,7 +21,6 @@ public class ArmSubsystem extends SubsystemBase {
     CANSparkMax arm;
     DutyCycleEncoder rotateEncoder;
     PIDController rotateControl;
-    int subArmiD = 40; //change id to correct id later
 
     Spark gripperTalon;
     //DigitalInput gripperLimitSwitch;
@@ -33,12 +32,13 @@ public class ArmSubsystem extends SubsystemBase {
     RelativeEncoder extendEncoder;
     PIDController extendControl;
 
+    //current arm target position setting
     int armSetting;
 
     double[] rotateAngles =        {-200, -90, -70,  -45,  0,    50,   200};
-    double[] extendDistancesHigh = {-.9,  -.9, -.3,  -.2,  -.2,  -.2,  -.2};
-    double[] extendDistancesMid =  {-.9,  -.9, -.9,  -.5,  -.2,  -.2,  -.2};
-    double[] extendDistancesLow =  {-.9,  -.9, -.9,  -.9,  -.2,  -.2,  -.2};
+    double[] extendDistancesHigh = {.9,  .9, .3,  .2,  .2,  .2,  .2};
+    double[] extendDistancesMid =  {.9,  .9, .9,  .5,  .2,  .2,  .2};
+    double[] extendDistancesLow =  {.9,  .9, .9,  .9,  .2,  .2,  .2};
 
     public ArmSubsystem() {
         //65 rotations is full extention for extending arm
@@ -56,7 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
         gripperTalon.set(0);
 
         
-        arm = new CANSparkMax(subArmiD, MotorType.kBrushless);
+        arm = new CANSparkMax(31, MotorType.kBrushless);
         arm.restoreFactoryDefaults();
         arm.setIdleMode(IdleMode.kBrake);
         arm.setSecondaryCurrentLimit(40);
@@ -83,7 +83,7 @@ public class ArmSubsystem extends SubsystemBase {
         armExtendNeo.setSmartCurrentLimit(20,10000);
         armExtendNeo.setOpenLoopRampRate(0.75);
         extendEncoder = armExtendNeo.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
-        extendEncoder.setPosition(-.4 * 58);
+        extendEncoder.setPosition(.41 * 58);
         extendControl = new PIDController(1.5, 0, 0.1);
 
 
@@ -98,8 +98,9 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void grip_speed(double power) {
-        double gripPosition = (gripperEncoder.getAbsolutePosition() - .5711) / .23;
+        double gripPosition = (gripperEncoder.getAbsolutePosition() - .3) * 3.33333;
         SmartDashboard.putNumber("Gripper Encoder Position", gripPosition);
+        SmartDashboard.putNumber("Grip Raw Pos", gripperEncoder.getAbsolutePosition());
 
 
         
@@ -110,12 +111,12 @@ public class ArmSubsystem extends SubsystemBase {
          } else {
             m_count = m_count - (m_currentCount - m_prevCount);
          }*/
-        if(gripPosition < 0.05) {
-            if(power > 0) {
+        if(gripPosition < 0.15) {
+            if(power < 0) {
                 power = 0;
             }
-        } else if(gripPosition > 1) {
-            if(power < 0) {
+        } else if(gripPosition > 0.98) {
+            if(power > 0) {
                 power = 0;
             }
         }
@@ -139,7 +140,7 @@ public class ArmSubsystem extends SubsystemBase {
         }*/
         //SmartDashboard.putNumber("Counter", m_count);
 
-        grip_speed(-gripperController.calculate((gripperEncoder.getAbsolutePosition() - .5711) / .23, location));
+        grip_speed(gripperController.calculate((gripperEncoder.getAbsolutePosition() - .3) * 3.33333, location));
     }
 
     /*
@@ -173,7 +174,7 @@ public class ArmSubsystem extends SubsystemBase {
             
             
              arm.set(speed);
-             //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
+             SmartDashboard.putNumber("Arm Position", rotateEncoder.getAbsolutePosition());
          }
     }
 
@@ -234,15 +235,15 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void setExtendSpeed(double speed) {
-        if(extendEncoder.getPosition() / 57 < -.9) {
+        /*if(extendEncoder.getPosition() / 57 > .9) {
             if(speed < 0) {
                 speed = 0;
             }
-        } else if(extendEncoder.getPosition() / 57 > -.1) {
+        } else if(extendEncoder.getPosition() / 57 < .1) {
             if(speed > 0) {
                 speed = 0;
             }
-        }
+        }*/
         armExtendNeo.set(speed);
         SmartDashboard.putNumber("Actual Arm Extend", (extendEncoder.getPosition() / 57));
         

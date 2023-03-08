@@ -29,7 +29,7 @@ public class ArmExtendCommand extends CommandBase {
   @Override
   public void execute() {
     //m_subsystem.setExtendSpeed(-0.1);
-    m_subsystem.setExtendPosition(-.85);
+    m_subsystem.setExtendPosition(.85);
   }
 
   // Called once the command ends or is interrupted.
