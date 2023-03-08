@@ -76,7 +76,7 @@ public class VisionSubsystem extends SubsystemBase {
     public Pose2d getPose() {
         var result = camera.getLatestResult();
         var resultTimestamp = result.getTimestampSeconds();
-        if(/*resultTimestamp != previousTimestamp &&*/ result.hasTargets()) {
+        if(resultTimestamp != previousTimestamp && result.hasTargets()) {
             previousTimestamp = resultTimestamp;
             var target = result.getBestTarget();
             var fiducialID = target.getFiducialId();

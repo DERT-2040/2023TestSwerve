@@ -56,7 +56,7 @@ public class ArmSubsystem extends SubsystemBase {
         gripperTalon.set(0);
 
         
-        arm = new CANSparkMax(31, MotorType.kBrushless);
+        arm = new CANSparkMax(45, MotorType.kBrushless);
         arm.restoreFactoryDefaults();
         arm.setIdleMode(IdleMode.kBrake);
         arm.setSecondaryCurrentLimit(40);
@@ -168,14 +168,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     //for arm rotation with joystick and no automatic extention
     public void manualRotateArm(double speed) {
-        if((((rotateEncoder.getAbsolutePosition() - .76 ) * 352) < -100 && speed < 0) || (((rotateEncoder.getAbsolutePosition() - .76 ) * 352) > 50) && speed > 0) {
-            arm.set(0);
-         } else {
+      //  if((((rotateEncoder.getAbsolutePosition() - .76 ) * 352) < -100 && speed < 0) || (((rotateEncoder.getAbsolutePosition() - .76 ) * 352) > 50) && speed > 0) {
+      //      arm.set(0);
+      //   } else {
             
             
              arm.set(speed);
              SmartDashboard.putNumber("Arm Position", rotateEncoder.getAbsolutePosition());
-         }
+        // }
     }
 
 
