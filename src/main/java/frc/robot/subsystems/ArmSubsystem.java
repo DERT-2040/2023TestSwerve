@@ -174,36 +174,42 @@ public class ArmSubsystem extends SubsystemBase {
             
             
              arm.set(speed);
-             SmartDashboard.putNumber("Arm Position", rotateEncoder.getAbsolutePosition());
+             SmartDashboard.putNumber("Known Arm Position", (rotateEncoder.getAbsolutePosition()));
         // }
-    }
+    }  
 
 
 
     //rotates arm by speed and extends automatically
     public void rotate(double speed) { // from Feb24 code
         //PRevents the arm from going higher than a certain amount
-        if((((rotateEncoder.getAbsolutePosition() - .76 ) * 352) < -100 && speed < 0) || (((rotateEncoder.getAbsolutePosition() - .76 ) * 352) > 50) && speed > 0) {
-           arm.set(0);
+        if((((rotateEncoder.getAbsolutePosition() - .166 ) * 352) < -100 && speed < 0) ||
+           (((rotateEncoder.getAbsolutePosition() - .166 ) * 352) > 50) && speed > 0) {
+            arm.set(0);
         } else {
            
            
             arm.set(speed);
-            extendAutomatically(((rotateEncoder.getAbsolutePosition() - .76 ) * 352));
+            extendAutomatically(((rotateEncoder.getAbsolutePosition() - .166 ) * 352));
             //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
         }
 
-        SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
+  //      SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
     }
+
+    private double getArmRotation(){
+        return((rotateEncoder.getAbsolutePosition() - 0.166) * 352);
+    }
+
 
     //sets the arm angle with default setting of high   
     public void setArmAngle(double angle) {
         armSetting = 2;
-        double actualArmAngle = (rotateEncoder.getAbsolutePosition()  - .76 ) * 352; //* (90/60) * (90.0/50.0) * 2;
+        double actualArmAngle = (rotateEncoder.getAbsolutePosition()  - .166 ) * 352; //* (90/60) * (90.0/50.0) * 2;
         rotate(rotateControl.calculate(actualArmAngle, angle));
-        SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
+    //    SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
         
-        SmartDashboard.putNumber("Desired Arm Angle", angle);
+    //    SmartDashboard.putNumber("Desired Arm Angle", angle);
         
     }
 
@@ -211,7 +217,7 @@ public class ArmSubsystem extends SubsystemBase {
     //sets the arm angle and extend based on provided setting
     public void setArmWithSetting(int setting) {
         armSetting = setting;
-        double actualArmAngle = (rotateEncoder.getAbsolutePosition()  - .76 ) * 352; //* (90/60) * (90.0/50.0) * 2;
+        double actualArmAngle = (rotateEncoder.getAbsolutePosition()  - .166 ) * 352; //* (90/60) * (90.0/50.0) * 2;
         if(setting == 0) {
             rotate(rotateControl.calculate(actualArmAngle, -45));
             SmartDashboard.putNumber("Desired Arm Angle", -45);

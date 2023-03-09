@@ -44,7 +44,7 @@ public class SwerveModule {  // Class Definition  ******************************
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
-          0.08,  // was 0.7
+          0.15,  // was 0.7
           0.01, // was 0.005
           0.000001,
           new TrapezoidProfile.Constraints(
