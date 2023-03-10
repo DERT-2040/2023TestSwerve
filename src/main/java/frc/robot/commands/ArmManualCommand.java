@@ -38,7 +38,7 @@ public class ArmManualCommand extends CommandBase {
                 }
                 m_subsystem.setExtendSpeed(-.4 * armExtend.getAsDouble());
             } else {
-                m_subsystem.rotate(.5 * armRotate.getAsDouble());
+                m_subsystem.rotate(-.5 * armRotate.getAsDouble());
             }
         } else {
             if(Math.abs(armExtend.getAsDouble()) > .1) {

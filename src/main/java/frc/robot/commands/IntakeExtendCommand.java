@@ -37,7 +37,7 @@ public class IntakeExtendCommand extends CommandBase {
          m_subsystem.goToPosition(20);
          break;
          case 3:
-         m_subsystem.goToPosition(40);
+         m_subsystem.goToPosition(47);
          break;
          default:
          break;
@@ -52,7 +52,7 @@ public class IntakeExtendCommand extends CommandBase {
          m_subsystem.goToPosition(20);
          break;
          case 3:
-         m_subsystem.goToPosition(40);
+         m_subsystem.goToPosition(47);
          break;
          default:
          break;

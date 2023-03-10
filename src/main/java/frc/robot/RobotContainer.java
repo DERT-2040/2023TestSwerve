@@ -136,6 +136,8 @@ public class RobotContainer {
   private static JoystickButton joystick1Button6 = new JoystickButton(joystick1, 6);
   private static JoystickButton joystick1Button7 = new JoystickButton(joystick1, 7);
   public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
+  private static JoystickButton joystick1Button4 = new JoystickButton(joystick1,4);
+  private static JoystickButton joystick1Button5 = new JoystickButton(joystick1, 5);
 
   //blue
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
@@ -149,6 +151,10 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button8  = new JoystickButton(gamePad1, 8);
   //Right Joystick press
   private static JoystickButton gamePad1Button10  = new JoystickButton(gamePad1, 10);
+  //left bumper
+  private static JoystickButton gamePad1Button5  = new JoystickButton(gamePad1, 5);
+  //right bumper
+  private static JoystickButton gamePad1Button6  = new JoystickButton(gamePad1, 6);
   
   
   private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
@@ -210,6 +216,9 @@ public class RobotContainer {
   private final IntakeInhaleCommand    m_intakeConeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
   private final IntakeInhaleCommand    m_intakeCubeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
   private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
+  private final IntakeExtendCommand m_intakeLongPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 3);
+  private final IntakeExtendCommand m_intakeMiddlePosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 2);
+  private final IntakeExtendCommand m_intakeInPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 1);
 
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
@@ -221,7 +230,7 @@ public class RobotContainer {
 
   private boolean armManualMode = false;
   public boolean getArmManualMode() {
-    return !armManualMode;
+    return armManualMode;
   }
 
 
@@ -288,10 +297,15 @@ public class RobotContainer {
       joystick2Button4.whileTrue(m_intakeConeCommand);
       joystick2Button2.whileTrue(m_intakeReverseCommand);
       joystick2Button3.whileTrue(m_intakePositionCommand);
+      joystick1Button4.whileTrue(m_intakeInPosition);
+      joystick1Button3.whileTrue(m_intakeMiddlePosition);
+      joystick1Button5.whileTrue(m_intakeLongPosition);
 
       gamePad1Button1.whileTrue(m_gripperReleaseCommand);
       gamePad1Button3.whileTrue(m_gripperCubeCommand);
       gamePad1Button4.whileTrue(m_gripperConeCommand);
+      gamePad1Button5.whileTrue(m_TurntableLeftCommand);
+      gamePad1Button6.whileTrue(m_TurntableRightCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);

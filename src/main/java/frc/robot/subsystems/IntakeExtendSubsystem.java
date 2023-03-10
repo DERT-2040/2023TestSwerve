@@ -25,8 +25,11 @@ public class IntakeExtendSubsystem extends SubsystemBase {
     public IntakeExtendSubsystem() {
         extendMotor = new CANSparkMax(extendID, MotorType.kBrushless); //extendMotor = new Spark(extendID);//
         extendMotor.setIdleMode(IdleMode.kBrake);
+        extendMotor.setSecondaryCurrentLimit(20);
+        extendMotor.setSmartCurrentLimit(20);
         extendEncoder = extendMotor.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
         extendEncoder.setPosition(0);
+        
         //extendEncoder.setPositionConversionFactor(1/);
         extendController = extendMotor.getPIDController();
         extendController.setP(.015);
