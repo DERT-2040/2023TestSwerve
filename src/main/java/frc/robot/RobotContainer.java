@@ -34,6 +34,7 @@ import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperConeCommand;
 import frc.robot.commands.GripperCubeCommand;
 import frc.robot.commands.GripperReleaseCommand;
+import frc.robot.commands.IntakeExhaleCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
 import frc.robot.commands.TurntableLeftCommand;
@@ -219,6 +220,7 @@ public class RobotContainer {
   private final IntakeExtendCommand m_intakeMiddlePosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 2);
   private final IntakeExtendCommand m_intakeInPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 1);
   private final IntakeInhaleCommand m_IntakeInhale = new IntakeInhaleCommand(m_intakeInhaleSubsystem);
+  private final IntakeExhaleCommand m_IntakeExhale = new IntakeExhaleCommand(m_intakeInhaleSubsystem);
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
   //private int armExtensionSetting = 0;
@@ -292,7 +294,7 @@ public class RobotContainer {
       joystick1Button10.whileTrue(m_armRetractCommand);
       joystick1Button6.whileTrue(m_TurntableLeftCommand);
       joystick1Button7.whileTrue(m_TurntableRightCommand);
-      joystick2Button2.whileTrue(m_intakeReverseCommand);
+      joystick2Button2.whileTrue(m_IntakeExhale);
       joystick2Button3.whileTrue(m_intakePositionCommand);
       joystick2Button5.whileTrue(m_intakeInPosition);
       joystick2Button3.whileTrue(m_intakeMiddlePosition);

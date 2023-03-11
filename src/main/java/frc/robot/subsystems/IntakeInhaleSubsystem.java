@@ -33,8 +33,8 @@ public class IntakeInhaleSubsystem extends SubsystemBase {
             selectedObject = true;
         }
     }
-    public void stop() {
-        inhaleMotor.set(0);
+    public void setSpeed(int speed) {
+        inhaleMotor.set(speed);
     }
 }
 
