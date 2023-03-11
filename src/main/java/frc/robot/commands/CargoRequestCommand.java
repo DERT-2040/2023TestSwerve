@@ -28,7 +28,7 @@ public class CargoRequestCommand extends CommandBase {
   @Override
   public void initialize() {
     m_LEDSubsystem.switchColor();
-    
+    m_IntakeInhaleSubsystem.switchObject();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
