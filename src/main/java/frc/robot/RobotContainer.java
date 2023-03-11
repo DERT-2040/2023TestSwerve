@@ -25,6 +25,7 @@ import frc.robot.Constants.DriveConstants;
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
+import frc.robot.commands.ArmGrabPositionCommand;
 import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.ArmRetractCommand;
 import frc.robot.commands.ArmSelectedPositionCommand;
@@ -34,6 +35,7 @@ import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperConeCommand;
 import frc.robot.commands.GripperCubeCommand;
 import frc.robot.commands.GripperReleaseCommand;
+import frc.robot.commands.IntakeExhaleCommand;
 import frc.robot.commands.IntakeExtendCommand;
 import frc.robot.commands.IntakeInhaleCommand;
 import frc.robot.commands.TurntableLeftCommand;
@@ -138,6 +140,7 @@ public class RobotContainer {
   public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
   private static JoystickButton joystick1Button4 = new JoystickButton(joystick1,4);
   private static JoystickButton joystick1Button5 = new JoystickButton(joystick1, 5);
+  private static JoystickButton joystick2Button1 = new JoystickButton(joystick2, 1);
 
   //blue
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
@@ -155,6 +158,8 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button5  = new JoystickButton(gamePad1, 5);
   //right bumper
   private static JoystickButton gamePad1Button6  = new JoystickButton(gamePad1, 6);
+  //Back/select
+  private static JoystickButton gamePad1Button7  = new JoystickButton(gamePad1, 7);
   
   
   private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
@@ -204,22 +209,22 @@ public class RobotContainer {
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
   private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX, this::getArmManualMode);
   private final ArmSelectedPositionCommand m_armSelectedPositionCommand =   new ArmSelectedPositionCommand(m_armSubsystem, this::getArmPositionSetting);
+  private final ArmGrabPositionCommand m_armGrabPositionCommand = new ArmGrabPositionCommand(m_armSubsystem);
   private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_armSubsystem);
   private final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_armSubsystem);
   private final GripperConeCommand    m_gripperConeCommand =    new GripperConeCommand(m_armSubsystem);
-  private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
+  private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem, m_intakeInhaleSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
   private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
   private final TurntableLeftCommand  m_TurntableLeftCommand =  new TurntableLeftCommand(m_TurntableSubsystem);
-  private final IntakeInhaleCommand    m_intakeConeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
-  private final IntakeInhaleCommand    m_intakeCubeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
-  private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
+  private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem);
   private final IntakeExtendCommand m_intakeLongPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 3);
   private final IntakeExtendCommand m_intakeMiddlePosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 2);
   private final IntakeExtendCommand m_intakeInPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 1);
-
+  private final IntakeInhaleCommand m_IntakeInhale = new IntakeInhaleCommand(m_intakeInhaleSubsystem);
+  private final IntakeExhaleCommand m_IntakeExhale = new IntakeExhaleCommand(m_intakeInhaleSubsystem);
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
   //private int armExtensionSetting = 0;
@@ -293,19 +298,19 @@ public class RobotContainer {
       joystick1Button10.whileTrue(m_armRetractCommand);
       joystick1Button6.whileTrue(m_TurntableLeftCommand);
       joystick1Button7.whileTrue(m_TurntableRightCommand);
-      joystick2Button5.whileTrue(m_intakeCubeCommand);
-      joystick2Button4.whileTrue(m_intakeConeCommand);
-      joystick2Button2.whileTrue(m_intakeReverseCommand);
+      joystick2Button2.whileTrue(m_IntakeExhale);
       joystick2Button3.whileTrue(m_intakePositionCommand);
-      joystick1Button4.whileTrue(m_intakeInPosition);
-      joystick1Button3.whileTrue(m_intakeMiddlePosition);
-      joystick1Button5.whileTrue(m_intakeLongPosition);
-
+      joystick2Button5.whileTrue(m_intakeInPosition);
+      joystick2Button3.whileTrue(m_intakeMiddlePosition);
+      joystick2Button4.whileTrue(m_intakeLongPosition);
+      joystick2Button1.whileTrue(m_IntakeInhale);
       gamePad1Button1.whileTrue(m_gripperReleaseCommand);
       gamePad1Button3.whileTrue(m_gripperCubeCommand);
       gamePad1Button4.whileTrue(m_gripperConeCommand);
       gamePad1Button5.whileTrue(m_TurntableLeftCommand);
       gamePad1Button6.whileTrue(m_TurntableRightCommand);
+
+      gamePad1Button7.whileTrue(m_armGrabPositionCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);
@@ -424,6 +429,23 @@ public class RobotContainer {
       /*if(RobotController.getBatteryVoltage() < 10) {
         speed = 0;
       }*/
+
+      if(Math.abs(gamePad1.getRawAxis(0)) > .1) {
+        x += .2 * -gamePad1.getRawAxis(0);
+        if(x > 1) {
+          x = 1;
+        } else if(x < -1) {
+          x = -1;
+        }
+      }
+      if(Math.abs(gamePad1.getRawAxis(1)) > .1) {
+        y += .2 * gamePad1.getRawAxis(1);
+        if(y > 1) {
+          y = 1;
+        } else if(y < -1) {
+          y = -1;
+        }
+      }
 
       m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
       SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);

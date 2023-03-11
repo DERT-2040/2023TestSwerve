@@ -1,12 +1,11 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeInhaleSubsystem;
 
-public class IntakeInhaleCommand extends CommandBase {
+public class IntakeExhaleCommand extends CommandBase {
     IntakeInhaleSubsystem m_subsystem;
-     public IntakeInhaleCommand(IntakeInhaleSubsystem subsystem) {
+     public IntakeExhaleCommand(IntakeInhaleSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
@@ -19,8 +18,8 @@ public class IntakeInhaleCommand extends CommandBase {
  
      @Override
      public void execute() {
-      m_subsystem.inhale();
-     }
+        m_subsystem.setSpeed(-1);
+    }
  
      @Override
      public void end(boolean interrupted) {
