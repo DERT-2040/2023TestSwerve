@@ -431,6 +431,23 @@ public class RobotContainer {
         speed = 0;
       }*/
 
+      if(Math.abs(gamePad1.getRawAxis(0)) > .1) {
+        x += .2 * -gamePad1.getRawAxis(0);
+        if(x > 1) {
+          x = 1;
+        } else if(x < -1) {
+          x = -1;
+        }
+      }
+      if(Math.abs(gamePad1.getRawAxis(1)) > .1) {
+        y += .2 * gamePad1.getRawAxis(1);
+        if(y > 1) {
+          y = 1;
+        } else if(y < -1) {
+          y = -1;
+        }
+      }
+
       m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
       SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);
     }
