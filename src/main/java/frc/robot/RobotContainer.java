@@ -25,6 +25,7 @@ import frc.robot.Constants.DriveConstants;
 // COMMANDS  //
 import frc.robot.commands.ArmCommand;
 import frc.robot.commands.ArmExtendCommand;
+import frc.robot.commands.ArmGrabPositionCommand;
 import frc.robot.commands.ArmManualCommand;
 import frc.robot.commands.ArmRetractCommand;
 import frc.robot.commands.ArmSelectedPositionCommand;
@@ -155,6 +156,8 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button5  = new JoystickButton(gamePad1, 5);
   //right bumper
   private static JoystickButton gamePad1Button6  = new JoystickButton(gamePad1, 6);
+  //Back/select
+  private static JoystickButton gamePad1Button7  = new JoystickButton(gamePad1, 7);
   
   
   private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
@@ -204,6 +207,7 @@ public class RobotContainer {
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
   private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX, this::getArmManualMode);
   private final ArmSelectedPositionCommand m_armSelectedPositionCommand =   new ArmSelectedPositionCommand(m_armSubsystem, this::getArmPositionSetting);
+  private final ArmGrabPositionCommand m_armGrabPositionCommand = new ArmGrabPositionCommand(m_armSubsystem);
   private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_armSubsystem);
   private final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_armSubsystem);
@@ -306,6 +310,8 @@ public class RobotContainer {
       gamePad1Button4.whileTrue(m_gripperConeCommand);
       gamePad1Button5.whileTrue(m_TurntableLeftCommand);
       gamePad1Button6.whileTrue(m_TurntableRightCommand);
+
+      gamePad1Button7.whileTrue(m_armGrabPositionCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);
