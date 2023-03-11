@@ -102,6 +102,10 @@ public class SwerveModule {  // Class Definition  ******************************
         m_drivePIDController.setD(kD);
         m_drivePIDController.setIZone(kIz);
         m_drivePIDController.setFF(kFF);
+        m_driveMotor.setSmartCurrentLimit(40, 10000);
+        m_driveMotor.setSecondaryCurrentLimit(40);
+        m_turningMotor.setSmartCurrentLimit(40, 10000);
+        m_turningMotor.setSecondaryCurrentLimit(40);
         //m_drivePIDController.setOutputRange(kMinOutput, kMaxOutput);
     // Set the distance per pulse for the drive encoder. We can simply use the
     // distance traveled for one rotation of the wheel divided by the encoder
