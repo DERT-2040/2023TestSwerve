@@ -421,9 +421,9 @@ public class RobotContainer {
       SmartDashboard.putNumber("Roll", ahrs.getRoll());
       double speed = 1;//(-joystick1.getZ() + 1) / 2;
       
-      if(RobotController.getBatteryVoltage() < 10) {
+      /*if(RobotController.getBatteryVoltage() < 10) {
         speed = 0;
-      }
+      }*/
 
       m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
       SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);

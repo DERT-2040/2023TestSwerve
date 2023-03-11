@@ -44,8 +44,8 @@ public class SwerveModule {  // Class Definition  ******************************
   // Using a TrapezoidProfile PIDController to allow for smooth turning
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
-          0.15,  // was 0.7
-          0.01, // was 0.005
+          0.7,  // was 0.7
+          0.04, // was 0.005
           0.000001,
           new TrapezoidProfile.Constraints(
               20,
@@ -170,7 +170,7 @@ public class SwerveModule {  // Class Definition  ******************************
     // Calculate the drive output from the drive PID controller.
     // velocity meter/sec * (60 sec/min * 8.14 gear ratio) / (0.1016 meters * pi) = V * 1530 rev/min
     // speed request meters.sec * (60 sec/min * 8.14 motor rev / wheel rev) / (0.1016*pi meters/ wheel rev)
-    m_drivePIDController.setReference(1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+    m_drivePIDController.setReference(2 * 1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     //SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
     //SmartDashboard.putNumber("Target", state.angle.getRadians());
     //SmartDashboard.putNumber("Velocity", m_turningEncoder.get);

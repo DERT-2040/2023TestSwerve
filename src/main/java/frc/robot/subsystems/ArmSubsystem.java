@@ -35,10 +35,11 @@ public class ArmSubsystem extends SubsystemBase {
     //current arm target position setting
     int armSetting;
 
-    double[] rotateAngles =        {-200, -50, 0, 30, 45, 70,  90, 200};
-    double[] extendDistancesHigh = {.2,  .2, .2,  .2, .2,  .2,  .9,  .9};
-    double[] extendDistancesMid =  {.2,  .2, .2,  0.014, 0.014,  0.014,  0.014,  0.014};
-    double[] extendDistancesLow =  {.2,  .2, .2,  .6, .9,  .9,  .9,  .9};
+    double[] rotateAngles =        {-200,   -50,   -20,   0,      30,    45,     70,     90,     200};
+    double[] extendDistancesHigh = {0.014,  0.014, 0.014, 0.014,  0.014, 0.014,  0.014,  .9,     .9};
+    double[] extendDistancesMid =  {0.014,  0.014, 0.014, 0.014,  0.014, 0.014,  0.014,  0.014,  0.014};
+    double[] extendDistancesLow =  {0.014,  0.014, 0.014, 0.014,  .6,    .9,     .9,     .9,     .9};
+    double[] extendGrab =          {0.5,  0.5, 0.5, 0.014,  0.014, 0.014,  0.014,  0.014,  0.014};
 
     public ArmSubsystem() {
         //65 rotations is full extention for extending arm
@@ -225,9 +226,12 @@ public class ArmSubsystem extends SubsystemBase {
         } else if(setting == 1) {
             rotate(rotateControl.calculate(actualArmAngle, 70));
             SmartDashboard.putNumber("Desired Arm Angle", 70);
-        } else {
+        } else if(setting == 2) {
             rotate(rotateControl.calculate(actualArmAngle, 90));
             SmartDashboard.putNumber("Desired Arm Angle", 90);
+        } else {
+            rotate(rotateControl.calculate(actualArmAngle, -20));
+            SmartDashboard.putNumber("Desired Arm Angle", -20);
         }
         
 
@@ -275,8 +279,10 @@ public class ArmSubsystem extends SubsystemBase {
             extendDistances = extendDistancesLow;
         } else if(armSetting == 1) {
             extendDistances = extendDistancesMid;
-        } else {
+        } else if(armSetting == 2) {
             extendDistances = extendDistancesHigh;
+        } else {
+            extendDistances = extendGrab;
         }
 
         double extend = extendDistances[i-1] + ((actualArmAngle - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendDistances[i] - extendDistances[i-1]);
