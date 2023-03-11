@@ -62,7 +62,7 @@ public class ArmSubsystem extends SubsystemBase {
         arm.setIdleMode(IdleMode.kBrake);
         arm.setSecondaryCurrentLimit(40);
         arm.setSmartCurrentLimit(40);
-        arm.setSmartCurrentLimit(40,5700);
+        //arm.setSmartCurrentLimit(40,5700);
         arm.setOpenLoopRampRate(0.75);
         rotateEncoder = new DutyCycleEncoder(6);
         /*rotateEncoder = arm.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
@@ -81,7 +81,7 @@ public class ArmSubsystem extends SubsystemBase {
         armExtendNeo.setIdleMode(IdleMode.kBrake);
         armExtendNeo.setSecondaryCurrentLimit(20);
         armExtendNeo.setSmartCurrentLimit(20);
-        armExtendNeo.setSmartCurrentLimit(20,10000);
+        //armExtendNeo.setSmartCurrentLimit(20,10000);
         armExtendNeo.setOpenLoopRampRate(0.75);
         extendEncoder = armExtendNeo.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
         extendEncoder.setPosition(.41 * 58);

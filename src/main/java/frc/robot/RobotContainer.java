@@ -186,7 +186,7 @@ public class RobotContainer {
 
 
   private double getRightY() {
-    return Math.pow(gamePad1.getRawAxis(5), 3);
+    return -Math.pow(gamePad1.getRawAxis(5), 3);
     
   }
   private double getRightX() {
