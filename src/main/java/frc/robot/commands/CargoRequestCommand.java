@@ -5,17 +5,21 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.IntakeInhaleSubsystem;
 import frc.robot.subsystems.LEDSubsystem;
 import frc.robot.RobotContainer;
 
 public class CargoRequestCommand extends CommandBase {
 
   LEDSubsystem m_LEDSubsystem;    
+  IntakeInhaleSubsystem m_IntakeInhaleSubsystem;
 
   /** Creates a new CargoRequestCommand. */
-  public CargoRequestCommand(LEDSubsystem subsystem) {
+  public CargoRequestCommand(LEDSubsystem subsystem, IntakeInhaleSubsystem inhaleSubsystem) {
     m_LEDSubsystem = subsystem;
+    m_IntakeInhaleSubsystem = inhaleSubsystem;
     addRequirements(m_LEDSubsystem);
+    addRequirements(m_IntakeInhaleSubsystem);
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -24,7 +28,7 @@ public class CargoRequestCommand extends CommandBase {
   @Override
   public void initialize() {
     m_LEDSubsystem.switchColor();
-
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

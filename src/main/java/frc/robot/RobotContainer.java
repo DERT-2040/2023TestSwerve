@@ -138,6 +138,7 @@ public class RobotContainer {
   public static  JoystickButton joystick2Button9 = new JoystickButton(joystick2, 9);
   private static JoystickButton joystick1Button4 = new JoystickButton(joystick1,4);
   private static JoystickButton joystick1Button5 = new JoystickButton(joystick1, 5);
+  private static JoystickButton joystick2Button1 = new JoystickButton(joystick2, 1);
 
   //blue
   private static JoystickButton gamePad1Button3  = new JoystickButton(gamePad1,  3); 
@@ -208,18 +209,16 @@ public class RobotContainer {
   private final GripperReleaseCommand m_gripperReleaseCommand = new GripperReleaseCommand(m_armSubsystem);
   private final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_armSubsystem);
   private final GripperConeCommand    m_gripperConeCommand =    new GripperConeCommand(m_armSubsystem);
-  private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem);
+  private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem, m_intakeInhaleSubsystem);
   private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
   private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
   private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
   private final TurntableLeftCommand  m_TurntableLeftCommand =  new TurntableLeftCommand(m_TurntableSubsystem);
-  private final IntakeInhaleCommand    m_intakeConeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 1);
-  private final IntakeInhaleCommand    m_intakeCubeCommand   =  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 2);
-  private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem, 3);
+  private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem);
   private final IntakeExtendCommand m_intakeLongPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 3);
   private final IntakeExtendCommand m_intakeMiddlePosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 2);
   private final IntakeExtendCommand m_intakeInPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 1);
-
+  private final IntakeInhaleCommand m_IntakeInhale = new IntakeInhaleCommand(m_intakeInhaleSubsystem);
   //0 is low, 1 is mid, and 2 is high
   private int armPositionSetting = 0;
   //private int armExtensionSetting = 0;
@@ -293,14 +292,12 @@ public class RobotContainer {
       joystick1Button10.whileTrue(m_armRetractCommand);
       joystick1Button6.whileTrue(m_TurntableLeftCommand);
       joystick1Button7.whileTrue(m_TurntableRightCommand);
-      joystick2Button5.whileTrue(m_intakeCubeCommand);
-      joystick2Button4.whileTrue(m_intakeConeCommand);
       joystick2Button2.whileTrue(m_intakeReverseCommand);
       joystick2Button3.whileTrue(m_intakePositionCommand);
-      joystick1Button4.whileTrue(m_intakeInPosition);
-      joystick1Button3.whileTrue(m_intakeMiddlePosition);
-      joystick1Button5.whileTrue(m_intakeLongPosition);
-
+      joystick2Button5.whileTrue(m_intakeInPosition);
+      joystick2Button3.whileTrue(m_intakeMiddlePosition);
+      joystick2Button4.whileTrue(m_intakeLongPosition);
+      joystick2Button1.whileTrue(m_IntakeInhale);
       gamePad1Button1.whileTrue(m_gripperReleaseCommand);
       gamePad1Button3.whileTrue(m_gripperCubeCommand);
       gamePad1Button4.whileTrue(m_gripperConeCommand);

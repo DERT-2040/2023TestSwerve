@@ -6,14 +6,10 @@ import frc.robot.subsystems.IntakeInhaleSubsystem;
 
 public class IntakeInhaleCommand extends CommandBase {
     IntakeInhaleSubsystem m_subsystem;
-    int automaticOption;
-    int selectedOption;
-     public IntakeInhaleCommand(IntakeInhaleSubsystem subsystem, int option) {
+     public IntakeInhaleCommand(IntakeInhaleSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
-         selectedOption = option;
-         automaticOption = 1;
      }
 
      
@@ -23,24 +19,11 @@ public class IntakeInhaleCommand extends CommandBase {
  
      @Override
      public void execute() {
-      //SmartDashboard.putNumber("Automatic Option", automaticOption);
-      switch(selectedOption) {
-         case 1: 
-         m_subsystem.inhale(1);
-         break;
-         case 2:
-         m_subsystem.inhale(0.5);
-         break;
-         case 3:
-         m_subsystem.inhale(-1);
-         break;
-         default:
-         break;
-      }
+      m_subsystem.inhale();
      }
  
      @Override
      public void end(boolean interrupted) {
-        m_subsystem.inhale(0);
+        m_subsystem.stop();
      }
 }
