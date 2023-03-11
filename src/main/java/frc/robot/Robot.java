@@ -130,8 +130,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     m_robotContainer.periodic();
-    m_robotContainer.drive();
-    m_robotContainer.getVision();
+    //m_robotContainer.drive();
+    //m_robotContainer.getVision();
 
 
 
@@ -147,6 +147,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    m_robotContainer.getVision();
+    //m_robotContainer.getVision();
   }
 }
