@@ -175,7 +175,7 @@ public class RobotContainer {
   private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
 
   private double getDriveX() {
-    return joystick1.getX();
+    return -joystick1.getX();
   }
   private double getDriveY() {
     return joystick1.getY();
@@ -259,7 +259,7 @@ public class RobotContainer {
     return armPositionSetting;
   }
 
-  private boolean armManualMode = false;
+  private boolean armManualMode = true;
   public boolean getArmManualMode() {
     return armManualMode;
   }

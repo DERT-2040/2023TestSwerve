@@ -41,7 +41,7 @@ public class DriveControlSubsystem extends SubsystemBase {
         /*double x = -joystick1.getX();
         double y = joystick1.getY();
         double rot = joystick2.getX();*/
-        double deadband = 0.2;
+        double deadband = 0.1;
         if(x > -deadband && x < deadband) {
           x = 0;
         }
@@ -51,10 +51,24 @@ public class DriveControlSubsystem extends SubsystemBase {
         if(rot > -deadband && rot < deadband) {
           rot = 0;
         }
-  
-        x = Math.pow(x, 3);
-        y = Math.pow(y, 3);
-        rot = Math.pow(rot, 3);
+        if(x > 0) {
+            x = Math.pow(x, 2);
+        } else if(x < 0) {
+            x = -Math.pow(x, 2);
+        }
+
+        if(y > 0) {
+            y = Math.pow(y, 2);
+        } else if(x < 0) {
+            y = -Math.pow(y, 2);
+        }
+
+        if(rot > 0) {
+            rot = Math.pow(rot, 2);
+        } else if(x < 0) {
+            rot = -Math.pow(rot, 2);
+        }
+        
   
         /*  Next step should be to convert getVision / getPose from returning translation from camera to the April Tag to
          *  the actual field position
@@ -80,11 +94,6 @@ public class DriveControlSubsystem extends SubsystemBase {
             y = y * m_maximum / test;
           }
   
-          double filter = 0.25;
-          filteredX = (x - filteredX) * filter + filteredX;
-          x = filteredX;
-          filteredY = (y - filteredY) * filter + filteredY;
-          y = filteredY;
           
           
           
@@ -115,6 +124,12 @@ public class DriveControlSubsystem extends SubsystemBase {
         /*if(RobotController.getBatteryVoltage() < 10) {
           speed = 0;
         }*/
+
+        double filter = 0.1;
+          filteredX = (x - filteredX) * filter + filteredX;
+          x = filteredX;
+          filteredY = (y - filteredY) * filter + filteredY;
+          y = filteredY;
   
         if(Math.abs(/*gamePad1.getRawAxis(0)*/ gamePadX) > .1) {
           x += .2 * -gamePadX;

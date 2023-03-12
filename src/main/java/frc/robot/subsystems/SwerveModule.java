@@ -9,8 +9,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 import com.revrobotics.SparkMaxRelativeEncoder;
 
+import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -42,14 +44,16 @@ public class SwerveModule {  // Class Definition  ******************************
   public static double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
   // Using a TrapezoidProfile PIDController to allow for smooth turning
-  private final ProfiledPIDController m_turningPIDController =
+  /*private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
           0.7,  // was 0.7
           0.04, // was 0.005
           0.000001,
           new TrapezoidProfile.Constraints(
               20,
-              20));
+              20));*/
+  private final PIDController m_turningPidController = new PIDController(0.5, 0.04, .000001);
+
 
   /**
    * Constructs a SwerveModule.
@@ -82,6 +86,7 @@ public class SwerveModule {  // Class Definition  ******************************
     m_driveMotor.restoreFactoryDefaults();
     m_driveMotor.setSmartCurrentLimit(40);
     m_driveMotor.setSecondaryCurrentLimit(40);
+    m_driveMotor.setOpenLoopRampRate(.00000001);
     
 
     m_turningMotor = new CANSparkMax(turningMotorChannel, MotorType.kBrushless);
@@ -107,6 +112,10 @@ public class SwerveModule {  // Class Definition  ******************************
         m_drivePIDController.setD(kD);
         m_drivePIDController.setIZone(kIz);
         m_drivePIDController.setFF(kFF);
+
+        
+        
+
         
         //m_drivePIDController.setOutputRange(kMinOutput, kMaxOutput);
     // Set the distance per pulse for the drive encoder. We can simply use the
@@ -137,7 +146,8 @@ public class SwerveModule {  // Class Definition  ******************************
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
     //m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-    m_turningPIDController.enableContinuousInput(0, 2 * Math.PI);
+    //m_turningPIDController.enableContinuousInput(0, 2 * Math.PI);
+    m_turningPidController.enableContinuousInput(0, 2 * Math.PI);
   }
 
   /**
@@ -176,7 +186,7 @@ public class SwerveModule {  // Class Definition  ******************************
     // Calculate the drive output from the drive PID controller.
     // velocity meter/sec * (60 sec/min * 8.14 gear ratio) / (0.1016 meters * pi) = V * 1530 rev/min
     // speed request meters.sec * (60 sec/min * 8.14 motor rev / wheel rev) / (0.1016*pi meters/ wheel rev)
-    m_drivePIDController.setReference(2 * 1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+    m_drivePIDController.setReference(3 * 1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     //SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
     //SmartDashboard.putNumber("Target", state.angle.getRadians());
     //SmartDashboard.putNumber("Velocity", m_turningEncoder.get);
@@ -187,8 +197,7 @@ public class SwerveModule {  // Class Definition  ******************************
     SmartDashboard.putNumber(turnOffsetKey + " Turn Temp F", m_turningMotor.getMotorTemperature() * (9/5) + 32);
     
     // Calculate the turning motor output from the turning PID controller.
-    final double turnOutput =
-        m_turningPIDController.calculate(GetTurningEncoderValue(), state.angle.getRadians());//  was getDistance
+    final double turnOutput = m_turningPidController.calculate(GetTurningEncoderValue(), state.angle.getRadians());//  was getDistance
         /* 
         SmartDashboard.putNumber("Radians", state.angle.getRadians());
         SmartDashboard.putNumber("output", turnOutput);
