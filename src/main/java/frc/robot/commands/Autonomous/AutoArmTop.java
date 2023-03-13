@@ -1,16 +1,14 @@
-package frc.robot.commands;
+package frc.robot.commands.Autonomous;
 
-import java.util.function.IntSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmGrabPositionCommand extends CommandBase {
+public class AutoArmTop extends CommandBase {
     ArmSubsystem m_subsystem;
-    IntSupplier selectedPos;
     
      
-     public ArmGrabPositionCommand(ArmSubsystem subsystem) {
+     public AutoArmTop(ArmSubsystem subsystem) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
@@ -25,8 +23,9 @@ public class ArmGrabPositionCommand extends CommandBase {
  
      @Override
      public void execute() {
-        m_subsystem.setArmWithSetting(3);
-        m_subsystem.grip_goto(1.1);
+        m_subsystem.setArmWithSetting(2);
+        m_subsystem.grip_goto(0);
+        
          //m_subsystem.rotate(.3);
          //m_subsystem.setArmAngle(30);
      }
@@ -37,4 +36,9 @@ public class ArmGrabPositionCommand extends CommandBase {
         m_subsystem.setExtendSpeed(0);
         m_subsystem.grip_speed(0);
      }
+
+     @Override
+    public boolean isFinished() {
+        return (m_subsystem.armInPosition && m_subsystem.extendInPosition);
+    }
 }

@@ -32,7 +32,7 @@ public class DriveControlSubsystem extends SubsystemBase {
 
 
 
-    public void drive(double x, double y, double rot, double gamePadX, double gamePadY, boolean auto, boolean balancing, AHRS ahrs) {
+    public void drive(double x, double y, double rot, double gamePadX, double gamePadY, boolean boostTrigger, boolean auto, boolean balancing, AHRS ahrs) {
       
         double executionTime = Timer.getFPGATimestamp();
         
@@ -41,16 +41,26 @@ public class DriveControlSubsystem extends SubsystemBase {
         /*double x = -joystick1.getX();
         double y = joystick1.getY();
         double rot = joystick2.getX();*/
-        double deadband = 0.1;
+        double deadband = 0.15;
         if(x > -deadband && x < deadband) {
           x = 0;
+        } else {
+            x = (x - deadband) / (1  -deadband);
         }
+
         if(y > -deadband && y < deadband) {
           y = 0;
+        } else {
+            x = (x - deadband) / (1  -deadband);
         }
+
         if(rot > -deadband && rot < deadband) {
           rot = 0;
+        } else {
+            x = (x - deadband) / (1  -deadband);
         }
+
+
         if(x > 0) {
             x = Math.pow(x, 2);
         } else if(x < 0) {
@@ -125,7 +135,7 @@ public class DriveControlSubsystem extends SubsystemBase {
           speed = 0;
         }*/
 
-        double filter = 0.1;
+        double filter = 0.25;
           filteredX = (x - filteredX) * filter + filteredX;
           x = filteredX;
           filteredY = (y - filteredY) * filter + filteredY;
@@ -146,6 +156,10 @@ public class DriveControlSubsystem extends SubsystemBase {
           } else if(y < -1) {
             y = -1;
           }
+        }
+
+        if(boostTrigger) {
+            speed = 3;
         }
   
         m_robotDrive.drive(speed * x, speed * y, speed * rot, true);

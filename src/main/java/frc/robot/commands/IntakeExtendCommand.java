@@ -21,43 +21,43 @@ public class IntakeExtendCommand extends CommandBase {
      
      @Override
      public void initialize() {
-        
+      if (selectedOption == 0) {
+         switch(automaticOption) {
+            case 1: 
+            m_subsystem.goToPosition(0);
+            break;
+            case 2:
+            m_subsystem.goToPosition(15);
+            break;
+            case 3:
+            m_subsystem.goToPosition(47);
+            break;
+            default:
+            break;
+         }
+         
+      } else {
+         switch(selectedOption) {
+            case 1: 
+            m_subsystem.goToPosition(0);
+            break;
+            case 2:
+            m_subsystem.goToPosition(15);
+            break;
+            case 3:
+            m_subsystem.goToPosition(47);
+            break;
+            default:
+            break;
+         }
+      }
      }
  
      @Override
      public void execute() {
       //m_subsystem.extend(1.0);
       //SmartDashboard.putNumber("Extend Auto Option", automaticOption);
-      if (selectedOption == 0) {
-      switch(automaticOption) {
-         case 1: 
-         m_subsystem.goToPosition(0);
-         break;
-         case 2:
-         m_subsystem.goToPosition(15);
-         break;
-         case 3:
-         m_subsystem.goToPosition(47);
-         break;
-         default:
-         break;
-      }
       
-   } else {
-      switch(selectedOption) {
-         case 1: 
-         m_subsystem.goToPosition(0);
-         break;
-         case 2:
-         m_subsystem.goToPosition(15);
-         break;
-         case 3:
-         m_subsystem.goToPosition(47);
-         break;
-         default:
-         break;
-      }
-   }
      }
  
      @Override

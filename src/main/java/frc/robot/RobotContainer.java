@@ -42,6 +42,8 @@ import frc.robot.commands.RobotDriveCommand;
 import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
 import frc.robot.commands.VisionCommand;
+import frc.robot.commands.Autonomous.AutoArmTop;
+import frc.robot.commands.Autonomous.AutoGripRelease;
 import frc.robot.commands.CargoRequestCommand;
 
 // SUBSYSTEMS  //
@@ -130,6 +132,7 @@ public class RobotContainer {
 
   private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
   private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
+  private static JoystickButton joystick1Button1 = new JoystickButton(joystick1, 1);
 
   private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
   private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
@@ -186,11 +189,11 @@ public class RobotContainer {
 
 
   private double getRightY() {
-    return -Math.pow(gamePad1.getRawAxis(5), 3);
+    return gamePad1.getRawAxis(5);
     
   }
   private double getRightX() {
-    return -Math.pow(gamePad1.getRawAxis(4), 3);
+    return -gamePad1.getRawAxis(4);
   }
 
   private double getLeftY() {
@@ -228,7 +231,7 @@ public class RobotContainer {
   //  usally associated with an input defined above
   */
 
-  private final RobotDriveCommand     m_robotDriveCommand =     new RobotDriveCommand(m_driveControlSubsystem, this::getDriveX, this::getDriveY, this::getDriveRot, this::getLeftX, this::getLeftY, joystick2Button8, joystick2Button9, ahrs);
+  private final RobotDriveCommand     m_robotDriveCommand =     new RobotDriveCommand(m_driveControlSubsystem, this::getDriveX, this::getDriveY, this::getDriveRot, this::getLeftX, this::getLeftY, joystick1Button1, joystick2Button8, joystick2Button9, ahrs);
 
   private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
@@ -251,8 +254,16 @@ public class RobotContainer {
   private final IntakeExtendCommand m_intakeInPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 1);
   private final IntakeInhaleCommand m_IntakeInhale = new IntakeInhaleCommand(m_intakeInhaleSubsystem);
   private final IntakeExhaleCommand m_IntakeExhale = new IntakeExhaleCommand(m_intakeInhaleSubsystem);
+
+
+
+
+  private final AutoArmTop m_autoArmTop = new AutoArmTop(m_armSubsystem);
+  private final AutoGripRelease m_autoGripRelease = new AutoGripRelease(m_armSubsystem);
+
+
   //0 is low, 1 is mid, and 2 is high
-  private int armPositionSetting = 0;
+  private int armPositionSetting = 2;
   //private int armExtensionSetting = 0;
 
   public int getArmPositionSetting() {
@@ -289,16 +300,16 @@ public class RobotContainer {
       gamePad1Button2.whileTrue(m_cargoRequestCommand);
 
 
-      if (last_pov != gamePad1.getPOV()) {
-        if (gamePad1.getPOV() == 0) {
+      if (last_pov != gamePad1.getPOV() || (gamePad1.getRawButtonPressed(10) || gamePad1.getRawButtonPressed(11))) {
+        if (gamePad1.getPOV() == 0 || gamePad1.getRawButtonPressed(11)) {
           if (armPositionSetting != 2) {
-          armPositionSetting += 1;
+            armPositionSetting += 1;
           } else {
             armPositionSetting = 0;
           }
-        } else if (gamePad1.getPOV() == 180) {
+        } else if (gamePad1.getPOV() == 180 || gamePad1.getRawButtonPressed(10)) {
           if (armPositionSetting != 0) {
-          armPositionSetting -= 1;
+            armPositionSetting -= 1;
           } else {
             armPositionSetting = 2;
           }
@@ -314,16 +325,16 @@ public class RobotContainer {
         m_LedSubsystem.setColor(true);
       }*/
 
-      if(gamePad1POVUp.getAsBoolean()) {
+      /*if(gamePad1POVUp.getAsBoolean()) {
 
-      }
+      }*/
 
       joystick1Button2.whileTrue(m_armCommand);
       joystick1Button3.whileTrue(m_armNegCommand);
       joystick1Button11.whileTrue(m_armExtendCommand);
       joystick1Button10.whileTrue(m_armRetractCommand);
-      joystick1Button6.whileTrue(m_TurntableLeftCommand);
-      joystick1Button7.whileTrue(m_TurntableRightCommand);
+      joystick1Button7.whileTrue(m_TurntableLeftCommand);
+      joystick1Button6.whileTrue(m_TurntableRightCommand);
       joystick2Button2.whileTrue(m_IntakeExhale);
       joystick2Button3.whileTrue(m_intakePositionCommand);
       joystick2Button5.whileTrue(m_intakeInPosition);
@@ -347,12 +358,12 @@ public class RobotContainer {
       }
 
       //Makes sure the armManualCommand only runs when joystick is in use
-      if(Math.abs(getRightY()) > .2) {
+      if(Math.abs(getRightY()) > .1) {
         if(!m_armManualCommand.isScheduled()) {
           m_armManualCommand.schedule();
         }
         
-      } else if(Math.abs(getRightX()) > .3) {
+      } else if(Math.abs(getRightX()) > .1) {
         if(!m_armManualCommand.isScheduled()) {
           m_armManualCommand.schedule();
         }

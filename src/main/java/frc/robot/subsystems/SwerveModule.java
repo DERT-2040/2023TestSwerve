@@ -186,7 +186,7 @@ public class SwerveModule {  // Class Definition  ******************************
     // Calculate the drive output from the drive PID controller.
     // velocity meter/sec * (60 sec/min * 8.14 gear ratio) / (0.1016 meters * pi) = V * 1530 rev/min
     // speed request meters.sec * (60 sec/min * 8.14 motor rev / wheel rev) / (0.1016*pi meters/ wheel rev)
-    m_drivePIDController.setReference(3 * 1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+    m_drivePIDController.setReference(1 * 1530 * state.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
     //SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
     //SmartDashboard.putNumber("Target", state.angle.getRadians());
     //SmartDashboard.putNumber("Velocity", m_turningEncoder.get);

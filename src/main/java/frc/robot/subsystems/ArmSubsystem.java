@@ -21,16 +21,19 @@ public class ArmSubsystem extends SubsystemBase {
     CANSparkMax arm;
     DutyCycleEncoder rotateEncoder;
     PIDController rotateControl;
+    public Boolean armInPosition;
 
     Spark gripperTalon;
     //DigitalInput gripperLimitSwitch;
     DutyCycleEncoder gripperEncoder;
     PIDController gripperController;
+    public Boolean gripInPosition;
  
  
     CANSparkMax armExtendNeo;
     RelativeEncoder extendEncoder;
     PIDController extendControl;
+    public Boolean extendInPosition;
 
     //current arm target position setting
     int armSetting;
@@ -40,6 +43,7 @@ public class ArmSubsystem extends SubsystemBase {
     double[] extendDistancesMid =  {0.014,  0.014, 0.014, 0.014,  0.014, 0.014,  0.014,  0.014,  0.014};
     double[] extendDistancesLow =  {0.014,  0.014, 0.014, 0.014,  .6,    .9,     .9,     .9,     .9};
     double[] extendGrab =          {0.51,    0.51,   0.51,   0.014,  0.014, 0.014,  0.014,  0.014,  0.014};
+    
 
     public ArmSubsystem() {
         //65 rotations is full extention for extending arm
@@ -116,7 +120,7 @@ public class ArmSubsystem extends SubsystemBase {
             if(power < 0) {
                 power = 0;
             }
-        } else if(gripPosition > 0.98) {
+        } else if(gripPosition > 1.1) {
             if(power > 0) {
                 power = 0;
             }
@@ -142,6 +146,12 @@ public class ArmSubsystem extends SubsystemBase {
         //SmartDashboard.putNumber("Counter", m_count);
 
         grip_speed(gripperController.calculate((gripperEncoder.getAbsolutePosition() - .3) * 3.33333, location));
+        
+        if(Math.abs((gripperEncoder.getAbsolutePosition() - .3) * 3.33333 - location) < .1) {
+            gripInPosition = true;
+        } else {
+            gripInPosition = false;
+        }
     }
 
     /*
@@ -169,13 +179,14 @@ public class ArmSubsystem extends SubsystemBase {
 
     //for arm rotation with joystick and no automatic extention
     public void manualRotateArm(double speed) {
-        if((((rotateEncoder.getAbsolutePosition() - .17) * 90 / .27) > 100 && speed < 0) || ((((rotateEncoder.getAbsolutePosition() - .17) * 90 / .27) < -50) && speed > 0)) {
+        if(((getArmRotation()) > 100 && speed < 0) ||
+        ((getArmRotation()) < -25) && speed > 0) {
             arm.set(0);
         } else {
             
             
             arm.set(speed);
-            SmartDashboard.putNumber("Known Arm Position", (rotateEncoder.getAbsolutePosition() - .17) * 90 / .27);
+            
         }
     }  
 
@@ -184,31 +195,37 @@ public class ArmSubsystem extends SubsystemBase {
     //rotates arm by speed and extends automatically
     public void rotate(double speed) { // from Feb24 code
         //PRevents the arm from going higher than a certain amount
-        if((((rotateEncoder.getAbsolutePosition() - .17) * 90 / .27) > 100 && -speed < 0) ||
-           (((rotateEncoder.getAbsolutePosition() - .17) * 90 / .27) < -50) && -speed > 0) {
+        if(((getArmRotation()) > 100 && -speed < 0) ||
+           ((getArmRotation()) < -50) && -speed > 0) {
             arm.set(0);
         } else {
            
            
             arm.set(-speed);
-            extendAutomatically(((rotateEncoder.getAbsolutePosition() - .17) * 90 / .27));
+            extendAutomatically((getArmRotation()));
             //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
         }
-        SmartDashboard.putNumber("Known Arm Position", (rotateEncoder.getAbsolutePosition() - .17) * 90 / .27);
 
   //      SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
     }
 
     private double getArmRotation(){
-        return((rotateEncoder.getAbsolutePosition() - .17) * 90 / .27);
+        double angle = (rotateEncoder.getAbsolutePosition() - .17) * 90 / .27;
+        SmartDashboard.putNumber("Known Arm Position", angle);
+        return(angle);
     }
 
 
     //sets the arm angle with default setting of high   
     public void setArmAngle(double angle) {
         //armSetting = 2;
-        double actualArmAngle = (rotateEncoder.getAbsolutePosition() - .17) * 90 / .27; //* (90/60) * (90.0/50.0) * 2;
+        double actualArmAngle = getArmRotation(); //* (90/60) * (90.0/50.0) * 2;
         rotate(rotateControl.calculate(actualArmAngle, angle));
+        if(Math.abs(actualArmAngle - angle) < 2) {
+            armInPosition = true;
+        } else {
+            armInPosition = false;
+        }
     //    SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
         
     //    SmartDashboard.putNumber("Desired Arm Angle", angle);
@@ -219,21 +236,23 @@ public class ArmSubsystem extends SubsystemBase {
     //sets the arm angle and extend based on provided setting
     public void setArmWithSetting(int setting) {
         armSetting = setting;
-        double actualArmAngle = getArmRotation(); //* (90/60) * (90.0/50.0) * 2;
+
+        double setPoint;
         if(setting == 0) {
-            rotate(rotateControl.calculate(actualArmAngle, 30));
-            SmartDashboard.putNumber("Desired Arm Angle", 30);
+            setPoint = 30;
         } else if(setting == 1) {
-            rotate(rotateControl.calculate(actualArmAngle, 70));
-            SmartDashboard.putNumber("Desired Arm Angle", 70);
+            setPoint = 70;
         } else if(setting == 2) {
-            rotate(rotateControl.calculate(actualArmAngle, 90));
-            SmartDashboard.putNumber("Desired Arm Angle", 90);
+            setPoint = 90;
         } else {
-            rotate(rotateControl.calculate(actualArmAngle, -13));
-            SmartDashboard.putNumber("Desired Arm Angle", -20);
+            setPoint = -13;
         }
-        
+
+        setArmAngle(setPoint);
+
+        //rotate(rotateControl.calculate(actualArmAngle, setPoint));
+        //SmartDashboard.putNumber("Desired Arm Angle", setPoint);
+
 
     }
 
@@ -241,6 +260,13 @@ public class ArmSubsystem extends SubsystemBase {
     public void setExtendPosition(double position) {
         setExtendSpeed(extendControl.calculate(extendEncoder.getPosition() / 57, position));
         SmartDashboard.putNumber("Desired Arm Extend", position);
+
+        if(Math.abs(extendEncoder.getPosition() / 57 - position) < .05) {
+            extendInPosition = true;
+        } else {
+            extendInPosition = false;
+        }
+        
         
     }
 
@@ -287,7 +313,6 @@ public class ArmSubsystem extends SubsystemBase {
 
         double extend = extendDistances[i-1] + ((actualArmAngle - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendDistances[i] - extendDistances[i-1]);
         setExtendPosition(extend);
-        SmartDashboard.putNumber("extend Position", extend);
         //armExtendNeo.set(extendControl.calculate(extendEncoder.getPosition() / 58, extend));
         //extendControl.setReference(extend, ControlType.kPosition);*/
     }
