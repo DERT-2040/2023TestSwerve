@@ -329,10 +329,10 @@ public class RobotContainer {
 
       }*/
 
-      joystick1Button2.whileTrue(m_armCommand);
-      joystick1Button3.whileTrue(m_armNegCommand);
-      joystick1Button11.whileTrue(m_armExtendCommand);
-      joystick1Button10.whileTrue(m_armRetractCommand);
+      //joystick1Button2.whileTrue(m_armCommand);
+      //joystick1Button3.whileTrue(m_armNegCommand);
+      //joystick1Button11.whileTrue(m_armExtendCommand);
+      //joystick1Button10.whileTrue(m_armRetractCommand);
       joystick1Button7.whileTrue(m_TurntableLeftCommand);
       joystick1Button6.whileTrue(m_TurntableRightCommand);
       joystick2Button2.whileTrue(m_IntakeExhale);

@@ -45,19 +45,32 @@ public class DriveControlSubsystem extends SubsystemBase {
         if(x > -deadband && x < deadband) {
           x = 0;
         } else {
-            x = (x - deadband) / (1  -deadband);
+            if(x > 0) {
+                x = (x - deadband) / (1 - deadband);
+            } else {
+                x = (x + deadband) / (1 - deadband);
+            }
+            
         }
 
         if(y > -deadband && y < deadband) {
           y = 0;
         } else {
-            x = (x - deadband) / (1  -deadband);
+            if(y > 0) {
+                y = (y - deadband) / (1 - deadband);
+            } else {
+                y = (y + deadband) / (1 - deadband);
+            }
         }
 
         if(rot > -deadband && rot < deadband) {
           rot = 0;
         } else {
-            x = (x - deadband) / (1  -deadband);
+            if(rot > 0) {
+                rot = (rot - deadband) / (1 - deadband);
+            } else {
+                rot = (rot + deadband) / (1 - deadband);
+            }
         }
 
 
