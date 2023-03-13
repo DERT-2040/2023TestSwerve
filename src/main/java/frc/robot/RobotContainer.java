@@ -236,7 +236,7 @@ public class RobotContainer {
   private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
-  private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX, this::getArmManualMode);
+  private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX/*, this::getArmManualMode*/);
   private final ArmSelectedPositionCommand m_armSelectedPositionCommand =   new ArmSelectedPositionCommand(m_armSubsystem, this::getArmPositionSetting);
   private final ArmGrabPositionCommand m_armGrabPositionCommand = new ArmGrabPositionCommand(m_armSubsystem);
   private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
@@ -342,20 +342,22 @@ public class RobotContainer {
       joystick2Button4.whileTrue(m_intakeLongPosition);
       joystick2Button1.whileTrue(m_IntakeInhale);
       gamePad1Button1.whileTrue(m_gripperReleaseCommand);
+      gamePad1Button10.whileTrue(m_gripperReleaseCommand);
       gamePad1Button3.whileTrue(m_gripperCubeCommand);
       gamePad1Button4.whileTrue(m_gripperConeCommand);
       gamePad1Button5.whileTrue(m_TurntableLeftCommand);
       gamePad1Button6.whileTrue(m_TurntableRightCommand);
+
 
       gamePad1Button7.whileTrue(m_armGrabPositionCommand);
 
 
       gamePad1Button8.whileTrue(m_armSelectedPositionCommand);
 
-      if(gamePad1.getRawButtonPressed(10)) {
+      /*if(gamePad1.getRawButtonPressed(10)) {
         armManualMode = !armManualMode;
         SmartDashboard.putBoolean("Manual Mode", armManualMode);
-      }
+      }*/
 
       //Makes sure the armManualCommand only runs when joystick is in use
       if(Math.abs(getRightY()) > .1) {

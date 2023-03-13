@@ -13,7 +13,7 @@ public class ArmManualCommand extends CommandBase {
     BooleanSupplier manualMode;
     
      
-     public ArmManualCommand(ArmSubsystem subsystem, DoubleSupplier armRotate, DoubleSupplier armExtend, BooleanSupplier manualMode) {
+     public ArmManualCommand(ArmSubsystem subsystem, DoubleSupplier armRotate, DoubleSupplier armExtend/*, BooleanSupplier manualMode*/) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
@@ -31,7 +31,7 @@ public class ArmManualCommand extends CommandBase {
  
      @Override
      public void execute() {
-        if(!manualMode.getAsBoolean()) {
+        /*if(!manualMode.getAsBoolean()) {
             if(Math.abs(armExtend.getAsDouble()) > .3) {
                 if(Math.abs(armRotate.getAsDouble()) > .2) {
                     m_subsystem.manualRotateArm(.7 * armRotate.getAsDouble());
@@ -40,7 +40,7 @@ public class ArmManualCommand extends CommandBase {
             } else {
                 m_subsystem.rotate(-.5 * armRotate.getAsDouble());
             }
-        } else {
+        } else {*/
             if(Math.abs(armExtend.getAsDouble()) > .1) {
                 
                 m_subsystem.setExtendSpeed(-.4 * (armExtend.getAsDouble() - .1));
@@ -49,7 +49,7 @@ public class ArmManualCommand extends CommandBase {
             if(Math.abs(armRotate.getAsDouble()) > .1) {
                 m_subsystem.manualRotateArm(.7 * (armRotate.getAsDouble() - .1));
             }
-        }
+        //}
         
      }
  
