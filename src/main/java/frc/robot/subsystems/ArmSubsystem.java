@@ -244,9 +244,9 @@ public class ArmSubsystem extends SubsystemBase {
         if(setting == 0) {
             setPoint = 30;
         } else if(setting == 1) {
-            setPoint = 70;
+            setPoint = 75;
         } else if(setting == 2) {
-            setPoint = 90;
+            setPoint = 95;
         } else {
             setPoint = -13;
         }

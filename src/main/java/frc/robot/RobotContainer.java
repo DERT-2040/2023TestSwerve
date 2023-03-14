@@ -231,7 +231,7 @@ public class RobotContainer {
   //  usally associated with an input defined above
   */
 
-  private final RobotDriveCommand     m_robotDriveCommand =     new RobotDriveCommand(m_driveControlSubsystem, this::getDriveX, this::getDriveY, this::getDriveRot, this::getLeftX, this::getLeftY, joystick1Button1, joystick2Button8, joystick2Button9, ahrs);
+  private final RobotDriveCommand     m_robotDriveCommand =     new RobotDriveCommand(m_driveControlSubsystem, this::getDriveX, this::getDriveY, this::getDriveRot, this::getLeftX, this::getLeftY, joystick1Button1, joystick1Button2, joystick2Button8, joystick2Button9, ahrs);
 
   private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);

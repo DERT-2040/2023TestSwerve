@@ -11,6 +11,7 @@ public class ArmManualCommand extends CommandBase {
     DoubleSupplier armRotate;
     DoubleSupplier armExtend;
     BooleanSupplier manualMode;
+    DoubleSupplier fineArm;
     
      
      public ArmManualCommand(ArmSubsystem subsystem, DoubleSupplier armRotate, DoubleSupplier armExtend/*, BooleanSupplier manualMode*/) {

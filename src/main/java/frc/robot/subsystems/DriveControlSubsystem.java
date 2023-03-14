@@ -32,7 +32,7 @@ public class DriveControlSubsystem extends SubsystemBase {
 
 
 
-    public void drive(double x, double y, double rot, double gamePadX, double gamePadY, boolean boostTrigger, boolean auto, boolean balancing, AHRS ahrs) {
+    public void drive(double x, double y, double rot, double gamePadX, double gamePadY, boolean boostTrigger, boolean superSpeed, boolean auto, boolean balancing, AHRS ahrs) {
       
         double executionTime = Timer.getFPGATimestamp();
         
@@ -170,12 +170,19 @@ public class DriveControlSubsystem extends SubsystemBase {
             y = -1;
           }
         }
-
-        if(boostTrigger) {
+        
+        double rotSpeed = 2;
+        if(superSpeed) {
+            speed = 4;
+            rotSpeed = 3;
+        } else if(boostTrigger) {
             speed = 3;
+            rotSpeed = 3;
         }
+
+        
   
-        m_robotDrive.drive(speed * x, speed * y, speed * rot, true);
+        m_robotDrive.drive(speed * x, speed * y, rotSpeed * rot, true);
         SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);
       }
   

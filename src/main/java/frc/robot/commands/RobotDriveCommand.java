@@ -17,11 +17,12 @@ public class RobotDriveCommand extends CommandBase {
     DoubleSupplier gamePadX;
     DoubleSupplier gamePadY;
     BooleanSupplier boostTrigger;
+    BooleanSupplier superSpeed;
     BooleanSupplier auto;
     BooleanSupplier balancing;
     AHRS ahrs;
 
-    public RobotDriveCommand(DriveControlSubsystem subsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, DoubleSupplier gamePadX, DoubleSupplier gamePadY, BooleanSupplier boostTrigger, BooleanSupplier auto, BooleanSupplier balancing, AHRS ahrs) {
+    public RobotDriveCommand(DriveControlSubsystem subsystem, DoubleSupplier x, DoubleSupplier y, DoubleSupplier rot, DoubleSupplier gamePadX, DoubleSupplier gamePadY, BooleanSupplier boostTrigger, BooleanSupplier superSpeed, BooleanSupplier auto, BooleanSupplier balancing, AHRS ahrs) {
         m_subsystem = subsystem;
         
         addRequirements(m_subsystem);
@@ -32,6 +33,7 @@ public class RobotDriveCommand extends CommandBase {
         this.gamePadX = gamePadX;
         this.gamePadY = gamePadY;
         this.boostTrigger = boostTrigger;
+        this.superSpeed = superSpeed;
         this.auto = auto;
         this.balancing = balancing;
         this.ahrs = ahrs;
@@ -49,7 +51,7 @@ public class RobotDriveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_subsystem.drive(x.getAsDouble(), y.getAsDouble(), rot.getAsDouble(), gamePadX.getAsDouble(), gamePadY.getAsDouble(), boostTrigger.getAsBoolean(), auto.getAsBoolean(), balancing.getAsBoolean(), ahrs);
+    m_subsystem.drive(x.getAsDouble(), y.getAsDouble(), rot.getAsDouble(), gamePadX.getAsDouble(), gamePadY.getAsDouble(), boostTrigger.getAsBoolean(), superSpeed.getAsBoolean(), auto.getAsBoolean(), balancing.getAsBoolean(), ahrs);
   }
 
   // Called once the command ends or is interrupted.
