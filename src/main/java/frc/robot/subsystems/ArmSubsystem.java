@@ -1,16 +1,16 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.DigitalInput;
+//import edu.wpi.first.wpilibj.Counter;
+//import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMax.ControlType;
+//import com.revrobotics.SparkMaxPIDController;
+//import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxRelativeEncoder;
@@ -105,8 +105,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void grip_speed(double power) {
         double gripPosition = (gripperEncoder.getAbsolutePosition() - .3) * 3.33333;
-        SmartDashboard.putNumber("Gripper Encoder Position", gripPosition);
-        SmartDashboard.putNumber("Grip Raw Pos", gripperEncoder.getAbsolutePosition());
+        //SmartDashboard.putNumber("Gripper Encoder Position", gripPosition);
+        //SmartDashboard.putNumber("Grip Raw Pos", gripperEncoder.getAbsolutePosition());
 
 
         
@@ -214,7 +214,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     private double getArmRotation(){
         double angle = (rotateEncoder.getAbsolutePosition() - .17) * 90 / .27;
-        SmartDashboard.putNumber("Known Arm Position", angle);
+        //SmartDashboard.putNumber("Known Arm Position", angle);
         return(angle);
     }
 
@@ -266,7 +266,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void setExtendPosition(double position) {
         setExtendSpeed(extendControl.calculate(getExtendPosition(), position));
-        SmartDashboard.putNumber("Desired Arm Extend", position);
+        //SmartDashboard.putNumber("Desired Arm Extend", position);
 
         if(Math.abs(getExtendPosition() - position) < .05) {
             extendInPosition = true;
@@ -299,7 +299,7 @@ public class ArmSubsystem extends SubsystemBase {
             
         
 
-        SmartDashboard.putNumber("Actual Arm Extend", (getExtendPosition()));
+        //SmartDashboard.putNumber("Actual Arm Extend", (getExtendPosition()));
         
         
     }
@@ -314,7 +314,7 @@ public class ArmSubsystem extends SubsystemBase {
         double limit = extendLimit[i-1] + ((getArmRotation() - rotateAngles[i-1]) / (rotateAngles[i] - rotateAngles[i-1])) * (extendLimit[i] - extendLimit[i-1]);
         if(getExtendPosition() > limit && speed > 0) {
             armExtendNeo.set(extendControl.calculate(getExtendPosition(), limit));
-            SmartDashboard.putNumber("Limit Arm Extend", limit);
+            //SmartDashboard.putNumber("Limit Arm Extend", limit);
             return true;
         }
         return false;

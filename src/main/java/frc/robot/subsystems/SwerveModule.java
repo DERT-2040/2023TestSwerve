@@ -9,22 +9,22 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.SparkMaxPIDController.AccelStrategy;
+//import com.revrobotics.SparkMaxPIDController.AccelStrategy;
 import com.revrobotics.SparkMaxRelativeEncoder;
 
 import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+//import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+//import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 //import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Preferences;
 //import frc.robot.Constants.ModuleConstants;
 // import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule {  // Class Definition  **************************************************************
   private CANSparkMax m_driveMotor;
@@ -190,11 +190,11 @@ public class SwerveModule {  // Class Definition  ******************************
     //SmartDashboard.putNumber("Position", GetTurningEncoderValue());   // was getDistance
     //SmartDashboard.putNumber("Target", state.angle.getRadians());
     //SmartDashboard.putNumber("Velocity", m_turningEncoder.get);
-    SmartDashboard.putNumber(turnOffsetKey + " Turn Position", GetTurningCalibrationValue());
-    SmartDashboard.putNumber(turnOffsetKey + " Drive Output Current", m_driveMotor.getOutputCurrent());
-    SmartDashboard.putNumber(turnOffsetKey + " Turn Output Current", m_turningMotor.getOutputCurrent());
-    SmartDashboard.putNumber(turnOffsetKey + " Drive Temp F", m_driveMotor.getMotorTemperature() * (9/5) + 32);
-    SmartDashboard.putNumber(turnOffsetKey + " Turn Temp F", m_turningMotor.getMotorTemperature() * (9/5) + 32);
+    //SmartDashboard.putNumber(turnOffsetKey + " Turn Position", GetTurningCalibrationValue());
+    //SmartDashboard.putNumber(turnOffsetKey + " Drive Output Current", m_driveMotor.getOutputCurrent());
+    //SmartDashboard.putNumber(turnOffsetKey + " Turn Output Current", m_turningMotor.getOutputCurrent());
+    //SmartDashboard.putNumber(turnOffsetKey + " Drive Temp F", m_driveMotor.getMotorTemperature() * (9/5) + 32);
+    //SmartDashboard.putNumber(turnOffsetKey + " Turn Temp F", m_turningMotor.getMotorTemperature() * (9/5) + 32);
     
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput = m_turningPidController.calculate(GetTurningEncoderValue(), state.angle.getRadians());//  was getDistance

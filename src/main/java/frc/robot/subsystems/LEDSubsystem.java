@@ -23,9 +23,9 @@ public class LEDSubsystem extends SubsystemBase {
         m_ledBuffer1 = new AddressableLEDBuffer(37);
         m_led1.setLength(m_ledBuffer.getLength());*/
 
-        isYellow = false;
+        isYellow = true;
 
-        setColor(false);
+        setColor(true);
         m_led.start();
         //m_led1.start();
         counter = 0;

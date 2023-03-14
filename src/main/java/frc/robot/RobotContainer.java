@@ -13,23 +13,23 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.util.Units;
+//import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotController;
+//import edu.wpi.first.wpilibj.RobotController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 
 // COMMANDS  //
-import frc.robot.commands.ArmCommand;
-import frc.robot.commands.ArmExtendCommand;
+//import frc.robot.commands.ArmCommand;
+//import frc.robot.commands.ArmExtendCommand;
 import frc.robot.commands.ArmGrabPositionCommand;
 import frc.robot.commands.ArmManualCommand;
-import frc.robot.commands.ArmRetractCommand;
+//import frc.robot.commands.ArmRetractCommand;
 import frc.robot.commands.ArmSelectedPositionCommand;
-import frc.robot.commands.ArmNegCommand;
+//import frc.robot.commands.ArmNegCommand;
 //import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DriveCalibrateCommand;
 import frc.robot.commands.GripperConeCommand;
@@ -41,9 +41,8 @@ import frc.robot.commands.IntakeInhaleCommand;
 import frc.robot.commands.RobotDriveCommand;
 import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
-import frc.robot.commands.VisionCommand;
-import frc.robot.commands.Autonomous.AutoArmTop;
-import frc.robot.commands.Autonomous.AutoGripRelease;
+import frc.robot.commands.Autonomous.Auto1;
+//import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
 
 // SUBSYSTEMS  //
@@ -63,16 +62,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+//import edu.wpi.first.wpilibj2.command.button.POVButton;
 
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+//import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 import java.util.List;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Timer;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -133,6 +132,7 @@ public class RobotContainer {
   private static JoystickButton joystick1Button2 = new JoystickButton(joystick1, 2);
   private static JoystickButton joystick1Button3 = new JoystickButton(joystick1, 3);
   private static JoystickButton joystick1Button1 = new JoystickButton(joystick1, 1);
+  private static JoystickButton joystick1Button9 = new JoystickButton(joystick1, 9);
 
   private static JoystickButton joystick2Button8 = new JoystickButton(joystick2, 8);
   private static JoystickButton joystick2Button2 = new JoystickButton(joystick2, 2);
@@ -168,14 +168,14 @@ public class RobotContainer {
   private static JoystickButton gamePad1Button7  = new JoystickButton(gamePad1, 7);
   
   
-  private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
+  /*private static POVButton      gamePad1POVUp =         new POVButton(gamePad1, 0);
   private static POVButton      gamePad1POVUpRight =    new POVButton(gamePad1, 45);
   private static POVButton      gamePad1POVRight =      new POVButton(gamePad1, 90);
   private static POVButton      gamePad1POVDownRight =  new POVButton(gamePad1, 135);
   private static POVButton      gamePad1POVDown =       new POVButton(gamePad1, 180);
   private static POVButton      gamePad1POVDownLeft =   new POVButton(gamePad1, 225);
   private static POVButton      gamePad1POVLeft =       new POVButton(gamePad1, 270);
-  private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);
+  private static POVButton      gamePad1POVUpLeft =     new POVButton(gamePad1, 315);*/
 
   private double getDriveX() {
     return -joystick1.getX();
@@ -202,6 +202,10 @@ public class RobotContainer {
   }
   private double getLeftX() {
     return gamePad1.getRawAxis(0);
+  }
+
+  private double getFineControl() {
+    return gamePad1.getRawAxis(2) - gamePad1.getRawAxis(3);
   }
 
 
@@ -231,12 +235,12 @@ public class RobotContainer {
   //  usally associated with an input defined above
   */
 
-  private final RobotDriveCommand     m_robotDriveCommand =     new RobotDriveCommand(m_driveControlSubsystem, this::getDriveX, this::getDriveY, this::getDriveRot, this::getLeftX, this::getLeftY, joystick1Button1, joystick1Button2, joystick2Button8, joystick2Button9, ahrs);
+  private final RobotDriveCommand     m_robotDriveCommand =     new RobotDriveCommand(m_driveControlSubsystem, this::getDriveX, this::getDriveY, this::getDriveRot, this::getLeftX, this::getLeftY, joystick1Button1, joystick1Button2, joystick1Button9, joystick2Button8, joystick2Button9);
 
-  private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
-  private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
-  private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
-  private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX/*, this::getArmManualMode*/);
+  //private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
+  //private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
+  //private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
+  private final ArmManualCommand      m_armManualCommand =      new ArmManualCommand(m_armSubsystem, this::getRightY, this::getRightX, this::getFineControl/*, this::getArmManualMode*/);
   private final ArmSelectedPositionCommand m_armSelectedPositionCommand =   new ArmSelectedPositionCommand(m_armSubsystem, this::getArmPositionSetting);
   private final ArmGrabPositionCommand m_armGrabPositionCommand = new ArmGrabPositionCommand(m_armSubsystem);
   private final IntakeExtendCommand   m_intakePositionCommand = new IntakeExtendCommand(m_intakeExtendSubsystem, 0);
@@ -244,22 +248,28 @@ public class RobotContainer {
   private final GripperCubeCommand m_gripperCubeCommand = new GripperCubeCommand(m_armSubsystem);
   private final GripperConeCommand    m_gripperConeCommand =    new GripperConeCommand(m_armSubsystem);
   private final CargoRequestCommand   m_cargoRequestCommand =   new CargoRequestCommand(m_LedSubsystem, m_intakeInhaleSubsystem);
-  private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
-  private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
+  //private final ArmExtendCommand      m_armExtendCommand    =   new ArmExtendCommand(m_armSubsystem);
+  //private final ArmRetractCommand     m_armRetractCommand   =   new ArmRetractCommand(m_armSubsystem);
   private final TurntableRightCommand m_TurntableRightCommand = new TurntableRightCommand(m_TurntableSubsystem);
   private final TurntableLeftCommand  m_TurntableLeftCommand =  new TurntableLeftCommand(m_TurntableSubsystem);
-  private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem);
+  //private final IntakeInhaleCommand    m_intakeReverseCommand=  new IntakeInhaleCommand(m_intakeInhaleSubsystem);
   private final IntakeExtendCommand m_intakeLongPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 3);
   private final IntakeExtendCommand m_intakeMiddlePosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 2);
   private final IntakeExtendCommand m_intakeInPosition = new IntakeExtendCommand(m_intakeExtendSubsystem, 1);
   private final IntakeInhaleCommand m_IntakeInhale = new IntakeInhaleCommand(m_intakeInhaleSubsystem);
   private final IntakeExhaleCommand m_IntakeExhale = new IntakeExhaleCommand(m_intakeInhaleSubsystem);
+  
+
+
+
+  //Auto commands
+  public final Auto1 m_auto1 = new Auto1(m_driveControlSubsystem);
 
 
 
 
-  private final AutoArmTop m_autoArmTop = new AutoArmTop(m_armSubsystem);
-  private final AutoGripRelease m_autoGripRelease = new AutoGripRelease(m_armSubsystem);
+  //private final AutoArmTop m_autoArmTop = new AutoArmTop(m_armSubsystem);
+  //private final AutoGripRelease m_autoGripRelease = new AutoGripRelease(m_armSubsystem);
 
 
   //0 is low, 1 is mid, and 2 is high
@@ -291,8 +301,9 @@ public class RobotContainer {
     }
 
     public void checkButtonInputs() {  
+      
 
-      SmartDashboard.putNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
+      //SmartDashboard.putNumber("Allience Number (Blue 1, Red 2)", CheckAlliance());
       //sets LEDs to Purple
      /*  if(gamePad1.getRawButton(3)) {
         m_LedSubsystem.setColor(false);
@@ -366,6 +377,10 @@ public class RobotContainer {
         }
         
       } else if(Math.abs(getRightX()) > .1) {
+        if(!m_armManualCommand.isScheduled()) {
+          m_armManualCommand.schedule();
+        }
+      } else if(Math.abs(getFineControl()) > .1) {
         if(!m_armManualCommand.isScheduled()) {
           m_armManualCommand.schedule();
         }

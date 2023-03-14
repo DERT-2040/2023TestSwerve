@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import java.util.function.BooleanSupplier;
+//import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -10,17 +10,18 @@ public class ArmManualCommand extends CommandBase {
     ArmSubsystem m_subsystem;
     DoubleSupplier armRotate;
     DoubleSupplier armExtend;
-    BooleanSupplier manualMode;
-    DoubleSupplier fineArm;
+    //BooleanSupplier manualMode;
+    DoubleSupplier fineControl;
     
      
-     public ArmManualCommand(ArmSubsystem subsystem, DoubleSupplier armRotate, DoubleSupplier armExtend/*, BooleanSupplier manualMode*/) {
+     public ArmManualCommand(ArmSubsystem subsystem, DoubleSupplier armRotate, DoubleSupplier armExtend, DoubleSupplier fineControl/*, BooleanSupplier manualMode*/) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.
          addRequirements(subsystem);
          this.armRotate = armRotate;
          this.armExtend = armExtend;
-         this.manualMode = manualMode;
+         this.fineControl = fineControl;
+         //this.manualMode = manualMode;
          
      }
 
@@ -42,6 +43,7 @@ public class ArmManualCommand extends CommandBase {
                 m_subsystem.rotate(-.5 * armRotate.getAsDouble());
             }
         } else {*/
+            
             if(Math.abs(armExtend.getAsDouble()) > .1) {
                 
                 m_subsystem.setExtendSpeed(-.4 * (armExtend.getAsDouble() - .1));
@@ -49,6 +51,8 @@ public class ArmManualCommand extends CommandBase {
             
             if(Math.abs(armRotate.getAsDouble()) > .1) {
                 m_subsystem.manualRotateArm(.7 * (armRotate.getAsDouble() - .1));
+            }  else if(Math.abs(fineControl.getAsDouble()) > .1) {
+                m_subsystem.manualRotateArm(.3 * (fineControl.getAsDouble() - .1));
             }
         //}
         

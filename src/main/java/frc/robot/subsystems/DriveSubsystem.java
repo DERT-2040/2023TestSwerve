@@ -17,7 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -107,7 +107,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block.
-    var odom = m_odometry.update(
+    m_odometry.update(
       new Rotation2d(getGyro()),
         new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
@@ -128,7 +128,7 @@ public class DriveSubsystem extends SubsystemBase {
     //m_field.setRobotPose(m_odometry.getPoseMeters().plus(new Transform2d(new Translation2d(0, 0), new Rotation2d(Units.degreesToRadians(90)))));  // update dashboard
     m_field.setRobotPose(rotatePose2d(m_odometry.getPoseMeters(),90));
     m_field.getObject("Target").setPose(targetPose);
-    SmartDashboard.putData("Field", m_field);
+    //SmartDashboard.putData("Field", m_field);
   }
 
 
@@ -184,7 +184,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("GyroPitch", gyro.getPitch());
     SmartDashboard.putNumber("GyroYaw", gyro.getYaw());
     SmartDashboard.putNumber("Odometry X", getPose().getX());*/
-    SmartDashboard.putNumber("getGyro output ", getGyro()*180/Math.PI);
+    //SmartDashboard.putNumber("getGyro output ", getGyro()*180/Math.PI);
   }
 
 

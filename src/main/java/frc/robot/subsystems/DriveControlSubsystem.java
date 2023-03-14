@@ -6,9 +6,10 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 
 public class DriveControlSubsystem extends SubsystemBase {
     DriveSubsystem m_robotDrive;
@@ -16,6 +17,7 @@ public class DriveControlSubsystem extends SubsystemBase {
 
     double filteredX;
     double filteredY;
+    AHRS ahrs;
     
 
     PIDController balancingPID;
@@ -28,13 +30,26 @@ public class DriveControlSubsystem extends SubsystemBase {
         filteredY = 0;
         
         balancingPID = new PIDController(1, 0, 0);
+        ahrs = RobotContainer.getAHRS();
+    }
+
+    public void simpleDrive(double x, double y, double rot, boolean fieldRelative) {
+      //filtering could be removed if needed
+      double filter = 0.25;
+          filteredX = (x - filteredX) * filter + filteredX;
+          x = filteredX;
+          filteredY = (y - filteredY) * filter + filteredY;
+          y = filteredY;
+
+
+      m_robotDrive.drive(x, y,  rot, fieldRelative);
     }
 
 
 
-    public void drive(double x, double y, double rot, double gamePadX, double gamePadY, boolean boostTrigger, boolean superSpeed, boolean auto, boolean balancing, AHRS ahrs) {
+    public void drive(double x, double y, double rot, double gamePadX, double gamePadY, boolean boostTrigger, boolean superSpeed, boolean lock, boolean auto, boolean balancing) {
       
-        double executionTime = Timer.getFPGATimestamp();
+        //double executionTime = Timer.getFPGATimestamp();
         
   
       //Joystick values
@@ -131,17 +146,17 @@ public class DriveControlSubsystem extends SubsystemBase {
   
         if(/*joystick2Button9.getAsBoolean()*/ balancing) {
           //if(Math.abs(ahrs.getPitch()) > 10) {
-            SmartDashboard.putNumber("Balancing PID", balancingPID.calculate(ahrs.getRoll(), 0));
+            //SmartDashboard.putNumber("Balancing PID", balancingPID.calculate(ahrs.getRoll(), 0));
           //}
   
         }
   
         //Vertical axis
-        SmartDashboard.putNumber("Yaw", ahrs.getYaw());
+        //SmartDashboard.putNumber("Yaw", ahrs.getYaw());
         //sideways axis
-        SmartDashboard.putNumber("Pitch", ahrs.getPitch());
+        //SmartDashboard.putNumber("Pitch", ahrs.getPitch());
         //forward camera facing axis
-        SmartDashboard.putNumber("Roll", ahrs.getRoll());
+        //SmartDashboard.putNumber("Roll", ahrs.getRoll());
         double speed = 1;//(-joystick1.getZ() + 1) / 2;
         
         /*if(RobotController.getBatteryVoltage() < 10) {
@@ -155,7 +170,7 @@ public class DriveControlSubsystem extends SubsystemBase {
           y = filteredY;
   
         if(Math.abs(/*gamePad1.getRawAxis(0)*/ gamePadX) > .1) {
-          x += .2 * -gamePadX;
+          x += .25 * -gamePadX;
           if(x > 1) {
             x = 1;
           } else if(x < -1) {
@@ -163,7 +178,7 @@ public class DriveControlSubsystem extends SubsystemBase {
           }
         }
         if(Math.abs(/*gamePad1.getRawAxis(1)*/ gamePadY) > .1) {
-          y += .2 * gamePadY;
+          y += .25 * gamePadY;
           if(y > 1) {
             y = 1;
           } else if(y < -1) {
@@ -180,10 +195,16 @@ public class DriveControlSubsystem extends SubsystemBase {
             rotSpeed = 3;
         }
 
+        if(lock) {
+          speed = 0;
+          rotSpeed = 1;
+          rot = .0001;
+        }
+
         
   
         m_robotDrive.drive(speed * x, speed * y, rotSpeed * rot, true);
-        SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);
+        //SmartDashboard.putNumber("Drive Execution Time", Timer.getFPGATimestamp() - executionTime);
       }
   
   
@@ -236,8 +257,8 @@ public class DriveControlSubsystem extends SubsystemBase {
           double m_xError = Math.abs(targetPose.getX() - fieldPose.getX());
           double m_yError = Math.abs(targetPose.getY() - fieldPose.getY());
   
-          SmartDashboard.putNumber("x error",m_xError);
-          SmartDashboard.putNumber("y error",m_yError);
+          //SmartDashboard.putNumber("x error",m_xError);
+          //SmartDashboard.putNumber("y error",m_yError);
   
           if(m_xError > 0.1016/2){  // only update drive if error is more than 2 inches
             x = m_xControl.calculate(fieldPose.getX(), targetPose.getX());
