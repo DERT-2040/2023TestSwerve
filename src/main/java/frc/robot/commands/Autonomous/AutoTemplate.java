@@ -1,5 +1,6 @@
 package frc.robot.commands.Autonomous;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -8,13 +9,13 @@ import frc.robot.commands.Autonomous.Components.AutoSimpleDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveControlSubsystem;
 
-public class Auto1 extends CommandBase {
+public class AutoTemplate extends CommandBase {
     DriveControlSubsystem m_subsystem;
     AutoSimpleDrive drive1;
     double startTime;
     
      //settings: 0 low, 1 mid, 2 high, 3 full retracted
-     public Auto1(DriveControlSubsystem subsystem) {
+     public AutoTemplate(DriveControlSubsystem subsystem) {
         m_subsystem = subsystem;
         // Use addRequirements() here to declare subsystem dependencies.
         drive1 = new AutoSimpleDrive(subsystem, 0, 1, 0, true);
@@ -59,4 +60,16 @@ public class Auto1 extends CommandBase {
     public boolean isFinished() {
         return false;
     }*/
+
+    public void stopCommand(Command command) {
+        if(command.isScheduled()) {
+            command.cancel();
+        }
+    }
+
+    public void startCommand(Command command) {
+        if(!command.isScheduled()) {
+            command.schedule();
+        }
+    }
 }

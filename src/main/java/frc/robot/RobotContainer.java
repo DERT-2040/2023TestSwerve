@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 //import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Joystick;
 //import edu.wpi.first.wpilibj.RobotController;
@@ -41,7 +42,8 @@ import frc.robot.commands.IntakeInhaleCommand;
 import frc.robot.commands.RobotDriveCommand;
 import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
-import frc.robot.commands.Autonomous.Auto1;
+import frc.robot.commands.Autonomous.AutoLeft;
+import frc.robot.commands.Autonomous.AutoRight;
 //import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
 
@@ -263,9 +265,29 @@ public class RobotContainer {
 
 
   //Auto commands
-  public final Auto1 m_auto1 = new Auto1(m_driveControlSubsystem);
+  public final AutoLeft m_autoLeft = new AutoLeft(m_driveControlSubsystem, m_armSubsystem);
+  public final AutoRight m_autoRight = new AutoRight(m_driveControlSubsystem, m_armSubsystem);
 
 
+  SendableChooser<Integer> m_autoChooser;
+  public void AutoChooserInit() {
+    m_autoChooser = new SendableChooser<>();
+
+    //from driver's view
+    m_autoChooser.setDefaultOption("Left", 1);
+    m_autoChooser.addOption("Right", 2);
+    //m_chooser.addOption("Choise 3", 3);
+    SmartDashboard.putData(m_autoChooser);
+  }
+
+  public Command getAutoCommand() {
+    int choice = m_autoChooser.getSelected();
+    if(choice == 1) {
+      return m_autoLeft;
+    } else {
+      return m_autoRight;
+    }
+  }
 
 
   //private final AutoArmTop m_autoArmTop = new AutoArmTop(m_armSubsystem);
@@ -458,7 +480,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  /*public Command getAutonomousCommand() {
     // Create config for trajectory
     TrajectoryConfig config =
         new TrajectoryConfig(
@@ -501,7 +523,7 @@ public class RobotContainer {
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
-  }
+  }*/
 
   static AHRS ahrs = AHRS();
 

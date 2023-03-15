@@ -11,7 +11,7 @@ public class AutoSimpleDrive extends CommandBase {
     double rot;
     boolean fieldRelative;
 
-    //Positive X is left, Positive Y is 
+    /**Positive X is left, Positive Y is backwards*/
     public AutoSimpleDrive(DriveControlSubsystem subsystem, double x, double y, double rot, boolean fieldRelative) {
         m_subsystem = subsystem;
         

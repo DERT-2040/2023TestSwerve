@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -89,7 +90,7 @@ public class ArmSubsystem extends SubsystemBase {
         //armExtendNeo.setSmartCurrentLimit(20,10000);
         armExtendNeo.setOpenLoopRampRate(0.75);
         extendEncoder = armExtendNeo.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
-        extendEncoder.setPosition(.5 * 58);
+        extendEncoder.setPosition(.29 * 58);
         extendControl = new PIDController(2, 0, 0.2);
 
 

@@ -8,7 +8,7 @@ public class AutoArm extends CommandBase {
     ArmSubsystem m_subsystem;
     int setting;
     
-     //settings: 0 low, 1 mid, 2 high, 3 full retracted
+     /**settings: 0 low, 1 mid, 2 high, 3 full retracted*/
      public AutoArm(ArmSubsystem subsystem, int setting) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.

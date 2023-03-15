@@ -9,7 +9,7 @@ public class AutoGrip extends CommandBase {
     ArmSubsystem m_subsystem;
     double targetPosition;
     
-     
+     /**release: 1.1, Cone: 0.05, Cube: 0.52*/
      public AutoGrip(ArmSubsystem subsystem, double targetPosition) {
          m_subsystem = subsystem;
          // Use addRequirements() here to declare subsystem dependencies.

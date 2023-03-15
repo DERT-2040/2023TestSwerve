@@ -43,6 +43,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.resetGyro();
     robotOn = false;
     CameraServer.startAutomaticCapture();
+    m_robotContainer.AutoChooserInit();
 
 
   }
@@ -95,7 +96,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.schedule();
     }*/
 
-    m_robotContainer.m_auto1.schedule();
+    //m_robotContainer.m_auto1.schedule();
+    m_robotContainer.getAutoCommand().schedule();
   }
 
   /** This function is called periodically during autonomous. */
