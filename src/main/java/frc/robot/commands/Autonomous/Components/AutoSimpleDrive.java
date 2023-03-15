@@ -11,6 +11,7 @@ public class AutoSimpleDrive extends CommandBase {
     double rot;
     boolean fieldRelative;
 
+    //Positive X is left, Positive Y is 
     public AutoSimpleDrive(DriveControlSubsystem subsystem, double x, double y, double rot, boolean fieldRelative) {
         m_subsystem = subsystem;
         
@@ -40,12 +41,9 @@ public class AutoSimpleDrive extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return false;
+  public void end(boolean interrupted) {
+    m_subsystem.simpleDrive(0, 0, 0, fieldRelative);
   }
+
     
 }

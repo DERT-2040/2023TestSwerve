@@ -35,12 +35,12 @@ public class DriveControlSubsystem extends SubsystemBase {
 
     public void simpleDrive(double x, double y, double rot, boolean fieldRelative) {
       //filtering could be removed if needed
-      double filter = 0.25;
+      /*double filter = 0.25;
           filteredX = (x - filteredX) * filter + filteredX;
           x = filteredX;
           filteredY = (y - filteredY) * filter + filteredY;
           y = filteredY;
-
+*/
 
       m_robotDrive.drive(x, y,  rot, fieldRelative);
     }
