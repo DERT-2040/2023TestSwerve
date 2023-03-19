@@ -6,13 +6,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.Autonomous.Components.AutoArm;
+import frc.robot.commands.Autonomous.Components.AutoBalance;
 import frc.robot.commands.Autonomous.Components.AutoGrip;
-import frc.robot.commands.Autonomous.Components.AutoIntake;
 import frc.robot.commands.Autonomous.Components.AutoSimpleDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveControlSubsystem;
 
-public class AutoLeft extends CommandBase {
+public class AutoMiddleBalance extends CommandBase {
     double startTime;
     
     
@@ -22,21 +22,23 @@ public class AutoLeft extends CommandBase {
     AutoSimpleDrive drive1;
     AutoSimpleDrive drive2;
     AutoSimpleDrive drive3;
+    AutoBalance balance;
     AutoGrip gripCube;
     AutoGrip gripRelease;
     AutoArm armTop;
     AutoArm armRetract;
-    AutoIntake intake;
+    
     
     
      //settings: 0 low, 1 mid, 2 high, 3 full retracted
-     public AutoLeft(DriveControlSubsystem drive, ArmSubsystem arm) {
+     public AutoMiddleBalance(DriveControlSubsystem drive, ArmSubsystem arm) {
         driveSub = drive;
         armSub = arm;
         // Use addRequirements() here to declare subsystem dependencies.
         drive1 = new AutoSimpleDrive(drive, 0, .15, 0, true);
-        drive2 = new AutoSimpleDrive(drive, .05, -.25, 0, true);
-        drive3 = new AutoSimpleDrive(drive, 0, -.75, 0, true);
+        drive2 = new AutoSimpleDrive(drive, 0, -1.5, 0, true);
+        drive3 = new AutoSimpleDrive(drive, 0, -.5, 0, true);
+        balance = new AutoBalance(drive);
         gripCube = new AutoGrip(armSub, .52);
         gripRelease = new AutoGrip(armSub, 1.1);
         armTop = new AutoArm(armSub, 2);
@@ -83,14 +85,18 @@ public class AutoLeft extends CommandBase {
         } else if (time < 7) {
             stopCommand(gripRelease);
             startCommand(drive2);
-        } else if (time < 10) {
+        } else if (time < 7.25) {
             startCommand(armRetract);
-        } else if (time < 13) {
+        } else if (time < 10) {
             stopCommand(drive2);
+            startCommand(balance);
+        } else if( time < 14) {
+            
             stopCommand(armRetract);
-            startCommand(drive3);
+            
         } else if (time < 15) {
-            stopCommand(drive3);
+            stopCommand(balance);
+            
         }
         
      }

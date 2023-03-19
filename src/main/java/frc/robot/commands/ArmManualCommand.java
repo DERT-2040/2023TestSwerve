@@ -53,6 +53,8 @@ public class ArmManualCommand extends CommandBase {
                 m_subsystem.manualRotateArm(.7 * (armRotate.getAsDouble() - .1));
             }  else if(Math.abs(fineControl.getAsDouble()) > .1) {
                 m_subsystem.manualRotateArm(.3 * (fineControl.getAsDouble() - .1));
+                m_subsystem.setExtendSpeed(.1);
+                
             }
         //}
         

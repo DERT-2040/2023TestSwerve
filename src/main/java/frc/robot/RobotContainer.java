@@ -43,10 +43,12 @@ import frc.robot.commands.RobotDriveCommand;
 import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
 import frc.robot.commands.Autonomous.AutoLeft;
+import frc.robot.commands.Autonomous.AutoMiddle;
+import frc.robot.commands.Autonomous.AutoMiddleBalance;
 import frc.robot.commands.Autonomous.AutoRight;
 //import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
-
+import frc.robot.commands.DriveBalanceCommand;
 // SUBSYSTEMS  //
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveControlSubsystem;
@@ -118,6 +120,11 @@ public class RobotContainer {
     checkButtonInputs();
     m_PDHMonitor.periodic();
     m_intakeExtendSubsystem.periodic();
+    //m_armSubsystem.periodic();
+    SmartDashboard.putNumber("Pitch", ahrs.getPitch());
+    SmartDashboard.putNumber("Yaw", ahrs.getYaw());
+    SmartDashboard.putNumber("Roll", ahrs.getRoll());
+
   }
 
 
@@ -238,7 +245,7 @@ public class RobotContainer {
   */
 
   private final RobotDriveCommand     m_robotDriveCommand =     new RobotDriveCommand(m_driveControlSubsystem, this::getDriveX, this::getDriveY, this::getDriveRot, this::getLeftX, this::getLeftY, joystick1Button1, joystick1Button2, joystick1Button9, joystick2Button8, joystick2Button9);
-
+  private final DriveBalanceCommand   m_balanceCommand =        new DriveBalanceCommand(m_driveControlSubsystem);
   //private final VisionCommand         m_visionCommand =         new VisionCommand(m_visionSubsystem);
   //private final ArmCommand            m_armCommand =            new ArmCommand(m_armSubsystem);
   //private final ArmNegCommand         m_armNegCommand =         new ArmNegCommand(m_armSubsystem);
@@ -266,7 +273,9 @@ public class RobotContainer {
 
   //Auto commands
   public final AutoLeft m_autoLeft = new AutoLeft(m_driveControlSubsystem, m_armSubsystem);
-  public final AutoRight m_autoRight = new AutoRight(m_driveControlSubsystem, m_armSubsystem);
+  public final AutoRight m_autoRight = new AutoRight(m_driveControlSubsystem, m_armSubsystem, m_intakeExtendSubsystem, m_intakeInhaleSubsystem);
+  public final AutoMiddle m_autoMiddle = new AutoMiddle(m_driveControlSubsystem, m_armSubsystem);
+  public final AutoMiddleBalance m_autoMiddleBalance = new AutoMiddleBalance(m_driveControlSubsystem, m_armSubsystem);
 
 
   SendableChooser<Integer> m_autoChooser;
@@ -275,7 +284,10 @@ public class RobotContainer {
 
     //from driver's view
     m_autoChooser.setDefaultOption("Left", 1);
-    m_autoChooser.addOption("Right", 2);
+    m_autoChooser.addOption("Middle", 2);
+    m_autoChooser.addOption("Right", 3);
+    m_autoChooser.addOption("MiddleBalance", 4);
+    m_autoChooser.addOption("None", 5);
     //m_chooser.addOption("Choise 3", 3);
     SmartDashboard.putData(m_autoChooser);
   }
@@ -284,8 +296,14 @@ public class RobotContainer {
     int choice = m_autoChooser.getSelected();
     if(choice == 1) {
       return m_autoLeft;
-    } else {
+    } else if(choice == 2) {
+      return m_autoMiddle;
+    } else if (choice == 3) {
       return m_autoRight;
+    } else if (choice == 4) {
+      return m_autoMiddleBalance;
+    } else {
+      return null;
     }
   }
 
@@ -366,8 +384,9 @@ public class RobotContainer {
       //joystick1Button3.whileTrue(m_armNegCommand);
       //joystick1Button11.whileTrue(m_armExtendCommand);
       //joystick1Button10.whileTrue(m_armRetractCommand);
-      joystick1Button7.whileTrue(m_TurntableLeftCommand);
-      joystick1Button6.whileTrue(m_TurntableRightCommand);
+      //joystick1Button7.whileTrue(m_TurntableLeftCommand);
+      //joystick1Button6.whileTrue(m_TurntableRightCommand);
+      //joystick1Button6.whileTrue(m_balanceCommand);
       joystick2Button2.whileTrue(m_IntakeExhale);
       joystick2Button3.whileTrue(m_intakePositionCommand);
       joystick2Button5.whileTrue(m_intakeInPosition);

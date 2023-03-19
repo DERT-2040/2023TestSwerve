@@ -43,6 +43,7 @@ public class IntakeExtendSubsystem extends SubsystemBase {
         
     }
 
+    /**0, 20, 47 */
     public void goToPosition(int chosenLocation) {
         desiredPosition = chosenLocation;
         //extendController.setReference(chosenLocation, ControlType.kPosition);

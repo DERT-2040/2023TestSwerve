@@ -5,6 +5,7 @@ import edu.wpi.first.math.controller.PIDController;
 //import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -44,7 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
     double[] extendDistancesMid =  {0.014,  0.014, 0.014,  0.014, 0.014,  0.014,   0.014, 0.014,  0.014,  0.014,  0.014};
     double[] extendDistancesLow =  {0.51,   0.51, 0.42,   0.29,  0.23, .33,  .17,   .33,    .9,     .9,     .9,     .9};
     double[] extendGrab =          {0.51,   0.51, 0.51,   0.51,  0.014, 0.014,   0.014, 0.014,  0.014,  0.014,  0.014};
-    double[] extendLimit =         {0.51,   0.51, 0.42,   0.29,  0.23, .33,  .17,   .33,    1,    1,    1};
+    double[] extendLimit =         {0.53,   0.56, 0.46,   0.31,  0.25, .35,  .17,   .33,    1,    1,    1};
     
 
     public ArmSubsystem() {
@@ -57,7 +58,7 @@ public class ArmSubsystem extends SubsystemBase {
         //counter = new Counter(4);
         gripperTalon = new Spark(0);
         //gripperLimitSwitch = new DigitalInput(5);
-        gripperEncoder = new DutyCycleEncoder(5);
+        gripperEncoder = new DutyCycleEncoder(4);
         gripperController = new PIDController(12, .001, 0);
 
         gripperTalon.set(0);
@@ -90,7 +91,7 @@ public class ArmSubsystem extends SubsystemBase {
         //armExtendNeo.setSmartCurrentLimit(20,10000);
         armExtendNeo.setOpenLoopRampRate(0.75);
         extendEncoder = armExtendNeo.getEncoder(SparkMaxRelativeEncoder.Type.kHallSensor, 42);
-        extendEncoder.setPosition(.29 * 58);
+        extendEncoder.setPosition(/*.29*/ .34 * 58);
         extendControl = new PIDController(2, 0, 0.2);
 
 
@@ -132,6 +133,7 @@ public class ArmSubsystem extends SubsystemBase {
         // m_prevCount = m_currentCount;
 
         gripperTalon.set(power);
+        SmartDashboard.putNumber("Grip", (gripperEncoder.getAbsolutePosition() - .3) * 3.33333);
         //SmartDashboard.putNumber("Counter", m_count);
         //SmartDashboard.putNumber("Current Count", counter.get());
     }
@@ -154,6 +156,7 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             gripInPosition = false;
         }
+        
     }
 
     /*
@@ -191,6 +194,7 @@ public class ArmSubsystem extends SubsystemBase {
             
         }
         setExtendToLimit(.01);
+        SmartDashboard.putNumber("Arm Position", getArmRotation());
     }  
 
 
@@ -206,7 +210,7 @@ public class ArmSubsystem extends SubsystemBase {
            
             arm.set(-speed);
             extendAutomatically();
-            //SmartDashboard.putNumber("Arm Position", rotateEncoder.getPosition());
+            
         }
         
 
@@ -230,7 +234,7 @@ public class ArmSubsystem extends SubsystemBase {
         } else {
             armInPosition = false;
         }
-    //    SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
+        SmartDashboard.putNumber("Actual Arm Angle", (rotateEncoder.getAbsolutePosition() - .76 ) * 352);
         
     //    SmartDashboard.putNumber("Desired Arm Angle", angle);
         
@@ -355,5 +359,9 @@ public class ArmSubsystem extends SubsystemBase {
         //armExtendNeo.set(extendControl.calculate(extendEncoder.getPosition() / 58, extend));
         //extendControl.setReference(extend, ControlType.kPosition);*/
     }
+
+    /*public void periodic() {
+        SmartDashboard.putNumber("Arm Position", getArmRotation());
+    }*/
     
 }

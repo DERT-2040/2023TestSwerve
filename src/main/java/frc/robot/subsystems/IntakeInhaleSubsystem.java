@@ -33,7 +33,8 @@ public class IntakeInhaleSubsystem extends SubsystemBase {
             selectedObject = true;
         }
     }
-    public void setSpeed(int speed) {
+    /**Cube: .5, Cone: 1 */
+    public void setSpeed(double speed) {
         inhaleMotor.set(speed);
     }
 }

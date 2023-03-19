@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.Timer;
 //import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,6 +34,24 @@ public class DriveControlSubsystem extends SubsystemBase {
         ahrs = RobotContainer.getAHRS();
     }
 
+    public void balance() {
+      
+      if(ahrs.getRoll() < -8) {
+        double diff = Math.abs((ahrs.getRoll() + 8) * 0.05);
+        if(diff > 1) {diff = 1;}
+        simpleDrive(0, .9 * diff, 0, true);
+        //SmartDashboard.putNumber("Balancing PID", balancingPID.calculate(ahrs.getRoll(), 0));
+      } else if(ahrs.getRoll() > 8) {
+        double diff = Math.abs((ahrs.getRoll() - 8) * 0.05);
+        if(diff > 1) {diff = 1;}
+        simpleDrive(0, -.9 * diff, 0, true);
+      } else {
+        simpleDrive(0, 0, 0.0001, true);
+      }
+    }
+      
+
+    /** Positive X: Left, Positive Y: Back */
     public void simpleDrive(double x, double y, double rot, boolean fieldRelative) {
       //filtering could be removed if needed
       /*double filter = 0.25;
@@ -41,9 +60,11 @@ public class DriveControlSubsystem extends SubsystemBase {
           filteredY = (y - filteredY) * filter + filteredY;
           y = filteredY;
 */
-
       m_robotDrive.drive(x, y,  rot, fieldRelative);
     }
+
+
+    
 
 
 
@@ -144,12 +165,6 @@ public class DriveControlSubsystem extends SubsystemBase {
           }
         }
   
-        if(/*joystick2Button9.getAsBoolean()*/ balancing) {
-          //if(Math.abs(ahrs.getPitch()) > 10) {
-            //SmartDashboard.putNumber("Balancing PID", balancingPID.calculate(ahrs.getRoll(), 0));
-          //}
-  
-        }
   
         //Vertical axis
         //SmartDashboard.putNumber("Yaw", ahrs.getYaw());
@@ -157,7 +172,7 @@ public class DriveControlSubsystem extends SubsystemBase {
         //SmartDashboard.putNumber("Pitch", ahrs.getPitch());
         //forward camera facing axis
         //SmartDashboard.putNumber("Roll", ahrs.getRoll());
-        double speed = 1;//(-joystick1.getZ() + 1) / 2;
+        double speed = 1.5;//(-joystick1.getZ() + 1) / 2;
         
         /*if(RobotController.getBatteryVoltage() < 10) {
           speed = 0;
