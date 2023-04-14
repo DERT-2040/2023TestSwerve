@@ -18,7 +18,7 @@ public class IntakeExhaleCommand extends CommandBase {
  
      @Override
      public void execute() {
-        m_subsystem.setSpeed(-1);
+        m_subsystem.setSpeed(1);
     }
  
      @Override

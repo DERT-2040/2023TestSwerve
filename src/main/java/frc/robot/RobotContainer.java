@@ -42,9 +42,12 @@ import frc.robot.commands.IntakeInhaleCommand;
 import frc.robot.commands.RobotDriveCommand;
 import frc.robot.commands.TurntableLeftCommand;
 import frc.robot.commands.TurntableRightCommand;
+import frc.robot.commands.Autonomous.AutoConeLeft;
 import frc.robot.commands.Autonomous.AutoLeft;
 import frc.robot.commands.Autonomous.AutoMiddle;
 import frc.robot.commands.Autonomous.AutoMiddleBalance;
+import frc.robot.commands.Autonomous.AutoMiddleBalanceCone;
+import frc.robot.commands.Autonomous.AutoMiddleBalanceMobile;
 import frc.robot.commands.Autonomous.AutoRight;
 //import frc.robot.commands.VisionCommand;
 import frc.robot.commands.CargoRequestCommand;
@@ -276,6 +279,8 @@ public class RobotContainer {
   public final AutoRight m_autoRight = new AutoRight(m_driveControlSubsystem, m_armSubsystem, m_intakeExtendSubsystem, m_intakeInhaleSubsystem);
   public final AutoMiddle m_autoMiddle = new AutoMiddle(m_driveControlSubsystem, m_armSubsystem);
   public final AutoMiddleBalance m_autoMiddleBalance = new AutoMiddleBalance(m_driveControlSubsystem, m_armSubsystem);
+  public final AutoMiddleBalanceCone m_autoMiddleBalanceCone = new AutoMiddleBalanceCone(m_driveControlSubsystem, m_armSubsystem);
+  public final AutoConeLeft m_autoConeLeft = new AutoConeLeft(m_driveControlSubsystem, m_armSubsystem);
 
 
   SendableChooser<Integer> m_autoChooser;
@@ -287,7 +292,9 @@ public class RobotContainer {
     m_autoChooser.addOption("Middle", 2);
     m_autoChooser.addOption("Right", 3);
     m_autoChooser.addOption("MiddleBalance", 4);
-    m_autoChooser.addOption("None", 5);
+    m_autoChooser.addOption("MiddleBalanceCone", 5);
+    m_autoChooser.addOption("LeftCone", 6);
+    m_autoChooser.addOption("None", 7);
     //m_chooser.addOption("Choise 3", 3);
     SmartDashboard.putData(m_autoChooser);
   }
@@ -302,6 +309,10 @@ public class RobotContainer {
       return m_autoRight;
     } else if (choice == 4) {
       return m_autoMiddleBalance;
+    } else if (choice == 5) { 
+      return m_autoMiddleBalanceCone;
+    } else if (choice == 6) {
+      return m_autoConeLeft;
     } else {
       return null;
     }

@@ -7,12 +7,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.Autonomous.Components.AutoArm;
 import frc.robot.commands.Autonomous.Components.AutoBalance;
+import frc.robot.commands.Autonomous.Components.AutoDriveToAngle;
 import frc.robot.commands.Autonomous.Components.AutoGrip;
 import frc.robot.commands.Autonomous.Components.AutoSimpleDrive;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveControlSubsystem;
 
-public class AutoMiddleBalance extends CommandBase {
+public class AutoMiddleBalanceMobile extends CommandBase {
     double startTime;
     
     
@@ -22,8 +23,9 @@ public class AutoMiddleBalance extends CommandBase {
     AutoSimpleDrive drive1;
     AutoSimpleDrive drive2;
     AutoSimpleDrive drive3;
+    AutoDriveToAngle spin;
     AutoBalance balance;
-    AutoGrip gripCone;
+    AutoGrip gripCube;
     AutoGrip gripRelease;
     AutoArm armTop;
     AutoArm armRetract;
@@ -31,15 +33,16 @@ public class AutoMiddleBalance extends CommandBase {
     
     
      //settings: 0 low, 1 mid, 2 high, 3 full retracted
-     public AutoMiddleBalance(DriveControlSubsystem drive, ArmSubsystem arm) {
+     public AutoMiddleBalanceMobile(DriveControlSubsystem drive, ArmSubsystem arm) {
         driveSub = drive;
         armSub = arm;
         // Use addRequirements() here to declare subsystem dependencies.
         drive1 = new AutoSimpleDrive(drive, 0, .15, 0, true);
         drive2 = new AutoSimpleDrive(drive, 0, -1.5, 0, true);
         drive3 = new AutoSimpleDrive(drive, 0, -.5, 0, true);
+        spin = new AutoDriveToAngle(drive, 0, 0, 90, true);
         balance = new AutoBalance(drive);
-        gripCone = new AutoGrip(armSub, .52);
+        gripCube = new AutoGrip(armSub, .52);
         gripRelease = new AutoGrip(armSub, 1.1);
         armTop = new AutoArm(armSub, 2);
         armRetract = new AutoArm(armSub, 3);
@@ -65,16 +68,13 @@ public class AutoMiddleBalance extends CommandBase {
         double time = Timer.getFPGATimestamp() - startTime;
         
         SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
-        if(time < 0.5) {
-            /*if(!drive1.isScheduled()) {
-                drive1.schedule();
-            }*/
-            startCommand(gripCone);
+        startCommand(spin);
+        /*if(time < 0.5) {
+            
+            startCommand(gripCube);
         } else if (time < 4) {
-            /*if(drive1.isScheduled()) {
-                drive1.cancel();
-            }*/
-            stopCommand(gripCone);
+
+            stopCommand(gripCube);
             startCommand(armTop);
         } else if (time < 5) {
             stopCommand(armTop);
@@ -85,12 +85,12 @@ public class AutoMiddleBalance extends CommandBase {
         } else if (time < 7) {
             stopCommand(gripRelease);
             startCommand(drive2);
-        } else if (time < 7.75) {
+        } else if (time < 7.25) {
             startCommand(armRetract);
-        } else if (time < 10.5) {
+        } else if (time < 10) {
             stopCommand(drive2);
             startCommand(balance);
-        } else if( time < 14.5) {
+        } else if( time < 14) {
             
             stopCommand(armRetract);
             
@@ -98,6 +98,7 @@ public class AutoMiddleBalance extends CommandBase {
             stopCommand(balance);
             
         }
+        */
         
      }
  

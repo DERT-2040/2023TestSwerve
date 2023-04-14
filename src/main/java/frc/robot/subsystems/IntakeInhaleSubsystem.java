@@ -21,9 +21,9 @@ public class IntakeInhaleSubsystem extends SubsystemBase {
     //Kirby
     public void inhale() {
         if (selectedObject) {
-            inhaleMotor.set(1);
+            inhaleMotor.set(-1);
         } else {
-            inhaleMotor.set(0.5);
+            inhaleMotor.set(-0.5);
         }
     }
     public void switchObject() {
@@ -33,7 +33,7 @@ public class IntakeInhaleSubsystem extends SubsystemBase {
             selectedObject = true;
         }
     }
-    /**Cube: .5, Cone: 1 */
+    /**Cube: -.5, Cone: -1 */
     public void setSpeed(double speed) {
         inhaleMotor.set(speed);
     }

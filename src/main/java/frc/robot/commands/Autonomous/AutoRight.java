@@ -43,7 +43,7 @@ public class AutoRight extends CommandBase {
         gripRelease = new AutoGrip(armSub, 1.1);
         armTop = new AutoArm(armSub, 2);
         armRetract = new AutoArm(armSub, 3);
-        intakeExtend = new AutoIntake(extend, inhale, 47, 0.5);
+        intakeExtend = new AutoIntake(extend, inhale, 47, -0.5);
     
 
 

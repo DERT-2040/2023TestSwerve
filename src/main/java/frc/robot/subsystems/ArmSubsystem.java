@@ -106,7 +106,7 @@ public class ArmSubsystem extends SubsystemBase {
 
 
     public void grip_speed(double power) {
-        double gripPosition = (gripperEncoder.getAbsolutePosition() - .3) * 3.33333;
+        double gripPosition = (gripperEncoder.getAbsolutePosition() - .2) * 3.33333;
         //SmartDashboard.putNumber("Gripper Encoder Position", gripPosition);
         //SmartDashboard.putNumber("Grip Raw Pos", gripperEncoder.getAbsolutePosition());
 
@@ -123,7 +123,7 @@ public class ArmSubsystem extends SubsystemBase {
             if(power < 0) {
                 power = 0;
             }
-        } else if(gripPosition > 1.1) {
+        } else if(gripPosition > 1.25) {
             if(power > 0) {
                 power = 0;
             }

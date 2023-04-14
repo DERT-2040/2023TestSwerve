@@ -35,7 +35,7 @@ public class AutoMiddle extends CommandBase {
         drive1 = new AutoSimpleDrive(drive, 0, .15, 0, true);
         drive2 = new AutoSimpleDrive(drive, 0, -.25, 0, true);
         drive3 = new AutoSimpleDrive(drive, 0, -.5, 0, true);
-        gripCube = new AutoGrip(armSub, .52);
+        gripCube = new AutoGrip(armSub, .05);
         gripRelease = new AutoGrip(armSub, 1.1);
         armTop = new AutoArm(armSub, 2);
         armRetract = new AutoArm(armSub, 3);
@@ -80,12 +80,12 @@ public class AutoMiddle extends CommandBase {
             stopCommand(drive1);
         } else if (time < 8) {
             stopCommand(gripRelease);
-            startCommand(drive2);
+            //startCommand(drive2);
         } else if (time < 11) {
-            startCommand(armRetract);
+            //startCommand(armRetract);
         } else if (time < 15) {
-            stopCommand(drive2);
-            stopCommand(armRetract);
+            //stopCommand(drive2);
+            //stopCommand(armRetract);
             
         }
         

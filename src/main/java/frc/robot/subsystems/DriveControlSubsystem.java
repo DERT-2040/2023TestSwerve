@@ -18,6 +18,7 @@ public class DriveControlSubsystem extends SubsystemBase {
 
     double filteredX;
     double filteredY;
+    double speedBoost;
     AHRS ahrs;
     
 
@@ -61,6 +62,23 @@ public class DriveControlSubsystem extends SubsystemBase {
           y = filteredY;
 */
       m_robotDrive.drive(x, y,  rot, fieldRelative);
+    }
+
+
+    /** angle of 0 (hopefully) is straight forward
+     *  Positive X: Left, Positive Y: Back
+     */
+    public void simpleDriveToRotation(double x, double y, double angle, boolean fieldRelative) {
+      double rot = (m_robotDrive.getPose().getRotation().getDegrees() - angle) / (180);
+          
+      if(rot > .5) {
+        rot = .5;
+      } else if(rot < -.5) {
+        rot = -.5;
+      }
+
+      m_robotDrive.drive(x, y,  rot, fieldRelative);
+      
     }
 
 
@@ -206,9 +224,29 @@ public class DriveControlSubsystem extends SubsystemBase {
             speed = 4;
             rotSpeed = 3;
         } else if(boostTrigger) {
+          /*if(speedBoost < 1.5) {
+            speedBoost += .05;
+          } else {
+            speedBoost = 1.5;
+          }
+            speed += speedBoost;
+            if(speed > 3) {
+              speed = 3;
+            }*/
             speed = 3;
             rotSpeed = 3;
-        }
+        }/* else {
+          if(speedBoost > 0) {
+            speedBoost -= .05;
+          } else {
+            speedBoost = 0;
+          }
+          speed += speedBoost;
+            if(speed > 3) {
+              speed = 3;
+            }
+
+        }*/
 
         if(lock) {
           speed = 0;
